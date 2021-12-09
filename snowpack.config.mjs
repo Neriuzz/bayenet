@@ -4,7 +4,9 @@ export default {
 		src: "/dist",
 	},
 	alias: {
-		"@": "./src"
+		"@": "./src",
+		"@styles": "./src/styles",
+		"@components": "./src/components"
 	},
 	plugins: [
 		"@snowpack/plugin-react-refresh",

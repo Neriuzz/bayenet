@@ -1,5 +1,5 @@
 // Styles
-import "@/styles/App.scss";
+import "@styles/App.scss";
 
 import React, { useEffect, useState } from "react";
 
