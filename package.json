@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "snowpack dev",
-    "build": "snowpack build"
+    "clean": "rm -rf build/",
+    "prod": "rm -rf build/ && snowpack build"
   },
   "keywords": [],
   "author": "",
