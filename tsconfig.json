@@ -10,11 +10,14 @@
         "skipLibCheck": true,
         "typeRoots": [
             "node_modules/@types",
-            "types"
-        ]
+            "src/types"
+        ],
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["src/*"]
+        }
     },
     "include": [
-        "src",
-        "types"
-    ]
+        "src/**/*"
+    ],
 }

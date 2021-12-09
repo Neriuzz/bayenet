@@ -6,19 +6,22 @@
     "extends": [
         "eslint:recommended",
         "plugin:react/recommended",
-        "plugin:@typescript-eslint/recommended"
+        "plugin:@typescript-eslint/recommended",
+        "plugin:jsx-a11y/recommended",
+        "plugin:react-hooks/recommended"
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaFeatures": {
             "jsx": true
         },
-        "ecmaVersion": 13,
+        "ecmaVersion": 2020,
         "sourceType": "module"
     },
     "plugins": [
         "react",
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "simple-import-sort"
     ],
     "rules": {
         "indent": [
@@ -36,6 +39,9 @@
         "semi": [
             "error",
             "always"
-        ]
+        ],
+        "@typescript-eslint/ban-ts-comment": "off",
+        "react/prop-types": "off",
+        "simple-import-sort/imports": "warn"
     }
 }
