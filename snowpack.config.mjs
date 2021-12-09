@@ -7,6 +7,7 @@ export default {
 		"@": "./src"
 	},
 	plugins: [
-		"@snowpack/plugin-react-refresh"
+		"@snowpack/plugin-react-refresh",
+		"@snowpack/plugin-sass"
 	]
 };
