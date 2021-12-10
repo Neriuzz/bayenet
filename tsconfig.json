@@ -1,11 +1,12 @@
 {
     "compilerOptions": {
-        "module": "ESNext",
-        "target": "ESNext",
+        "module": "esnext",
+        "target": "es5",
+        "allowSyntheticDefaultImports": true,
         "strict": true,
         "moduleResolution": "node",
         "esModuleInterop": true,
-        "jsx": "preserve",
+        "jsx": "react",
         "noEmit": true,
         "skipLibCheck": true,
         "typeRoots": [

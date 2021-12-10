@@ -1,6 +1,7 @@
 // Styles
 import "@styles/App.scss";
 
+// React
 import React, { useEffect, useState } from "react";
 
 const App: React.FC = () => {
@@ -14,7 +15,7 @@ const App: React.FC = () => {
 	return (
 		<>
 			<h1 className="big">
-				LOL
+				test
 			</h1>
 			<p>
 				Page has been opened for {count} seconds.

@@ -20,8 +20,8 @@
     },
     "plugins": [
         "react",
-        "@typescript-eslint",
-        "simple-import-sort"
+        "simple-import-sort",
+        "@typescript-eslint"
     ],
     "rules": {
         "indent": [
@@ -40,8 +40,9 @@
             "error",
             "always"
         ],
-        "@typescript-eslint/ban-ts-comment": "off",
+        "no-extra-semi": "off",
         "react/prop-types": "off",
-        "simple-import-sort/imports": "warn"
+        "simple-import-sort/imports": "warn",
+        "@typescript-eslint/ban-ts-comment": "off"
     }
 }
