@@ -4,10 +4,10 @@ import "@styles/App.scss";
 // React
 import React from "react";
 
-const App: React.FC = () => {
+const App = () => {
 	return (
 		<>
-			<canvas id="canvas"></canvas>
+			<h1>Testing</h1>
 		</>
 	);
 };

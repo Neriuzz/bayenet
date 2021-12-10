@@ -1,4 +1,4 @@
-import Renderable from "./Renderable";
+import Renderable from "../interfaces/Renderable";
 
 class Node implements Renderable {
 	render() {
