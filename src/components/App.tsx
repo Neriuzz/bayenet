@@ -1,14 +1,13 @@
 // Styles
 import "@styles/App.scss";
 
-// React
-import React from "react";
+// Components
+import Canvas from "@components/Canvas";
+
 
 const App = () => {
 	return (
-		<>
-			<h1>Testing</h1>
-		</>
+		<Canvas />
 	);
 };
 

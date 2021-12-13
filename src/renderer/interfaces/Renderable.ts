@@ -2,6 +2,6 @@ interface Renderable {
 	render: () => void
 }
 
-export default Renderable;
 
+export default Renderable;
 

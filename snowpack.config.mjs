@@ -11,5 +11,8 @@ export default {
 	plugins: [
 		"@snowpack/plugin-react-refresh",
 		"@snowpack/plugin-sass"
-	]
+	],
+	buildOptions: {
+		jsxInject: "import React from \"react\""
+	}
 };
