@@ -46,7 +46,7 @@ export default class Renderer {
 
 	private onDoubleClick(e: MouseEvent) {
 		e.preventDefault();
-		let offset = this.camera.getOffset();
+		let offset = this.camera.getCurrentPosition();
 		this.createNode(new Vector2D(e.clientX - offset.x, e.clientY - offset.y));
 	}
 

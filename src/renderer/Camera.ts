@@ -53,10 +53,6 @@ export default class Camera {
 		this.currentPosition = new Vector2D(this.initialPosition.x + deltaPosition.x, this.initialPosition.y + deltaPosition.y);
 	}
 
-	public getOffset(): Vector2D {
-		return this.currentPosition;
-	}
-
 	public clearScreen() {
 		this.context.setTransform(1, 0, 0, 1, 0, 0);
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -65,10 +61,6 @@ export default class Camera {
 
 	public getCurrentPosition(): Vector2D {
 		return this.currentPosition;
-	}
-
-	public getCanvas(): HTMLCanvasElement {
-		return this.canvas;
 	}
 
 	public getCanvasBounds(): Vector2D {
