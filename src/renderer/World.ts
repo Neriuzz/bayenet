@@ -23,4 +23,8 @@ export default class World {
 	public getAllObjectsInView(): IRenderable[] {
 		return this.objects.filter(object => object.isInView(this.camera.getCanvasBounds(), this.camera.getCurrentPosition()));
 	}
+
+	public getObjectBeingMousedOver(): IRenderable | undefined {
+		return this.getAllObjectsInView().find(object => object.isMouseOver(this.camera.getMousePosition(), this.camera.getCurrentPosition()));
+	}
 }

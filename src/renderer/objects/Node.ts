@@ -34,8 +34,8 @@ export default class Node implements IRenderable, IHoverable {
 		return false;
 	}
 
-	public isMouseOver(mousePosition: Vector2D): boolean {
-		if ((mousePosition.x - this.coords.x) * (mousePosition.x - this.coords.x) + (mousePosition.y - this.coords.y) * (mousePosition.y - this.coords.y) <= this.r * this.r)
+	public isMouseOver(mousePosition: Vector2D, cameraPosition: Vector2D): boolean {
+		if ((mousePosition.x - cameraPosition.x - this.coords.x) * (mousePosition.x - cameraPosition.x - this.coords.x) + (mousePosition.y - cameraPosition.y - this.coords.y) * (mousePosition.y - cameraPosition.y - this.coords.y) <= this.r * this.r)
 			return true;
 		return false;
 	}

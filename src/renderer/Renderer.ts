@@ -33,7 +33,7 @@ export default class Renderer {
 
 		this.canvas.addEventListener("dblclick", (e: MouseEvent) => this.onDoubleClick(e));
 		window.addEventListener("keydown", (e: KeyboardEvent) => this.onKeyDown(e));
-		
+	
 		this.renderLoop();
 	}
 
@@ -51,17 +51,17 @@ export default class Renderer {
 	}
 
 	private onKeyDown(e: KeyboardEvent) {
-		e.preventDefault();
 		if (e.key == "Delete") {
 			this.deleteNode(this.camera.getMousePosition());
 		}
 	}
 
 	private deleteNode(mousePosition: Vector2D) {
-		let objects = this.world.getAllObjectsInView();
-		let object = objects.filter(object => object.isMouseOver(mousePosition))[0];
-		if (object)
-			this.world.removeObject(object);
+		let object = this.world.getObjectBeingMousedOver();
+		if (!object)
+			return;
+		
+		this.world.removeObject(object);
 	}
 
 	private createNode(coords: Vector2D) {
@@ -72,7 +72,6 @@ export default class Renderer {
 	public draw() {
 		this.camera.clearScreen();
 		let objects = this.world.getAllObjectsInView();
-		console.log(objects.length);
 		objects.forEach(object => {
 			object.render(this.context);
 		});
