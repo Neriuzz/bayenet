@@ -67,4 +67,8 @@ export default class Camera {
 	public getCanvas(): HTMLCanvasElement {
 		return this.canvas;
 	}
+
+	public getCanvasBounds(): Vector2D {
+		return new Vector2D(this.canvas.width, this.canvas.height);
+	}
 }

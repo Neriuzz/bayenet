@@ -19,12 +19,10 @@ export default class Node implements IRenderable {
 		context.fill();
 	}
 
-	public isInView(camera: Camera): boolean {
-		let cameraPosition = camera.getCurrentPosition();
-		let canvas = camera.getCanvas();
+	public isInView(canvasBounds: Vector2D, cameraPosition: Vector2D): boolean {
 		if (
 			(this.coords.x + this.r + cameraPosition.x >= 0 && this.coords.y + this.r + cameraPosition.y >= 0) &&
-			(this.coords.x - this.r + cameraPosition.x < canvas.width && this.coords.y - this.r + cameraPosition.y < canvas.height)
+			(this.coords.x - this.r + cameraPosition.x < canvasBounds.x && this.coords.y - this.r + cameraPosition.y < canvasBounds.y)
 		) 
 			return true;
 		return false;

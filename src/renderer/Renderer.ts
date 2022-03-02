@@ -6,20 +6,14 @@ import World from "./World";
 
 export default class Renderer {
 
-	canvas: HTMLCanvasElement;
-	context: CanvasRenderingContext2D;
-
-	camera: Camera;
-	world: World;
+	private camera: Camera;
+	private world: World;
 	// inputHandler: InputHandler;
 
-	frameCount: number;
-	animationFrameID: number | null;
+	private frameCount: number;
+	private animationFrameID: number | null;
 
-	constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
-		// Register canvas and context
-		this.canvas = canvas;
-		this.context = context;
+	constructor(private canvas: HTMLCanvasElement, private context: CanvasRenderingContext2D) {
 
 		this.frameCount = 0;
 		this.animationFrameID = null;
@@ -28,7 +22,7 @@ export default class Renderer {
 		this.camera = new Camera(this.canvas, this.context);
 
 		// Create new world
-		this.world = new World();
+		this.world = new World(this.camera);
 
 		// Create event handler
 		// this.inputHandler = new InputHandler(this.canvas, this.world);
@@ -38,7 +32,7 @@ export default class Renderer {
 		window.addEventListener("resize", () => this.resize());
 
 		this.canvas.addEventListener("dblclick", (e: MouseEvent) => this.onDoubleClick(e));
-		console.log(this.canvas.width, this.canvas.height);
+		
 		this.renderLoop();
 	}
 
@@ -55,14 +49,15 @@ export default class Renderer {
 		this.createNode(new Vector2D(e.clientX - offset.x, e.clientY - offset.y));
 	}
 
-	public createNode(coords: Vector2D) {
+	private createNode(coords: Vector2D) {
 		let node: Node = new Node(coords, 20);
 		this.world.addObject(node);
 	}
 
 	public draw() {
 		this.camera.clearScreen();
-		let objects = this.world.getAllObjectsInView(this.camera);
+		let objects = this.world.getAllObjectsInView();
+		console.log(objects.length);
 		objects.forEach(object => {
 			object.render(this.context);
 		});

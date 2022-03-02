@@ -4,7 +4,7 @@ import IRenderable from "./interfaces/IRenderable";
 export default class World {
 	objects: IRenderable[];
 
-	constructor() {
+	constructor(private camera: Camera) {
 		this.objects = [];
 	}
 
@@ -16,7 +16,7 @@ export default class World {
 		return this.objects;
 	}
 
-	public getAllObjectsInView(camera: Camera): IRenderable[] {
-		return this.objects.filter(object => object.isInView(camera));
+	public getAllObjectsInView(): IRenderable[] {
+		return this.objects.filter(object => object.isInView(this.camera.getCanvasBounds(), this.camera.getCurrentPosition()));
 	}
 }
