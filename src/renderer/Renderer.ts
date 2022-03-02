@@ -32,6 +32,7 @@ export default class Renderer {
 		window.addEventListener("resize", () => this.resize());
 
 		this.canvas.addEventListener("dblclick", (e: MouseEvent) => this.onDoubleClick(e));
+		window.addEventListener("keydown", (e: KeyboardEvent) => this.onKeyDown(e));
 		
 		this.renderLoop();
 	}
@@ -47,6 +48,20 @@ export default class Renderer {
 		e.preventDefault();
 		let offset = this.camera.getOffset();
 		this.createNode(new Vector2D(e.clientX - offset.x, e.clientY - offset.y));
+	}
+
+	private onKeyDown(e: KeyboardEvent) {
+		e.preventDefault();
+		if (e.key == "Delete") {
+			this.deleteNode(this.camera.getMousePosition());
+		}
+	}
+
+	private deleteNode(mousePosition: Vector2D) {
+		let objects = this.world.getAllObjectsInView();
+		let object = objects.filter(object => object.isMouseOver(mousePosition))[0];
+		if (object)
+			this.world.removeObject(object);
 	}
 
 	private createNode(coords: Vector2D) {

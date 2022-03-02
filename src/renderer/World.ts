@@ -9,7 +9,11 @@ export default class World {
 	}
 
 	public addObject(object: IRenderable) {
-		this.objects.push(object);
+		object.setID(this.objects.push(object) - 1);
+	}
+
+	public removeObject(object: IRenderable) {
+		this.objects = this.objects.filter(obj => obj.getID() != object.getID())
 	}
 
 	public getAllObjects(): IRenderable[] {

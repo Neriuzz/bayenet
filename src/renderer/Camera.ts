@@ -8,6 +8,7 @@ export default class Camera {
 	
 	private initialPosition: Vector2D;
 	private currentPosition: Vector2D;
+	private mousePosition: Vector2D;
 	private dragStartPosition: Vector2D | null = null;
 
 	constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
@@ -18,6 +19,7 @@ export default class Camera {
 		// Set initial and current positions
 		this.currentPosition = new Vector2D(0, 0);
 		this.initialPosition = new Vector2D(0, 0);
+		this.mousePosition = new Vector2D(0, 0);
 
 		// Register event listeners for the camera
 		this.registerEventListeners();
@@ -44,6 +46,7 @@ export default class Camera {
 	
 	private onMouseMove(e: MouseEvent) {
 		e.preventDefault();
+		this.mousePosition = new Vector2D(e.clientX, e.clientY);
 		if (!this.mouseDown)
 			return;
 		let deltaPosition = new Vector2D(e.clientX - this.dragStartPosition!.x, e.clientY - this.dragStartPosition!.y);
@@ -70,5 +73,9 @@ export default class Camera {
 
 	public getCanvasBounds(): Vector2D {
 		return new Vector2D(this.canvas.width, this.canvas.height);
+	}
+
+	public getMousePosition(): Vector2D {
+		return this.mousePosition;
 	}
 }
