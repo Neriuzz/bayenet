@@ -1,30 +1,30 @@
 import Camera from "./Camera";
-import IRenderable from "./interfaces/IRenderable";
+import Entity from "./interfaces/Entity";
 
 export default class World {
-	objects: IRenderable[];
+	private _entities: Entity[];
 
-	constructor(private camera: Camera) {
-		this.objects = [];
+	constructor(private _camera: Camera) {
+		this._entities = [];
 	}
 
-	public addObject(object: IRenderable) {
-		object.setID(this.objects.push(object) - 1);
+	public addEntity(entity: Entity) {
+		this._entities.push(entity);
 	}
 
-	public removeObject(object: IRenderable) {
-		this.objects = this.objects.filter(obj => obj.getID() != object.getID())
+	public removeEntity(entity: Entity) {
+		this._entities = this._entities.filter(ent => ent.id != entity.id)
 	}
 
-	public getAllObjects(): IRenderable[] {
-		return this.objects;
+	public get entities(): Entity[] {
+		return this._entities;
 	}
 
-	public getAllObjectsInView(): IRenderable[] {
-		return this.objects.filter(object => object.isInView(this.camera.getCanvasBounds(), this.camera.getCurrentPosition()));
+	public get entitiesInView(): Entity[] {
+		return this._entities.filter(entity => entity.isInView(this._camera.getCanvasBounds(), this._camera.getCurrentPosition()));
 	}
 
-	public getObjectBeingMousedOver(): IRenderable | undefined {
-		return this.getAllObjectsInView().find(object => object.isMouseOver(this.camera.getMousePosition(), this.camera.getCurrentPosition()));
+	public get mousedOverEntity(): Entity | undefined {
+		return this.entitiesInView.find(entity => entity.isMouseOver(this._camera.getMousePosition(), this._camera.getCurrentPosition()));
 	}
 }

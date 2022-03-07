@@ -1,6 +1,6 @@
 import Camera from "./Camera";
 import InputHandler from "./InputHandler";
-import Node from "./objects/Node";
+import Node from "./entities/Node";
 import Vector2D from "./Vector2D";
 import World from "./World";
 
@@ -12,6 +12,8 @@ export default class Renderer {
 
 	private frameCount: number;
 	private animationFrameID: number | null;
+
+	private nextID: number = 0;
 
 	constructor(private canvas: HTMLCanvasElement, private context: CanvasRenderingContext2D) {
 
@@ -52,28 +54,28 @@ export default class Renderer {
 
 	private onKeyDown(e: KeyboardEvent) {
 		if (e.key == "Delete") {
-			this.deleteNode(this.camera.getMousePosition());
+			this.deleteMousedOverNode();
 		}
 	}
 
-	private deleteNode(mousePosition: Vector2D) {
-		let object = this.world.getObjectBeingMousedOver();
-		if (!object)
+	private deleteMousedOverNode() {
+		let entity = this.world.mousedOverEntity;
+		if (!entity)
 			return;
 		
-		this.world.removeObject(object);
+		this.world.removeEntity(entity);
 	}
 
 	private createNode(coords: Vector2D) {
-		let node: Node = new Node(coords, 20);
-		this.world.addObject(node);
+		let node = new Node(coords, 20, this.nextID++);
+		this.world.addEntity(node);
 	}
 
 	public draw() {
 		this.camera.clearScreen();
-		let objects = this.world.getAllObjectsInView();
-		objects.forEach(object => {
-			object.render(this.context);
+		let entities = this.world.entitiesInView;
+		entities.forEach(entity => {
+			entity.render(this.context);
 		});
 	}
 
