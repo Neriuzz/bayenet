@@ -1,5 +1,7 @@
-import Vector2D from "../Vector2D";
+import IRenderable from "./IRenderable";
 
-export default interface IHoverable {
-	isMouseOver: (mousePosition: Vector2D, cameraPosition: Vector2D) => boolean
-}
+export default interface IHoverable extends IRenderable {
+	onEnterHover(): void;
+	onHovering(): void;
+	onExitHover(): void;
+};

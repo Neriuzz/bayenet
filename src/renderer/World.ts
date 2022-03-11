@@ -1,30 +1,44 @@
+import IRenderable from "./interfaces/IRenderable";
+
 import Camera from "./Camera";
-import Entity from "./interfaces/Entity";
+
+import Node from "./entities/Node";
+
+import Vector2D from "./Vector2D";
 
 export default class World {
-	private _entities: Entity[];
+	private _renderables: IRenderable[];
+	private _nextID: number = 0;
 
 	constructor(private _camera: Camera) {
-		this._entities = [];
+		this._renderables = [];
 	}
 
-	public addEntity(entity: Entity) {
-		this._entities.push(entity);
+	private addRenderable(renderable: IRenderable) {
+		this._renderables.push(renderable);
 	}
 
-	public removeEntity(entity: Entity) {
-		this._entities = this._entities.filter(ent => ent.id != entity.id)
+	private removeRenderable(renderable: IRenderable) {
+		this._renderables = this._renderables.filter(_renderable => _renderable.id != renderable.id);
 	}
 
-	public get entities(): Entity[] {
-		return this._entities;
+	public get renderables(): IRenderable[] {
+		return this._renderables;
 	}
 
-	public get entitiesInView(): Entity[] {
-		return this._entities.filter(entity => entity.isInView(this._camera.getCanvasBounds(), this._camera.getCurrentPosition()));
+	public get renderablesInView(): IRenderable[] {
+		return this._renderables.filter(renderable => renderable.isInView(this._camera.currentPosition, this._camera.canvasBounds));
 	}
 
-	public get mousedOverEntity(): Entity | undefined {
-		return this.entitiesInView.find(entity => entity.isMouseOver(this._camera.getMousePosition(), this._camera.getCurrentPosition()));
+	public get camera(): Camera {
+		return this._camera;
+	}
+
+	public createNode(coords: Vector2D) {
+		this.addRenderable(new Node(coords, 20, this._nextID++));
+	}
+
+	public deleteNode(node: Node) {
+		this.removeRenderable(node);
 	}
 }
