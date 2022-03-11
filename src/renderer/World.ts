@@ -30,6 +30,10 @@ export default class World {
 		return this._renderables.filter(renderable => renderable.isInView(this._camera.currentPosition, this._camera.canvasBounds));
 	}
 
+	public get mousedOverRenderable(): IRenderable | undefined {
+		return this.renderablesInView.find(renderable => renderable.isMouseOver(this._camera.currentPosition, this._camera.mousePosition));
+	}
+
 	public get camera(): Camera {
 		return this._camera;
 	}

@@ -2,18 +2,14 @@ import IHoverable from "../interfaces/IHoverable";
 import IClickable from "../interfaces/IClickable";
 import Vector2D from "../Vector2D";
 
-export default class Node implements IClickable, IHoverable {
+export default class Node implements IClickable {
 
-	private _colour: string;
-
-	constructor(private _coords: Vector2D, private _r: number, private _id: number) {
-		this._colour = "red";
-	}
+	constructor(private _coords: Vector2D, private _r: number, private _id: number) {}
 
 	public render(context: CanvasRenderingContext2D) {
 		context.beginPath();
 		context.arc(this._coords.x, this._coords.y, this._r, 0, Math.PI * 2);
-		context.fillStyle = this._colour;
+		context.fillStyle = "red";
 		context.fill();
 	}
 
@@ -35,15 +31,11 @@ export default class Node implements IClickable, IHoverable {
 		);
 	}
 
-	public onEnterHover() {
-		this._colour = "blue";
+	public onClick() {
+		console.log(`Clicked on node ${this._id}`);
 	}
 
-	public onExitHover() {
-		this._colour = "red";
+	public onDoubleClick() {
+		console.log(`Double-clicked on node ${this._id}`);
 	}
-
-	public onHovering() {}
-
-	public onClick() {}
 }
