@@ -4,6 +4,5 @@ export default interface IRenderable {
 	readonly id: number;
 	render(context: CanvasRenderingContext2D): void;
 	isInView(cameraPosition: Vector2D, cameraBounds: Vector2D): boolean;
-	isMouseOver(cameraPosition: Vector2D, mousePositon: Vector2D): boolean;
 };
 

@@ -1,20 +1,36 @@
-import IHoverable from "../interfaces/IHoverable";
 import IClickable from "../interfaces/IClickable";
+import IRenderable from "../interfaces/IRenderable";
 import Vector2D from "../Vector2D";
 
-export default class Node implements IClickable {
+export default class Node implements IRenderable, IClickable {
 
-	constructor(private _coords: Vector2D, private _r: number, private _id: number) {}
+	private _clicked: boolean = false;
+	private _zIndex: number = 1;
+
+	constructor(private _id: number, private _coords: Vector2D, private _r: number) {}
 
 	public render(context: CanvasRenderingContext2D) {
 		context.beginPath();
 		context.arc(this._coords.x, this._coords.y, this._r, 0, Math.PI * 2);
 		context.fillStyle = "red";
-		context.fill();
+		if (this._clicked) {
+			context.strokeStyle = "blue";
+			context.lineWidth = 5;
+			context.stroke();
+		}
+ 		context.fill();
 	}
 
 	public get id() {
 		return this._id;
+	}
+
+	public get zIndex() {
+		return this._zIndex;
+	}
+
+	public get clicked() {
+		return this._clicked;
 	}
 
 	public isInView(cameraPosition: Vector2D, canvasBounds: Vector2D): boolean {
@@ -32,6 +48,7 @@ export default class Node implements IClickable {
 	}
 
 	public onClick() {
+		this._clicked = !this._clicked;
 		console.log(`Clicked on node ${this._id}`);
 	}
 

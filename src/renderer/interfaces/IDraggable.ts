@@ -1,6 +1,6 @@
-import IRenderable from "./IRenderable";
+import IInteractable from "./IInteractable";
 
-export default interface IDraggable extends IRenderable {
+export default interface IDraggable extends IInteractable {
 	onDragStart(): void;
 	onDrag(): void;
 	onDragEnd(): void;

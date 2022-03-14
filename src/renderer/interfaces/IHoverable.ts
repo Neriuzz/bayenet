@@ -1,6 +1,6 @@
-import IRenderable from "./IRenderable";
+import IInteractable from "./IInteractable";
 
-export default interface IHoverable extends IRenderable {
+export default interface IHoverable extends IInteractable {
 	readonly hovering: boolean;
 	onEnterHover(): void;
 	onHovering(): void;

@@ -3,47 +3,41 @@ import World from "./World";
 import InputHandler from "./InputHandler";
 
 export default class Renderer {
+	private _camera: Camera;
+	private _world: World;
+	private _inputHandler: InputHandler;
 
-	private camera: Camera;
-	private world: World;
-	private inputHandler: InputHandler;
+	private _frameCount: number = 0;
+	private _animationFrameID: number = 0;
 
-	private frameCount: number;
-	private animationFrameID: number | null;
-
-	constructor(private canvas: HTMLCanvasElement, private context: CanvasRenderingContext2D) {
-
-		this.frameCount = 0;
-		this.animationFrameID = null;
-		
+	constructor(private _canvas: HTMLCanvasElement, private _context: CanvasRenderingContext2D) {
 		// Initialise camera
-		this.camera = new Camera(this.canvas, this.context);
+		this._camera = new Camera(this._canvas, this._context);
 
 		// Initialise world
-		this.world = new World(this.camera);
+		this._world = new World(this._camera);
 
 		// Initialise input handler
-		this.inputHandler = new InputHandler(this.canvas, this.world);
+		this._inputHandler = new InputHandler(this._canvas, this._world);
 			
+		// Begin the render loop
 		this.renderLoop();
 	}
 
 	public draw() {
-		this.camera.clearScreen();
-		let renderables = this.world.renderablesInView;
-		renderables.forEach(renderable => {
-			renderable.render(this.context);
+		this._camera.clearScreen();
+		this._world.renderablesInView.forEach(renderable => {
+			renderable.render(this._context);
 		});
 	}
 
 	public renderLoop() {
-		this.frameCount++;
+		this._frameCount++;
 		this.draw();
-		this.animationFrameID = requestAnimationFrame(() => this.renderLoop());
+		this._animationFrameID = requestAnimationFrame(() => this.renderLoop());
 	}
 
 	public cancelDraw() {
-		cancelAnimationFrame(this.animationFrameID!);
+		cancelAnimationFrame(this._animationFrameID!);
 	}
-
 }

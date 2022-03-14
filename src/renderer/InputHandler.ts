@@ -23,23 +23,33 @@ export default class InputHandler {
 	private onClick(event: MouseEvent) {
 		event.preventDefault();
 
-		let clickable = this._world.mousedOverRenderable as IClickable;
-		if (!clickable) {
-			return;
-		}
+		// Retrieve all clickable renderables on screen
+		let clickables = this._world.renderablesInView as IClickable[];
+		
+		let clickable = clickables
+			.sort(clickable => clickable.zIndex)
+			.reverse()
+			.filter(clickable => clickable.isMouseOver(this._world.camera.currentPosition, this._world.camera.mousePosition))[0];
 
-		clickable.onClick();
+		// If we aren't cicking on a clickable renderable, then we must be clicking on the canvas
+		if (!clickable)
+			return;
+
+		clickable.onClick()
 	}
 
 	private onDoubleClick(event: MouseEvent) {
 		event.preventDefault();
 
-		// Check if we are double-clicking on a clickable object
-		let clickable = this._world.mousedOverRenderable as IClickable;
+		let clickables = this._world.renderablesInView as IClickable[];
+
+		let clickable = clickables
+			.sort(clickable => clickable.zIndex)
+			.reverse()
+			.filter(clickable => clickable.isMouseOver(this._world.camera.currentPosition, this._world.camera.mousePosition))[0];
+
 		if (!clickable) {
-			// If not, create a new node
-			let coords = new Vector2D(event.clientX - this._world.camera.currentPosition.x, event.clientY - this._world.camera.currentPosition.y)
-			this._world.createNode(coords);
+			this._world.createNode(new Vector2D(event.clientX - this._world.camera.currentPosition.x, event.clientY - this._world.camera.currentPosition.y));
 			return;
 		}
 
