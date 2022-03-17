@@ -29,5 +29,4 @@ export default abstract class DraggableEntity {
 	public get currentPosition(): Vector2D {
 		return this._currentPosition;
 	}
-
 };

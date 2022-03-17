@@ -23,15 +23,14 @@ export default class InputHandler {
 
 		let mousePosition = new Vector2D(event.clientX, event.clientY)
 
-		let clickable = this._world.clickablesInView
+		// Retrieve the entity we are clicking on
+		let [clickable] = this._world.clickablesInView
 			.filter(clickable => clickable.isMouseOver(this._world.camera.currentPosition, mousePosition))
 			.sort(clickable => clickable.zIndex)
-			.reverse()[0];
+			.reverse();
 
-		if (!clickable)
-			return;
-
-		clickable.onClick()
+		// If we are clicking on something, then perfrom the click action
+		clickable?.onClick();
 	}
 
 	private onDoubleClick(event: MouseEvent) {
@@ -39,10 +38,10 @@ export default class InputHandler {
 
 		let mousePosition = new Vector2D(event.clientX, event.clientY)
 
-		let clickable = this._world.clickablesInView
+		let [clickable] = this._world.clickablesInView
 			.filter(clickable => clickable.isMouseOver(this._world.camera.currentPosition, mousePosition))
 			.sort(clickable => clickable.zIndex)
-			.reverse()[0];
+			.reverse();
 
 		if (!clickable) {
 			this._world.createNode(new Vector2D(event.clientX - this._world.camera.currentPosition.x, event.clientY - this._world.camera.currentPosition.y));
@@ -57,10 +56,10 @@ export default class InputHandler {
 
 		let mousePosition = new Vector2D(event.clientX, event.clientY)
 
-		let draggable = this._world.draggablesInView
+		let [draggable] = this._world.draggablesInView
 			.filter(draggable => draggable.isMouseOver(this._world.camera.currentPosition, mousePosition))
 			.sort(draggable => draggable.zIndex)
-			.reverse()[0];
+			.reverse();
 
 		draggable ? draggable.onDragStart(event) : this._world.camera.onDragStart(event);
 	}
@@ -97,5 +96,4 @@ export default class InputHandler {
 		this._canvas.height = window.innerHeight * window.devicePixelRatio;
 		this._canvas.style.transform = `scale(${1 / window.devicePixelRatio})`;
 	}
-
-}
+};

@@ -8,7 +8,7 @@ export default class Node extends DraggableEntity implements IRenderable, IClick
 	public clickable = true;
 	public draggable = true;
 
-	public clicked = false;
+	public selected = false;
 	public zIndex = 1;
 
 	constructor(public id: number, _currentPosition: Vector2D, private _r: number) {
@@ -16,19 +16,19 @@ export default class Node extends DraggableEntity implements IRenderable, IClick
 	}
 
 	public render(context: CanvasRenderingContext2D) {
+		context.save();
 		context.beginPath();
 		context.arc(this._currentPosition.x, this._currentPosition.y, this._r, 0, Math.PI * 2);
 		context.fillStyle = "red";
-		if (this.clicked) {
+		if (this.selected) {
+			context.globalAlpha = 0.5;
 			context.strokeStyle = "blue";
-			context.lineWidth = 5;
+			context.lineWidth = 6;
 			context.stroke();
+			context.globalAlpha = 1;
 		}
  		context.fill();
-	}
-
-	public get radius() {
-		return this._r;
+		context.restore();
 	}
 
 	public isInView(cameraPosition: Vector2D, canvasBounds: Vector2D): boolean {
@@ -46,11 +46,11 @@ export default class Node extends DraggableEntity implements IRenderable, IClick
 	}
 
 	public onClick() {
-		this.clicked = !this.clicked;
+		this.selected = !this.selected;
 		console.log(`Clicked on node ${this.id}`);
 	}
 
 	public onDoubleClick() {
 		console.log(`Double-clicked on node ${this.id}`);
 	}
-}
+};

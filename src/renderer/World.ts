@@ -47,8 +47,8 @@ export default class World {
 		return this.renderablesInView.filter(isDraggable) as any;
 	}
 
-	public get selectedRenderables(): IRenderable[] {
-		return this._renderables.filter(renderable => isClickable(renderable) && renderable.clicked);
+	public get selectedClickables(): IClickable[] {
+		return this._renderables.filter(renderable => isClickable(renderable) && renderable.selected) as any;
 	}
 
 	public get camera(): Camera {
@@ -63,4 +63,4 @@ export default class World {
 	public deleteNode(node: Node) {
 		this.removeRenderable(node);
 	}
-}
+};

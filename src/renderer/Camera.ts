@@ -16,4 +16,4 @@ export default class Camera extends DraggableEntity {
 	public get canvasBounds(): Vector2D {
 		return new Vector2D(this._canvas.width, this._canvas.height);
 	}
-}
+};
