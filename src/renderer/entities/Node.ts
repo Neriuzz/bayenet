@@ -1,19 +1,23 @@
 import IClickable from "../interfaces/IClickable";
+import IDraggable from "../interfaces/IDraggable";
 import IRenderable from "../interfaces/IRenderable";
-import Vector2D from "../Vector2D";
+import Vector2D from "../util/Vector2D";
 
-export default class Node implements IRenderable, IClickable {
+export default class Node implements IRenderable, IClickable, IDraggable {
+	public clickable = true;
+	public draggable = true;
 
-	private _clicked: boolean = false;
-	private _zIndex: number = 1;
+	public dragging = false;
+	public clicked = false;
+	public zIndex = 1;
 
-	constructor(private _id: number, private _coords: Vector2D, private _r: number) {}
+	constructor(public id: number, private _coords: Vector2D, private _r: number) {}
 
 	public render(context: CanvasRenderingContext2D) {
 		context.beginPath();
 		context.arc(this._coords.x, this._coords.y, this._r, 0, Math.PI * 2);
 		context.fillStyle = "red";
-		if (this._clicked) {
+		if (this.clicked) {
 			context.strokeStyle = "blue";
 			context.lineWidth = 5;
 			context.stroke();
@@ -21,16 +25,12 @@ export default class Node implements IRenderable, IClickable {
  		context.fill();
 	}
 
-	public get id() {
-		return this._id;
+	public get radius() {
+		return this._r;
 	}
 
-	public get zIndex() {
-		return this._zIndex;
-	}
-
-	public get clicked() {
-		return this._clicked;
+	public get coords() {
+		return this._coords;
 	}
 
 	public isInView(cameraPosition: Vector2D, canvasBounds: Vector2D): boolean {
@@ -48,11 +48,15 @@ export default class Node implements IRenderable, IClickable {
 	}
 
 	public onClick() {
-		this._clicked = !this._clicked;
-		console.log(`Clicked on node ${this._id}`);
+		this.clicked = !this.clicked;
+		console.log(`Clicked on node ${this.id}`);
 	}
 
 	public onDoubleClick() {
-		console.log(`Double-clicked on node ${this._id}`);
+		console.log(`Double-clicked on node ${this.id}`);
 	}
+
+	public onDragStart() {}
+	public onDrag() {}
+	public onDragEnd() {}
 }

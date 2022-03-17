@@ -1,7 +1,5 @@
 import World from "./World";
-import Vector2D from "./Vector2D";
-import IClickable from "./interfaces/IClickable";
-import IHoverable from "./interfaces/IHoverable";
+import Vector2D from "./util/Vector2D";
 
 export default class InputHandler {
 	constructor(private _canvas: HTMLCanvasElement, private _world: World) {
@@ -23,15 +21,13 @@ export default class InputHandler {
 	private onClick(event: MouseEvent) {
 		event.preventDefault();
 
-		// Retrieve all clickable renderables on screen
-		let clickables = this._world.renderablesInView as IClickable[];
-		
-		let clickable = clickables
-			.sort(clickable => clickable.zIndex)
-			.reverse()
-			.filter(clickable => clickable.isMouseOver(this._world.camera.currentPosition, this._world.camera.mousePosition))[0];
+		let mousePosition = new Vector2D(event.clientX, event.clientY)
 
-		// If we aren't cicking on a clickable renderable, then we must be clicking on the canvas
+		let clickable = this._world.clickablesInView
+			.filter(clickable => clickable.isMouseOver(this._world.camera.currentPosition, mousePosition))
+			.sort(clickable => clickable.zIndex)
+			.reverse()[0];
+
 		if (!clickable)
 			return;
 
@@ -41,31 +37,58 @@ export default class InputHandler {
 	private onDoubleClick(event: MouseEvent) {
 		event.preventDefault();
 
-		let clickables = this._world.renderablesInView as IClickable[];
+		let mousePosition = new Vector2D(event.clientX, event.clientY)
 
-		let clickable = clickables
+		let clickable = this._world.clickablesInView
+			.filter(clickable => clickable.isMouseOver(this._world.camera.currentPosition, mousePosition))
 			.sort(clickable => clickable.zIndex)
-			.reverse()
-			.filter(clickable => clickable.isMouseOver(this._world.camera.currentPosition, this._world.camera.mousePosition))[0];
+			.reverse()[0];
 
 		if (!clickable) {
 			this._world.createNode(new Vector2D(event.clientX - this._world.camera.currentPosition.x, event.clientY - this._world.camera.currentPosition.y));
 			return;
 		}
-
+	
 		clickable.onDoubleClick();
 	}
 
 	private onMouseDown(event: MouseEvent) {
 		event.preventDefault();
+
+		let mousePosition = new Vector2D(event.clientX, event.clientY)
+
+		let draggable = this._world.draggablesInView
+			.filter(draggable => draggable.isMouseOver(this._world.camera.currentPosition, mousePosition))
+			.sort(draggable => draggable.zIndex)
+			.reverse()[0];
+
+		draggable ? draggable.onDragStart() : this._world.camera.onDragStart(event);
 	}
 
 	private onMouseUp(event: MouseEvent) {
 		event.preventDefault();
+
+		if (this._world.camera.dragging) {
+			this._world.camera.onDragEnd(event);
+			return;
+		}
+
+		let draggable = this._world.draggablesInView.find(draggable => draggable.dragging);
+
+		draggable?.onDragEnd()
 	}
 
 	private onMouseMove(event: MouseEvent) {
 		event.preventDefault();
+		
+		if (this._world.camera.dragging) {
+			this._world.camera.onDrag(event);
+			return;
+		}
+
+		let draggable = this._world.draggablesInView.find(draggable => draggable.dragging);
+
+		draggable?.onDrag()
 	}
 
 	private onResize() {

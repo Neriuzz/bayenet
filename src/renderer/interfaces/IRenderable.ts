@@ -1,4 +1,4 @@
-import Vector2D from "../Vector2D";
+import Vector2D from "../util/Vector2D";
 
 export default interface IRenderable {
 	readonly id: number;

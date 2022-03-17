@@ -1,11 +1,16 @@
-import IRenderable from "./interfaces/IRenderable";
-
+// Required imports
 import Camera from "./Camera";
-
 import Node from "./entities/Node";
 
-import Vector2D from "./Vector2D";
+// Utilities
+import Vector2D from "./util/Vector2D";
+import { isClickable, isHoverable, isDraggable } from "./util/TypeGuard";
+
+// Interfaces
+import IRenderable from "./interfaces/IRenderable";
 import IClickable from "./interfaces/IClickable";
+import IHoverable from "./interfaces/IHoverable";
+import IDraggable from "./interfaces/IDraggable";
 
 
 export default class World {
@@ -30,8 +35,20 @@ export default class World {
 		return this._renderables.filter(renderable => renderable.isInView(this._camera.currentPosition, this._camera.canvasBounds));
 	}
 
+	public get clickablesInView(): IClickable[] {
+		return this.renderablesInView.filter(isClickable) as any;
+	}
+
+	public get hoverablesInView(): IHoverable[] {
+		return this.renderablesInView.filter(isHoverable) as any;
+	}
+
+	public get draggablesInView(): IDraggable[] {
+		return this.renderablesInView.filter(isDraggable) as any;
+	}
+
 	public get selectedRenderables(): IRenderable[] {
-		return this._renderables.filter(renderable => (renderable as IClickable).clicked);
+		return this._renderables.filter(renderable => isClickable(renderable) && renderable.clicked);
 	}
 
 	public get camera(): Camera {
@@ -39,7 +56,8 @@ export default class World {
 	}
 
 	public createNode(coords: Vector2D) {
-		this.addRenderable(new Node(this._nextID++, coords, 20));
+		let node = new Node(this._nextID++, coords, 20);
+		this.addRenderable(node);
 	}
 
 	public deleteNode(node: Node) {
