@@ -62,7 +62,7 @@ export default class InputHandler {
 			.sort(draggable => draggable.zIndex)
 			.reverse()[0];
 
-		draggable ? draggable.onDragStart() : this._world.camera.onDragStart(event);
+		draggable ? draggable.onDragStart(event) : this._world.camera.onDragStart(event);
 	}
 
 	private onMouseUp(event: MouseEvent) {
@@ -75,12 +75,12 @@ export default class InputHandler {
 
 		let draggable = this._world.draggablesInView.find(draggable => draggable.dragging);
 
-		draggable?.onDragEnd()
+		draggable?.onDragEnd(event)
 	}
 
 	private onMouseMove(event: MouseEvent) {
 		event.preventDefault();
-		
+
 		if (this._world.camera.dragging) {
 			this._world.camera.onDrag(event);
 			return;
@@ -88,7 +88,7 @@ export default class InputHandler {
 
 		let draggable = this._world.draggablesInView.find(draggable => draggable.dragging);
 
-		draggable?.onDrag()
+		draggable?.onDrag(event)
 	}
 
 	private onResize() {
