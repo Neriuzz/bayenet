@@ -10,6 +10,7 @@ const Canvas = () => {
 
 	useEffect(
 		() => {
+			canvasRef.current?.focus();
 			contextRef.current = canvasRef.current?.getContext("2d");
 
 			if (canvasRef.current && contextRef.current) {
@@ -23,7 +24,7 @@ const Canvas = () => {
 	);
 	
 	return (
-		<canvas ref={canvasRef} />
+		<canvas ref={canvasRef} tabIndex={0} />
 	);
 };
 

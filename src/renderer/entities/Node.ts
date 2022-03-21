@@ -1,3 +1,4 @@
+import ClickGesture from "../gestures/ClickGesture";
 import IClickable from "../interfaces/IClickable";
 import IDraggable from "../interfaces/IDraggable";
 import IRenderable from "../interfaces/IRenderable";
@@ -45,12 +46,16 @@ export default class Node extends DraggableEntity implements IRenderable, IClick
 		);
 	}
 
-	public onClick() {
+	public onClick(clickGesture: ClickGesture) {
 		this.selected = !this.selected;
+
+		if (!clickGesture.altPressed)
+			clickGesture.selected?.forEach(clickable => clickable.selected = false);
+
 		console.log(`Clicked on node ${this.id}`);
 	}
 
-	public onDoubleClick() {
+	public onDoubleClick(clickGesture: ClickGesture) {
 		console.log(`Double-clicked on node ${this.id}`);
 	}
 };
