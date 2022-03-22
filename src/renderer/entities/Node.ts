@@ -1,16 +1,14 @@
 import ClickGesture from "../gestures/ClickGesture";
+import DragGesture from "../gestures/DragGesture";
 import IClickable from "../interfaces/IClickable";
 import IDraggable from "../interfaces/IDraggable";
 import IRenderable from "../interfaces/IRenderable";
 import Vector2D from "../util/Vector2D";
 import DraggableEntity from "./DraggableEntity";
 
-export default class Node extends DraggableEntity implements IRenderable, IClickable, IDraggable {
+export default class Node extends DraggableEntity implements IRenderable, IClickable {
 	public clickable = true;
-	public draggable = true;
-
 	public selected = false;
-	public zIndex = 1;
 
 	constructor(public id: number, _currentPosition: Vector2D, private _r: number) {
 		super(_currentPosition);

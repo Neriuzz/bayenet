@@ -39,15 +39,14 @@ export default class InputHandler {
 
 	private getInteractable(interactables: IInteractable[], mousePosition: Vector2D): IInteractable {
 		let [interactable] = interactables
-			.filter(interactable => interactable.isMouseOver!(this._world.camera.currentPosition, mousePosition))
-			.sort(interactable => interactable.zIndex!)
-			.reverse()
-		
+			.filter(interactable => interactable.isMouseOver(this._world.camera.currentPosition, mousePosition))
+			.sort(interactable => interactable.zIndex);
+
 		return interactable ?? this.board;
 	}
 
 	private get currentlyDragging(): IDraggable | undefined {
-		return this._world.camera.dragging ? this.board : this._world.draggablesInView.find(draggable => draggable.dragging);
+		return this.board.dragging ? this.board : this._world.draggablesInView.find(draggable => draggable.dragging);
 	}
 
 	private onKeyDown(event: KeyboardEvent) {
@@ -110,11 +109,14 @@ export default class InputHandler {
 
 		this.dragging = false;
 
-		let mousePosition = new Vector2D(event.clientX, event.clientY)
+		let position = new Vector2D(event.clientX, event.clientY);
+		const dragGesture = {
+			position
+		};
 
-		let draggable = this.getInteractable(this._world.draggablesInView, mousePosition) as IDraggable;
+		let draggable = this.getInteractable(this._world.draggablesInView, position) as IDraggable;
 
-		draggable.onDragStart(event);
+		draggable.onDragStart(dragGesture);
 	}
 		
 	private onMouseMove(event: MouseEvent) {
@@ -122,13 +124,23 @@ export default class InputHandler {
 
 		this.dragging = true;
 
-		this.currentlyDragging?.onDrag(event);
+		let position = new Vector2D(event.clientX, event.clientY);
+		const dragGesture = {
+			position
+		};
+
+		this.currentlyDragging?.onDrag(dragGesture);
 	}
 
 	private onMouseUp(event: MouseEvent) {
 		event.preventDefault();
 
-		this.currentlyDragging?.onDragEnd(event);
+		let position = new Vector2D(event.clientX, event.clientY);
+		const dragGesture = {
+			position
+		};
+
+		this.currentlyDragging?.onDragEnd(dragGesture);
 	}
 
 	private onResize() {

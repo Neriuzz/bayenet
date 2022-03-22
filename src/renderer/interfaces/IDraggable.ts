@@ -1,10 +1,11 @@
+import DragGesture from "../gestures/DragGesture";
 import IInteractable from "./IInteractable";
 
 export default interface IDraggable extends IInteractable {
-	readonly draggable?: boolean;
+	readonly draggable: boolean;
+	readonly dragging: boolean;
 
-	readonly dragging?: boolean;
-	onDragStart(event: MouseEvent): void;
-	onDrag(event: MouseEvent): void;
-	onDragEnd(event: MouseEvent): void;
+	onDragStart(dragGesture: DragGesture): void;
+	onDrag(dragGesture: DragGesture): void;
+	onDragEnd(dragGesture: DragGesture): void;
 };

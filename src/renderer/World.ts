@@ -11,6 +11,7 @@ import IRenderable from "./interfaces/IRenderable";
 import IClickable from "./interfaces/IClickable";
 import IHoverable from "./interfaces/IHoverable";
 import IDraggable from "./interfaces/IDraggable";
+import IInteractable from "./interfaces/IInteractable";
 
 
 export default class World {
@@ -32,7 +33,9 @@ export default class World {
 	}
 
 	public get renderablesInView(): IRenderable[] {
-		return this._renderables.filter(renderable => renderable.isInView(this._camera.currentPosition, this._camera.canvasBounds));
+		return this._renderables
+			.filter(renderable => renderable.isInView(this._camera.currentPosition, this._camera.canvasBounds))
+			.sort((a, b) => a.zIndex - b.zIndex);
 	}
 
 	public get clickablesInView(): IClickable[] {
@@ -45,6 +48,10 @@ export default class World {
 
 	public get draggablesInView(): IDraggable[] {
 		return this.renderablesInView.filter(isDraggable) as any;
+	}
+
+	public get interactablesInView(): IInteractable[] {
+		return this.renderablesInView.filter(isClickable || isDraggable || isHoverable) as any;
 	}
 
 	public get selectedClickables(): IClickable[] {

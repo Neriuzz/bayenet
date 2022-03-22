@@ -1,10 +1,20 @@
 import DraggableEntity from "./entities/DraggableEntity";
 import Vector2D from "./util/Vector2D";
 
-export default class Camera extends DraggableEntity {
+export default class Camera {
+
+	private _currentPosition: Vector2D;
 
 	constructor(private _canvas: HTMLCanvasElement, private _context: CanvasRenderingContext2D) {
-		super(new Vector2D(0, 0));
+		this._currentPosition = new Vector2D(0, 0);		
+	}
+
+	public get currentPosition() {
+		return this._currentPosition;
+	}
+
+	public set currentPosition(newPosition: Vector2D) {
+		this._currentPosition = newPosition;
 	}
 
 	public clearScreen() {
