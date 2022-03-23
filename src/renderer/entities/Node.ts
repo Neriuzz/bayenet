@@ -1,7 +1,5 @@
 import ClickGesture from "../gestures/ClickGesture";
-import DragGesture from "../gestures/DragGesture";
 import IClickable from "../interfaces/IClickable";
-import IDraggable from "../interfaces/IDraggable";
 import IRenderable from "../interfaces/IRenderable";
 import Vector2D from "../util/Vector2D";
 import DraggableEntity from "./DraggableEntity";

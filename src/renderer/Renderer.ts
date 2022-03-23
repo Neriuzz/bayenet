@@ -28,7 +28,7 @@ export default class Renderer {
 		// Clear the bitmap
 		this._camera.clearScreen();
 
-		// Sort renderables by z-index
+		// Sort renderables by increasing z-index
 		let renderables = this._world.renderablesInView.sort((a, b) => a.zIndex - b.zIndex);
 
 		// Render out each renderable
