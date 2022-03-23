@@ -13,7 +13,7 @@ export default class Board extends DraggableEntity implements IClickable {
 	public zIndex = 0;
 
 	constructor (private world: World) {
-		super(new Vector2D(0, 0));
+		super(-1, new Vector2D(0, 0));
 	}
 
 	public onClick(clickGesture: ClickGesture) {

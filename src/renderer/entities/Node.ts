@@ -11,7 +11,7 @@ export default class Node extends DraggableEntity implements IRenderable, IClick
 	public selected = false;
 
 	constructor(public id: number, _currentPosition: Vector2D, private _r: number) {
-		super(_currentPosition);
+		super(id, _currentPosition);
 	}
 
 	public render(context: CanvasRenderingContext2D) {
@@ -50,7 +50,7 @@ export default class Node extends DraggableEntity implements IRenderable, IClick
 		if (!clickGesture.altPressed)
 			clickGesture.selected?.forEach(clickable => clickable.selected = false);
 
-		console.log(`Clicked on node ${this.id}`);
+		console.log(this);
 	}
 
 	public onDoubleClick(clickGesture: ClickGesture) {

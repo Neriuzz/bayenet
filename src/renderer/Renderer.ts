@@ -25,10 +25,14 @@ export default class Renderer {
 	}
 
 	public draw() {
+		// Clear the bitmap
 		this._camera.clearScreen();
-		this._world.renderablesInView.forEach(renderable => {
-			renderable.render(this._context);
-		});
+
+		// Sort renderables by z-index and render each
+		this._world.renderablesInView
+			.sort((a, b) => a.zIndex - b.zIndex)
+			.reverse()
+			.forEach(renderable => { renderable.render(this._context) });
 	}
 
 	public renderLoop() {

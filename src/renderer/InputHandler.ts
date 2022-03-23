@@ -40,13 +40,10 @@ export default class InputHandler {
 	private getInteractable(interactables: IInteractable[], mousePosition: Vector2D): IInteractable {
 		let [interactable] = interactables
 			.filter(interactable => interactable.isMouseOver(this._world.camera.currentPosition, mousePosition))
-			.sort(interactable => interactable.zIndex);
+			.sort((a, b) => a.zIndex - b.zIndex)
+			.reverse();
 
-		return interactable ?? this.board;
-	}
-
-	private get currentlyDragging(): IDraggable | undefined {
-		return this.board.dragging ? this.board : this._world.draggablesInView.find(draggable => draggable.dragging);
+		return interactable;
 	}
 
 	private onKeyDown(event: KeyboardEvent) {
@@ -63,28 +60,27 @@ export default class InputHandler {
 	private onClick(event: MouseEvent) {
 		event.preventDefault();
 
-		// Do not call on click handler if we are currently dragging something
-		if (this.dragging)
+		// Do not call on click handler if we are currently dragging or this is our second click
+		if (this.dragging || event.detail !== 1)
 			return;
 
-		if (event.detail === 1) {
-			this.timer = setTimeout(() => {		
-				let position = new Vector2D(event.clientX, event.clientY);	
-				let offset = this._world.camera.currentPosition;
-				const clickGesture = {
-					position,
-					offset,
-					selected: this._world.selectedClickables,
-					altPressed: event.altKey
-				};
+		
+		this.timer = setTimeout(() => {		
+			let position = new Vector2D(event.clientX, event.clientY);	
+			let offset = this._world.camera.currentPosition;
+			const clickGesture = {
+				position,
+				offset,
+				selected: this._world.selectedClickables,
+				altPressed: event.altKey
+			};
 
-				// Retrieve the entity we are clicking on
-				let clickable = this.getInteractable(this._world.clickablesInView, position) as IClickable;
+			// Retrieve the entity we are clicking on
+			let clickable = this.getInteractable(this._world.clickablesInView, position) as IClickable;
 
-				// If we are clicking on something, then perfrom the click action
-				clickable.onClick(clickGesture);
-			}, 200);
-		}
+			// If we are clicking on something, then perfrom the click action
+			clickable ? clickable.onClick(clickGesture) : this.board.onClick(clickGesture);
+		}, 200);
 	}
 
 	private onDoubleClick(event: MouseEvent) {
@@ -100,8 +96,8 @@ export default class InputHandler {
 		 };
 
 		let clickable = this.getInteractable(this._world.clickablesInView, position) as IClickable;
-	
-		clickable.onDoubleClick(clickGesture);
+
+		clickable ? clickable.onDoubleClick(clickGesture) : this.board.onDoubleClick(clickGesture);
 	}
 
 	private onMouseDown(event: MouseEvent) {
@@ -116,7 +112,7 @@ export default class InputHandler {
 
 		let draggable = this.getInteractable(this._world.draggablesInView, position) as IDraggable;
 
-		draggable.onDragStart(dragGesture);
+		draggable ? draggable.onDragStart(dragGesture) : this.board.onDragStart(dragGesture);
 	}
 		
 	private onMouseMove(event: MouseEvent) {
@@ -129,18 +125,44 @@ export default class InputHandler {
 			position
 		};
 
-		this.currentlyDragging?.onDrag(dragGesture);
+		if (this.board.dragging) {
+			this.board.onDrag(dragGesture);
+			return;
+		}
+
+		let draggable = this._world.draggablesInView.find(draggable => draggable.dragging) as IDraggable;
+		draggable?.onDrag(dragGesture);
 	}
 
 	private onMouseUp(event: MouseEvent) {
 		event.preventDefault();
 
 		let position = new Vector2D(event.clientX, event.clientY);
-		const dragGesture = {
+		let dragGesture = {
 			position
 		};
 
-		this.currentlyDragging?.onDragEnd(dragGesture);
+		if (this.board.dragging) {
+			this.board.onDragEnd(dragGesture);
+			return;
+		}
+
+		let draggable = this._world.draggablesInView.find(draggable => draggable.dragging) as IDraggable;
+		if (draggable) {
+			let [interactable] = this._world.interactablesInView
+				.filter(interactable => interactable.id !== draggable.id && interactable.isMouseOver(this._world.camera.currentPosition, position))
+				.sort((a, b) => a.zIndex - b.zIndex)
+				.reverse();
+			
+			let zIndex = interactable?.zIndex + 1 || 1;
+
+			let dragGesture = {
+				position,
+				zIndex
+			}
+
+			draggable.onDragEnd(dragGesture);
+		}
 	}
 
 	private onResize() {

@@ -10,7 +10,7 @@ export default abstract class DraggableEntity implements IDraggable {
 	protected _initialPosition: Vector2D;
 	protected _dragStartPosition: Vector2D | null = null;
 
-	constructor(protected _currentPosition: Vector2D) {
+	constructor(public id: number, protected _currentPosition: Vector2D) {
 		this._initialPosition = new Vector2D(this._currentPosition.x, this._currentPosition.y);
 	}
 
@@ -28,6 +28,7 @@ export default abstract class DraggableEntity implements IDraggable {
 	public onDragEnd(dragGesture: DragGesture) {
 		this.dragging = false;
 		this._dragStartPosition = null;
+		this.zIndex = dragGesture?.zIndex || this.zIndex;
 	}
 
 	public get currentPosition(): Vector2D {

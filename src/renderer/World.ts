@@ -33,9 +33,7 @@ export default class World {
 	}
 
 	public get renderablesInView(): IRenderable[] {
-		return this._renderables
-			.filter(renderable => renderable.isInView(this._camera.currentPosition, this._camera.canvasBounds))
-			.sort((a, b) => a.zIndex - b.zIndex);
+		return this._renderables.filter(renderable => renderable.isInView(this._camera.currentPosition, this._camera.canvasBounds));
 	}
 
 	public get clickablesInView(): IClickable[] {
