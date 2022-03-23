@@ -13,7 +13,6 @@ export default class Node extends DraggableEntity implements IRenderable, IClick
 	}
 
 	public render(context: CanvasRenderingContext2D) {
-		context.save();
 		context.beginPath();
 		context.arc(this._currentPosition.x, this._currentPosition.y, this._r, 0, Math.PI * 2);
 		context.fillStyle = "red";
@@ -25,7 +24,6 @@ export default class Node extends DraggableEntity implements IRenderable, IClick
 			context.globalAlpha = 1;
 		}
  		context.fill();
-		context.restore();
 	}
 
 	public isInView(cameraPosition: Vector2D, canvasBounds: Vector2D): boolean {

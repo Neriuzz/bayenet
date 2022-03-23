@@ -32,7 +32,11 @@ export default class Renderer {
 		let renderables = this._world.renderablesInView.sort((a, b) => a.zIndex - b.zIndex);
 
 		// Render out each renderable
-		renderables.forEach(renderable => renderable.render(this._context));
+		renderables.forEach(renderable => {
+			this._context.save();
+			renderable.render(this._context);
+			this._context.restore();
+		});
 	}
 
 	public renderLoop() {
