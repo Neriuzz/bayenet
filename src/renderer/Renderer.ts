@@ -28,11 +28,11 @@ export default class Renderer {
 		// Clear the bitmap
 		this._camera.clearScreen();
 
-		// Sort renderables by z-index and render each
-		this._world.renderablesInView
-			.sort((a, b) => a.zIndex - b.zIndex)
-			.reverse()
-			.forEach(renderable => { renderable.render(this._context) });
+		// Sort renderables by z-index
+		let renderables = this._world.renderablesInView.sort((a, b) => a.zIndex - b.zIndex);
+
+		// Render out each renderable
+		renderables.forEach(renderable => renderable.render(this._context));
 	}
 
 	public renderLoop() {

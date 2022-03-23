@@ -59,7 +59,7 @@ export default class InputHandler {
 
 	private onClick(event: MouseEvent) {
 		event.preventDefault();
-
+		
 		// Do not call on click handler if we are currently dragging or this is our second click
 		if (this.dragging || event.detail !== 1)
 			return;
