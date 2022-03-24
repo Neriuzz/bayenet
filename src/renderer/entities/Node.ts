@@ -1,11 +1,14 @@
 import ClickGesture from "../gestures/ClickGesture";
 import IClickable from "../interfaces/IClickable";
+import IHoverable from "../interfaces/IHoverable";
 import IRenderable from "../interfaces/IRenderable";
 import Vector2D from "../util/Vector2D";
 import DraggableEntity from "./DraggableEntity";
 
-export default class Node extends DraggableEntity implements IRenderable, IClickable {
+export default class Node extends DraggableEntity implements IRenderable, IClickable, IHoverable {
 	public clickable = true;
+	public hoverable = true;
+	public hovering = false;
 	public selected = false;
 
 	constructor(public id: number, currentPosition: Vector2D, private r: number) {
@@ -23,6 +26,7 @@ export default class Node extends DraggableEntity implements IRenderable, IClick
 			context.stroke();
 		}
  		context.fill();
+		context.closePath();
 	}
 
 	public isInView(cameraPosition: Vector2D, canvasBounds: Vector2D): boolean {
@@ -50,5 +54,19 @@ export default class Node extends DraggableEntity implements IRenderable, IClick
 
 	public onDoubleClick(clickGesture: ClickGesture) {
 		console.log(`Double-clicked on node ${this.id}`);
+	}
+
+	public onEnterHover() {
+		this.hovering = true;
+		console.log(`Started hovering over node ${this.id}`);
+	}
+
+	public onHovering() {
+		console.log(`Hovering over node ${this.id}`);
+	}
+
+	public onExitHover() {
+		this.hovering = false;
+		console.log(`Stopped hovering over node ${this.id}`);
 	}
 };

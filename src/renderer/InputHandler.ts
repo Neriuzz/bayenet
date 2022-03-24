@@ -8,6 +8,9 @@ import IInteractable from "./interfaces/IInteractable";
 import IClickable from "./interfaces/IClickable";
 import IDraggable from "./interfaces/IDraggable";
 import ClickGesture from "./gestures/ClickGesture";
+import KeyGesture from "./gestures/KeyGesture";
+import DragGesture from "./gestures/DragGesture";
+import IHoverable from "./interfaces/IHoverable";
 
 export default class InputHandler {
 	// Variable for differentiating between drags and clicks
@@ -62,7 +65,7 @@ export default class InputHandler {
 	private onKeyDown(event: KeyboardEvent) {
 		event.preventDefault();
 		
-		let keyGesture = {
+		let keyGesture: KeyGesture = {
 			key: event.key,
 			selected: this.world.selectedClickables
 		};
@@ -81,7 +84,7 @@ export default class InputHandler {
 		this.timer = setTimeout(() => {		
 			let position = this.getTruePosition(new Vector2D(event.clientX, event.clientY));
 			let offset = this.world.camera.position;
-			let clickGesture = {
+			let clickGesture: ClickGesture = {
 				position,
 				offset,
 				selected: this.world.selectedClickables,
@@ -103,7 +106,7 @@ export default class InputHandler {
 
 		let position = this.getTruePosition(new Vector2D(event.clientX, event.clientY));
 		let offset = this.world.camera.position;
-		let clickGesture = { 
+		let clickGesture: ClickGesture = { 
 			position,
 			offset
 		 };
@@ -119,7 +122,7 @@ export default class InputHandler {
 		this.dragging = false;
 
 		let position = new Vector2D(event.clientX, event.clientY);
-		let dragGesture = {
+		let dragGesture: DragGesture = {
 			position
 		};
 
@@ -130,15 +133,15 @@ export default class InputHandler {
 		
 	private onMouseMove(event: MouseEvent) {
 		event.preventDefault();
+		
+		let position = new Vector2D(event.clientX, event.clientY);
 
 		this.dragging = true;
 
-		let position = new Vector2D(event.clientX, event.clientY);
-		let dragGesture = {
-			position
-		};
-
 		if (this.board.dragging) {
+			let dragGesture: DragGesture = {
+				position
+			};
 			this.board.onDrag(dragGesture);
 			return;
 		}
@@ -151,18 +154,21 @@ export default class InputHandler {
 				zIndex
 			};
 			draggable.onDrag(dragGesture);
+			return;
 		}
+
+		this.onHover(this.getTruePosition(position));
 	}
 
 	private onMouseUp(event: MouseEvent) {
 		event.preventDefault();
 
 		let position = new Vector2D(event.clientX, event.clientY);
-		let dragGesture = {
-			position
-		};
 
 		if (this.board.dragging) {
+			let dragGesture: DragGesture = {
+				position
+			};
 			this.board.onDragEnd(dragGesture);
 			return;
 		}
@@ -176,6 +182,20 @@ export default class InputHandler {
 			};
 			draggable.onDragEnd(dragGesture);
 		}
+	}
+
+	private onHover(position: Vector2D) {
+		let hovering = this.world.hoverablesInView.find(hoverable => hoverable.hovering);
+		if (hovering) {
+			if (hovering.isMouseOver(position))
+				console.log(`Hovering over node ${hovering.id}`);
+			else
+				hovering.onExitHover();
+			return;
+		}
+		
+		let hoverable = this.getInteractable(this.world.hoverablesInView, position) as IHoverable;
+		hoverable?.onEnterHover();
 	}
 
 	private onResize() {
