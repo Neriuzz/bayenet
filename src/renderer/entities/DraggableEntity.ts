@@ -7,34 +7,34 @@ export default abstract class DraggableEntity implements IDraggable {
 	public dragging = false;
 	public zIndex = 1;
 
-	protected _initialPosition: Vector2D;
-	protected _dragStartPosition: Vector2D | null = null;
+	protected initialPosition: Vector2D;
+	protected dragStartPosition: Vector2D | null = null;
 
-	constructor(public id: number, protected _currentPosition: Vector2D) {
-		this._initialPosition = new Vector2D(this._currentPosition.x, this._currentPosition.y);
+	constructor(public id: number, protected currentPosition: Vector2D) {
+		this.initialPosition = new Vector2D(this.currentPosition.x, this.currentPosition.y);
 	}
 
 	public onDragStart(dragGesture: DragGesture) {
 		this.dragging = true;
-		this._dragStartPosition = dragGesture.position;
-		this._initialPosition = new Vector2D(this._currentPosition.x, this._currentPosition.y);
+		this.dragStartPosition = dragGesture.position;
+		this.initialPosition = new Vector2D(this.currentPosition.x, this.currentPosition.y);
 	}
 
 	public onDrag(dragGesture: DragGesture) {
 		this.zIndex = dragGesture.zIndex || this.zIndex;
-		let deltaPosition = new Vector2D(dragGesture.position.x - this._dragStartPosition!.x, dragGesture.position.y - this._dragStartPosition!.y);
-		this._currentPosition = new Vector2D(this._initialPosition.x + deltaPosition.x, this._initialPosition.y + deltaPosition.y);
+		let deltaPosition = new Vector2D(dragGesture.position.x - this.dragStartPosition!.x, dragGesture.position.y - this.dragStartPosition!.y);
+		this.currentPosition = new Vector2D(this.initialPosition.x + deltaPosition.x, this.initialPosition.y + deltaPosition.y);
 	}
 
 	public onDragEnd(dragGesture: DragGesture) {
 		this.dragging = false;
-		this._dragStartPosition = null;
+		this.dragStartPosition = null;
 		this.zIndex = dragGesture.zIndex || this.zIndex;
 	}
 
-	public get currentPosition(): Vector2D {
-		return this._currentPosition;
+	public get position(): Vector2D {
+		return this.currentPosition;
 	}
 
-	public abstract isMouseOver(cameraPosition: Vector2D, mousePosition: Vector2D): boolean
+	public abstract isMouseOver(position: Vector2D): boolean
 };

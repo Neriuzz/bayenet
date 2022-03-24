@@ -15,25 +15,21 @@ import IInteractable from "./interfaces/IInteractable";
 
 
 export default class World {
-	private _renderables: IRenderable[] = [];
-	private _nextID: number = 0;
+	private renderables: IRenderable[] = [];
+	private nextID: number = 0;
 
-	constructor(private _camera: Camera) {}
+	constructor(public readonly camera: Camera) {}
 
 	private addRenderable(renderable: IRenderable) {
-		this._renderables.push(renderable);
+		this.renderables.push(renderable);
 	}
 
 	private removeRenderable(renderable: IRenderable) {
-		this._renderables = this._renderables.filter(_renderable => _renderable.id != renderable.id);
-	}
-
-	public get renderables(): IRenderable[] {
-		return this._renderables;
+		this.renderables = this.renderables.filter(_renderable => _renderable.id !== renderable.id);
 	}
 
 	public get renderablesInView(): IRenderable[] {
-		return this._renderables.filter(renderable => renderable.isInView(this._camera.currentPosition, this._camera.canvasBounds));
+		return this.renderables.filter(renderable => renderable.isInView(this.camera.position, this.camera.bounds));
 	}
 
 	public get clickablesInView(): IClickable[] {
@@ -53,15 +49,11 @@ export default class World {
 	}
 
 	public get selectedClickables(): IClickable[] {
-		return this._renderables.filter(renderable => isClickable(renderable) && renderable.selected) as any;
-	}
-
-	public get camera(): Camera {
-		return this._camera;
+		return this.renderables.filter(renderable => isClickable(renderable) && renderable.selected) as any;
 	}
 
 	public createNode(coords: Vector2D) {
-		let node = new Node(this._nextID++, coords, 20);
+		let node = new Node(this.nextID++, coords, 20);
 		this.addRenderable(node);
 	}
 

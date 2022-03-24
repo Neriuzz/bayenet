@@ -21,16 +21,16 @@ export default class Board extends DraggableEntity implements IClickable {
 	}
 	
 	public onDoubleClick(clickGesture: ClickGesture) {
-		let coords = new Vector2D(clickGesture.position.x - clickGesture.offset.x, clickGesture.position.y - clickGesture.offset.y);
+		let coords = new Vector2D(clickGesture.position.x, clickGesture.position.y);
 		this.world.createNode(coords);
 	}
 
 	public onDrag(dragGesture: DragGesture) {
 		super.onDrag(dragGesture);
-		this.world.camera.currentPosition = this._currentPosition;
+		this.world.camera.position = this.currentPosition;
 	}
 
-	public isMouseOver(cameraPosition: Vector2D, mousePosition: Vector2D): boolean { return true }
+	public isMouseOver(position: Vector2D): boolean { return true }
 
 	public onKeyDown(keyGesture: KeyGesture) {
 		if (keyGesture.key == "Delete")

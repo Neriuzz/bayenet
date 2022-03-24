@@ -8,35 +8,34 @@ export default class Node extends DraggableEntity implements IRenderable, IClick
 	public clickable = true;
 	public selected = false;
 
-	constructor(public id: number, _currentPosition: Vector2D, private _r: number) {
-		super(id, _currentPosition);
+	constructor(public id: number, currentPosition: Vector2D, private r: number) {
+		super(id, currentPosition);
 	}
 
 	public render(context: CanvasRenderingContext2D) {
 		context.beginPath();
-		context.arc(this._currentPosition.x, this._currentPosition.y, this._r, 0, Math.PI * 2);
+		context.arc(this.position.x, this.position.y, this.r, 0, Math.PI * 2);
 		context.fillStyle = "red";
 		if (this.selected) {
-			context.globalAlpha = 0.5;
 			context.strokeStyle = "blue";
 			context.lineWidth = 6;
+			context.lineCap = "round";
 			context.stroke();
-			context.globalAlpha = 1;
 		}
  		context.fill();
 	}
 
 	public isInView(cameraPosition: Vector2D, canvasBounds: Vector2D): boolean {
 		return ( 
-			(this._currentPosition.x + this._r + cameraPosition.x >= 0 && this._currentPosition.y + this._r + cameraPosition.y >= 0) && 
-			(this._currentPosition.x - this._r + cameraPosition.x < canvasBounds.x && this._currentPosition.y - this._r + cameraPosition.y < canvasBounds.y)
+			(this.position.x + this.r + cameraPosition.x >= 0 && this.position.y + this.r + cameraPosition.y >= 0) && 
+			(this.position.x - this.r + cameraPosition.x < canvasBounds.x && this.position.y - this.r + cameraPosition.y < canvasBounds.y)
 		);
 	}
 
-	public isMouseOver(cameraPosition: Vector2D, mousePosition: Vector2D): boolean {
+	public isMouseOver(position: Vector2D): boolean {
 		return (
-			(mousePosition.x - cameraPosition.x - this._currentPosition.x) ** 2 + 
-			(mousePosition.y - cameraPosition.y - this._currentPosition.y) ** 2 <= this._r ** 2
+			(position.x - this.position.x) ** 2 + 
+			(position.y - this.position.y) ** 2 <= this.r ** 2
 		);
 	}
 

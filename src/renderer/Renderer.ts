@@ -3,22 +3,22 @@ import World from "./World";
 import InputHandler from "./InputHandler";
 
 export default class Renderer {
-	private _camera: Camera;
-	private _world: World;
-	private _inputHandler: InputHandler;
+	private camera: Camera;
+	private world: World;
+	private inputHandler: InputHandler;
 
-	private _frameCount: number = 0;
-	private _animationFrameID: number = 0;
+	private frameCount: number = 0;
+	private animationFrameID: number = 0;
 
-	constructor(private _canvas: HTMLCanvasElement, private _context: CanvasRenderingContext2D) {
+	constructor(private canvas: HTMLCanvasElement, private context: CanvasRenderingContext2D) {
 		// Initialise camera
-		this._camera = new Camera(this._canvas, this._context);
+		this.camera = new Camera(this.canvas, this.context);
 
 		// Initialise world
-		this._world = new World(this._camera);
+		this.world = new World(this.camera);
 
 		// Initialise input handler
-		this._inputHandler = new InputHandler(this._canvas, this._world);
+		this.inputHandler = new InputHandler(this.world);
 			
 		// Begin the render loop
 		this.renderLoop();
@@ -26,26 +26,26 @@ export default class Renderer {
 
 	public draw() {
 		// Clear the bitmap
-		this._camera.clearScreen();
+		this.camera.clearScreen();
 
 		// Sort renderables by increasing z-index
-		let renderables = this._world.renderablesInView.sort((a, b) => a.zIndex - b.zIndex);
+		let renderables = this.world.renderablesInView.sort((a, b) => a.zIndex - b.zIndex);
 
 		// Render out each renderable
 		renderables.forEach(renderable => {
-			this._context.save();
-			renderable.render(this._context);
-			this._context.restore();
+			this.context.save();
+			renderable.render(this.context);
+			this.context.restore();
 		});
 	}
 
 	public renderLoop() {
-		this._frameCount++;
+		this.frameCount++;
 		this.draw();
-		this._animationFrameID = requestAnimationFrame(() => this.renderLoop());
+		this.animationFrameID = requestAnimationFrame(() => this.renderLoop());
 	}
 
 	public cancelDraw() {
-		cancelAnimationFrame(this._animationFrameID!);
+		cancelAnimationFrame(this.animationFrameID!);
 	}
 };
