@@ -46,6 +46,15 @@ export default class InputHandler {
 		return interactable;
 	}
 
+	public getZIndex(draggable: IDraggable, position: Vector2D): number {
+		let [interactable] = this._world.interactablesInView
+				.filter(interactable => interactable.id !== draggable.id && interactable.isMouseOver(this._world.camera.currentPosition, position))
+				.sort((a, b) => a.zIndex - b.zIndex)
+				.reverse();
+		
+		return interactable?.zIndex + 1 || 1;
+	}
+
 	private onKeyDown(event: KeyboardEvent) {
 		event.preventDefault();
 		
@@ -59,7 +68,7 @@ export default class InputHandler {
 
 	private onClick(event: MouseEvent) {
 		event.preventDefault();
-		
+
 		// Do not call on click handler if we are currently dragging or this is our second click
 		if (this.dragging || event.detail !== 1)
 			return;
@@ -131,7 +140,14 @@ export default class InputHandler {
 		}
 
 		let draggable = this._world.draggablesInView.find(draggable => draggable.dragging) as IDraggable;
-		draggable?.onDrag(dragGesture);
+		if (draggable) {
+			let zIndex = Number.MAX_SAFE_INTEGER;
+			let dragGesture = {
+				position,
+				zIndex
+			};
+			draggable.onDrag(dragGesture);
+		}
 	}
 
 	private onMouseUp(event: MouseEvent) {
@@ -149,18 +165,11 @@ export default class InputHandler {
 
 		let draggable = this._world.draggablesInView.find(draggable => draggable.dragging) as IDraggable;
 		if (draggable) {
-			let [interactable] = this._world.interactablesInView
-				.filter(interactable => interactable.id !== draggable.id && interactable.isMouseOver(this._world.camera.currentPosition, position))
-				.sort((a, b) => a.zIndex - b.zIndex)
-				.reverse();
-			
-			let zIndex = interactable?.zIndex + 1 || 1;
-
+			let zIndex = this.getZIndex(draggable, position);
 			let dragGesture = {
 				position,
 				zIndex
-			}
-
+			};
 			draggable.onDragEnd(dragGesture);
 		}
 	}
