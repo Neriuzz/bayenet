@@ -2,7 +2,8 @@ import IClickable from "../interfaces/IClickable";
 
 type KeyGesture = {
 	key: string,
-	selected: IClickable[],
+	ctrl: boolean,
+	alt: boolean
 };
 
 export default KeyGesture;

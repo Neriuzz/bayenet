@@ -67,7 +67,8 @@ export default class InputHandler {
 		
 		let keyGesture: KeyGesture = {
 			key: event.key,
-			selected: this.world.selectedClickables
+			ctrl: event.ctrlKey,
+			alt: event.altKey
 		};
 
 		this.board.onKeyDown(keyGesture);

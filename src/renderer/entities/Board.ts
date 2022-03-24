@@ -34,6 +34,9 @@ export default class Board extends DraggableEntity implements IClickable {
 
 	public onKeyDown(keyGesture: KeyGesture) {
 		if (keyGesture.key == "Delete")
-			keyGesture.selected.forEach(clickable => this.world.deleteNode(clickable as Node));
+			this.world.selectedClickables.forEach(clickable => this.world.deleteNode(clickable as Node));
+		if(keyGesture.key == "a" && keyGesture.ctrl) {
+			this.world.clickables.forEach(clickable => clickable.selected = true);
+		}
 	}
 }

@@ -32,6 +32,10 @@ export default class World {
 		return this.renderables.filter(renderable => renderable.isInView(this.camera.position, this.camera.bounds));
 	}
 
+	public get clickables(): IClickable[] {
+		return this.renderables.filter(isClickable) as any;
+	}
+
 	public get clickablesInView(): IClickable[] {
 		return this.renderablesInView.filter(isClickable) as any;
 	}
