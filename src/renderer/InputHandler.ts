@@ -11,10 +11,14 @@ import ClickGesture from "./gestures/ClickGesture";
 import KeyGesture from "./gestures/KeyGesture";
 import DragGesture from "./gestures/DragGesture";
 import IHoverable from "./interfaces/IHoverable";
+import Edge from "./entities/Edge";
+import EntityType from "./EntityType";
 
 export default class InputHandler {
 	// Variable for differentiating between drags and clicks
 	private dragging = false;
+
+	private creatingEdge: Edge | null = null;
 
 	// Timer for differentiating between clicks and double clicks
 	private timer: NodeJS.Timeout | null = null;
@@ -68,7 +72,8 @@ export default class InputHandler {
 		let keyGesture: KeyGesture = {
 			key: event.key,
 			ctrl: event.ctrlKey,
-			alt: event.altKey
+			alt: event.altKey,
+			shift: event.shiftKey
 		};
 
 		this.board.onKeyDown(keyGesture);
@@ -84,19 +89,30 @@ export default class InputHandler {
 		
 		this.timer = setTimeout(() => {		
 			let position = this.getTruePosition(new Vector2D(event.clientX, event.clientY));
-			let offset = this.world.camera.position;
 			let clickGesture: ClickGesture = {
 				position,
-				offset,
-				selected: this.world.selectedClickables,
-				altPressed: event.altKey
+				alt: event.altKey,
+				shift: event.shiftKey,
+				selected: this.world.selectedClickables
 			};
 
-			// Retrieve the entity we are clicking on
 			let clickable = this.getInteractable(this.world.clickablesInView, position) as IClickable;
 
-			// If we are clicking on something, then perfrom the click action
-			clickable ? clickable.onClick(clickGesture) : this.board.onClick(clickGesture);
+			if (clickable) {
+				if (this.creatingEdge && clickable.type === EntityType.NODE) {
+					this.creatingEdge.toNode = clickable as any;
+					this.creatingEdge = null;
+					return;
+				}
+				if(clickable.type === EntityType.NODE && event.shiftKey) {
+					this.creatingEdge = this.world.createEdge(clickable as any, position);
+					return;
+				}
+				clickable.onClick(clickGesture);
+				return;
+			}
+
+			this.board.onClick(clickGesture);
 		}, 200);
 	}
 
@@ -106,10 +122,10 @@ export default class InputHandler {
 		clearTimeout(this.timer!);
 
 		let position = this.getTruePosition(new Vector2D(event.clientX, event.clientY));
-		let offset = this.world.camera.position;
 		let clickGesture: ClickGesture = { 
 			position,
-			offset
+			alt: event.altKey,
+			shift: event.shiftKey
 		 };
 
 		let clickable = this.getInteractable(this.world.clickablesInView, position) as IClickable;
@@ -138,6 +154,10 @@ export default class InputHandler {
 		let position = new Vector2D(event.clientX, event.clientY);
 
 		this.dragging = true;
+
+		if (this.creatingEdge) {
+			this.creatingEdge.position = this.getTruePosition(position);
+		}
 
 		if (this.board.dragging) {
 			let dragGesture: DragGesture = {
@@ -189,7 +209,7 @@ export default class InputHandler {
 		let hovering = this.world.hoverablesInView.find(hoverable => hoverable.hovering);
 		if (hovering) {
 			if (hovering.isMouseOver(position))
-				console.log(`Hovering over node ${hovering.id}`);
+				hovering.onHovering();
 			else
 				hovering.onExitHover();
 			return;

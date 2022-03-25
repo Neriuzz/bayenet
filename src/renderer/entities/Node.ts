@@ -1,17 +1,22 @@
+import EntityType from "../EntityType";
 import ClickGesture from "../gestures/ClickGesture";
 import IClickable from "../interfaces/IClickable";
 import IHoverable from "../interfaces/IHoverable";
 import IRenderable from "../interfaces/IRenderable";
 import Vector2D from "../util/Vector2D";
 import DraggableEntity from "./DraggableEntity";
+import Edge from "./Edge";
 
 export default class Node extends DraggableEntity implements IRenderable, IClickable, IHoverable {
 	public clickable = true;
 	public hoverable = true;
 	public hovering = false;
 	public selected = false;
+	
+	public type = EntityType.NODE;
+	public edge: Edge | null = null;
 
-	constructor(public id: number, currentPosition: Vector2D, private r: number) {
+	constructor(public id: number, currentPosition: Vector2D, public r: number) {
 		super(id, currentPosition);
 	}
 
@@ -44,9 +49,12 @@ export default class Node extends DraggableEntity implements IRenderable, IClick
 	}
 
 	public onClick(clickGesture: ClickGesture) {
+		if (clickGesture.shift)
+			return;
+
 		this.selected = !this.selected;
 
-		if (!clickGesture.altPressed)
+		if (!clickGesture.alt)
 			clickGesture.selected?.forEach(clickable => clickable.selected = false);
 
 		console.log(this);

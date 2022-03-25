@@ -1,12 +1,28 @@
+import EntityType from "../EntityType";
 import IRenderable from "../interfaces/IRenderable";
 import Vector2D from "../util/Vector2D";
+import Node from "./Node";
 
 export default class Edge implements IRenderable {
 	public zIndex = 1;
+	public type = EntityType.EDGE;
 
-	constructor(public id: number, private fromNode: Node | null, private toNode: Node | null = null) {}
+	public toNode: Node | null = null;
 
-	public render(context: CanvasRenderingContext2D) { }
+	constructor(public id: number, public fromNode: Node, public position: Vector2D) {
+		this.fromNode.edge = this;
+	}
+
+	public render(context: CanvasRenderingContext2D) {
+		context.beginPath();
+		context.moveTo(this.fromNode.position.x + this.fromNode.r, this.fromNode.position.y);
+		if (this.toNode) {
+			context.lineTo(this.toNode.position.x - this.toNode.r, this.toNode.position.y);
+		} else {
+			context.lineTo(this.position.x, this.position.y);
+		}
+		context.stroke();
+	 }
 
 	public isInView(cameraPosition: Vector2D, cameraBounds: Vector2D): boolean {
 		return true;

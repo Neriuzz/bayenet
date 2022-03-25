@@ -12,6 +12,7 @@ import IClickable from "./interfaces/IClickable";
 import IHoverable from "./interfaces/IHoverable";
 import IDraggable from "./interfaces/IDraggable";
 import IInteractable from "./interfaces/IInteractable";
+import Edge from "./entities/Edge";
 
 
 export default class World {
@@ -59,9 +60,20 @@ export default class World {
 	public createNode(coords: Vector2D) {
 		let node = new Node(this.nextID++, coords, 20);
 		this.addRenderable(node);
+		return node;
 	}
 
 	public deleteNode(node: Node) {
 		this.removeRenderable(node);
+	}
+
+	public createEdge(fromNode: Node, coords: Vector2D) {
+		let edge = new Edge(this.nextID++, fromNode, coords);
+		this.addRenderable(edge);
+		return edge;
+	}
+
+	public deleteEdge(edge: Edge) {
+		this.removeRenderable(edge);
 	}
 };

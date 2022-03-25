@@ -1,3 +1,4 @@
+import EntityType from "../EntityType";
 import ClickGesture from "../gestures/ClickGesture";
 import DragGesture from "../gestures/DragGesture";
 import KeyGesture from "../gestures/KeyGesture";
@@ -11,6 +12,7 @@ import Node from "./Node";
 export default class Board extends DraggableEntity implements IClickable {
 	public clickable = true;
 	public zIndex = 0;
+	public type = EntityType.BOARD;
 
 	constructor (private world: World) {
 		super(-1, new Vector2D(0, 0));
@@ -34,7 +36,13 @@ export default class Board extends DraggableEntity implements IClickable {
 
 	public onKeyDown(keyGesture: KeyGesture) {
 		if (keyGesture.key == "Delete")
-			this.world.selectedClickables.forEach(clickable => this.world.deleteNode(clickable as Node));
+			this.world.selectedClickables.forEach(clickable => {
+				let node = clickable as Node;
+				// if (node.edge) {
+				// 	this.world.deleteEdge(node.edge);
+				// } 
+				this.world.deleteNode(node);
+			});
 		if(keyGesture.key == "a" && keyGesture.ctrl) {
 			this.world.clickables.forEach(clickable => clickable.selected = true);
 		}
