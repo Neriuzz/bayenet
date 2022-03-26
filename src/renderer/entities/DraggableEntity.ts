@@ -1,6 +1,8 @@
+import EntityType from "../EntityType";
 import DragGesture from "../gestures/DragGesture";
 import IDraggable from "../interfaces/IDraggable";
 import Vector2D from "../util/Vector2D";
+import WorldState from "../WorldState";
 
 export default abstract class DraggableEntity implements IDraggable {
 	public draggable = true;
@@ -10,7 +12,9 @@ export default abstract class DraggableEntity implements IDraggable {
 	protected initialPosition: Vector2D;
 	protected dragStartPosition: Vector2D | null = null;
 
-	constructor(public id: number, protected currentPosition: Vector2D) {
+	protected state = WorldState.instance;
+
+	constructor(public id: number, public type: EntityType, protected currentPosition: Vector2D) {
 		this.initialPosition = new Vector2D(this.currentPosition.x, this.currentPosition.y);
 	}
 
@@ -18,6 +22,7 @@ export default abstract class DraggableEntity implements IDraggable {
 		this.dragging = true;
 		this.dragStartPosition = dragGesture.position;
 		this.initialPosition = new Vector2D(this.currentPosition.x, this.currentPosition.y);
+		this.state.draggable = this;
 	}
 
 	public onDrag(dragGesture: DragGesture) {
@@ -30,6 +35,7 @@ export default abstract class DraggableEntity implements IDraggable {
 		this.dragging = false;
 		this.dragStartPosition = null;
 		this.zIndex = dragGesture.zIndex || this.zIndex;
+		this.state.draggable = null;
 	}
 
 	public get position(): Vector2D {

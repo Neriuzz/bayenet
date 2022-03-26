@@ -4,14 +4,14 @@ import Vector2D from "../util/Vector2D";
 import Node from "./Node";
 
 export default class Edge implements IRenderable {
+	public renderable = true;
+
 	public zIndex = 1;
 	public type = EntityType.EDGE;
 
 	public toNode: Node | null = null;
 
-	constructor(public id: number, public fromNode: Node, public position: Vector2D) {
-		this.fromNode.edge = this;
-	}
+	constructor(public id: number, public fromNode: Node, public position: Vector2D) {}
 
 	public render(context: CanvasRenderingContext2D) {
 		context.beginPath();
@@ -27,5 +27,4 @@ export default class Edge implements IRenderable {
 	public isInView(cameraPosition: Vector2D, cameraBounds: Vector2D): boolean {
 		return true;
 	}
-
 }

@@ -3,28 +3,25 @@ import ClickGesture from "../gestures/ClickGesture";
 import DragGesture from "../gestures/DragGesture";
 import KeyGesture from "../gestures/KeyGesture";
 import IClickable from "../interfaces/IClickable";
-import IDraggable from "../interfaces/IDraggable";
 import Vector2D from "../util/Vector2D";
 import World from "../World";
 import DraggableEntity from "./DraggableEntity";
-import Node from "./Node";
 
 export default class Board extends DraggableEntity implements IClickable {
 	public clickable = true;
 	public zIndex = 0;
-	public type = EntityType.BOARD;
 
 	constructor (private world: World) {
-		super(-1, new Vector2D(0, 0));
+		super(-1, EntityType.BOARD, new Vector2D(0, 0));
 	}
 
 	public onClick(clickGesture: ClickGesture) {
-		clickGesture.selected?.forEach(clickable => clickable.selected = false);
+		this.state.clickables.forEach(clickable => clickable.selected = false);
+		this.state.clickables = [];
 	}
 	
 	public onDoubleClick(clickGesture: ClickGesture) {
-		let coords = new Vector2D(clickGesture.position.x, clickGesture.position.y);
-		this.world.createNode(coords);
+		this.world.createNode(clickGesture.position);
 	}
 
 	public onDrag(dragGesture: DragGesture) {
@@ -35,16 +32,16 @@ export default class Board extends DraggableEntity implements IClickable {
 	public isMouseOver(position: Vector2D): boolean { return true }
 
 	public onKeyDown(keyGesture: KeyGesture) {
-		if (keyGesture.key == "Delete")
-			this.world.selectedClickables.forEach(clickable => {
-				let node = clickable as Node;
-				// if (node.edge) {
-				// 	this.world.deleteEdge(node.edge);
-				// } 
-				this.world.deleteNode(node);
-			});
+		if (keyGesture.key == "Delete") {
+			this.state.clickables.forEach(clickable => this.world.removeEntity(clickable));
+			this.state.clickables = [];
+		}
 		if(keyGesture.key == "a" && keyGesture.ctrl) {
-			this.world.clickables.forEach(clickable => clickable.selected = true);
+			this.state.clickables = [];
+			this.world.clickables.forEach(clickable => {
+				clickable.selected = true;
+				this.state.clickables.push(clickable);
+			});
 		}
 	}
 }

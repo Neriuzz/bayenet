@@ -4,20 +4,20 @@ import IClickable from "../interfaces/IClickable";
 import IHoverable from "../interfaces/IHoverable";
 import IRenderable from "../interfaces/IRenderable";
 import Vector2D from "../util/Vector2D";
+import WorldState from "../WorldState";
 import DraggableEntity from "./DraggableEntity";
 import Edge from "./Edge";
 
 export default class Node extends DraggableEntity implements IRenderable, IClickable, IHoverable {
+	public renderable = true;
 	public clickable = true;
 	public hoverable = true;
+
 	public hovering = false;
 	public selected = false;
-	
-	public type = EntityType.NODE;
-	public edge: Edge | null = null;
 
 	constructor(public id: number, currentPosition: Vector2D, public r: number) {
-		super(id, currentPosition);
+		super(id, EntityType.NODE, currentPosition);
 	}
 
 	public render(context: CanvasRenderingContext2D) {
@@ -49,15 +49,12 @@ export default class Node extends DraggableEntity implements IRenderable, IClick
 	}
 
 	public onClick(clickGesture: ClickGesture) {
-		if (clickGesture.shift)
-			return;
+		if (!clickGesture.alt)
+			this.state.clickables.forEach(clickable => clickable.selected = false);
 
 		this.selected = !this.selected;
-
-		if (!clickGesture.alt)
-			clickGesture.selected?.forEach(clickable => clickable.selected = false);
-
-		console.log(this);
+		this.state.clickables.push(this);
+		this.state.clickable = this;
 	}
 
 	public onDoubleClick(clickGesture: ClickGesture) {
@@ -67,6 +64,7 @@ export default class Node extends DraggableEntity implements IRenderable, IClick
 	public onEnterHover() {
 		this.hovering = true;
 		console.log(`Started hovering over node ${this.id}`);
+		this.state.hoverable = this;
 	}
 
 	public onHovering() {
@@ -76,5 +74,6 @@ export default class Node extends DraggableEntity implements IRenderable, IClick
 	public onExitHover() {
 		this.hovering = false;
 		console.log(`Stopped hovering over node ${this.id}`);
+		this.state.hoverable = null;
 	}
 };

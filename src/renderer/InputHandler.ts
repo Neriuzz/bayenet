@@ -11,14 +11,12 @@ import ClickGesture from "./gestures/ClickGesture";
 import KeyGesture from "./gestures/KeyGesture";
 import DragGesture from "./gestures/DragGesture";
 import IHoverable from "./interfaces/IHoverable";
-import Edge from "./entities/Edge";
 import EntityType from "./EntityType";
+import WorldState from "./WorldState";
 
 export default class InputHandler {
-	// Variable for differentiating between drags and clicks
-	private dragging = false;
-
-	private creatingEdge: Edge | null = null;
+	// Access to world state
+	private state = WorldState.instance;
 
 	// Timer for differentiating between clicks and double clicks
 	private timer: NodeJS.Timeout | null = null;
@@ -83,36 +81,22 @@ export default class InputHandler {
 		event.preventDefault();
 
 		// Do not call on click handler if we are currently dragging or this is our second click
-		if (this.dragging || event.detail !== 1)
+		if (this.state.dragging || event.detail !== 1)
 			return;
 
 		
 		this.timer = setTimeout(() => {		
 			let position = this.getTruePosition(new Vector2D(event.clientX, event.clientY));
+
 			let clickGesture: ClickGesture = {
 				position,
 				alt: event.altKey,
-				shift: event.shiftKey,
-				selected: this.world.selectedClickables
+				shift: event.shiftKey
 			};
 
 			let clickable = this.getInteractable(this.world.clickablesInView, position) as IClickable;
 
-			if (clickable) {
-				if (this.creatingEdge && clickable.type === EntityType.NODE) {
-					this.creatingEdge.toNode = clickable as any;
-					this.creatingEdge = null;
-					return;
-				}
-				if(clickable.type === EntityType.NODE && event.shiftKey) {
-					this.creatingEdge = this.world.createEdge(clickable as any, position);
-					return;
-				}
-				clickable.onClick(clickGesture);
-				return;
-			}
-
-			this.board.onClick(clickGesture);
+			clickable ? clickable.onClick(clickGesture) : this.board.onClick(clickGesture);
 		}, 200);
 	}
 
@@ -136,7 +120,7 @@ export default class InputHandler {
 	private onMouseDown(event: MouseEvent) {
 		event.preventDefault();
 
-		this.dragging = false;
+		this.state.dragging = false;
 
 		let position = new Vector2D(event.clientX, event.clientY);
 		let dragGesture: DragGesture = {
@@ -153,11 +137,7 @@ export default class InputHandler {
 		
 		let position = new Vector2D(event.clientX, event.clientY);
 
-		this.dragging = true;
-
-		if (this.creatingEdge) {
-			this.creatingEdge.position = this.getTruePosition(position);
-		}
+		this.state.dragging = true;
 
 		if (this.board.dragging) {
 			let dragGesture: DragGesture = {
@@ -167,14 +147,13 @@ export default class InputHandler {
 			return;
 		}
 
-		let draggable = this.world.draggablesInView.find(draggable => draggable.dragging) as IDraggable;
-		if (draggable) {
+		if (this.state.draggable) {
 			let zIndex = Number.MAX_SAFE_INTEGER;
 			let dragGesture = {
 				position,
 				zIndex
 			};
-			draggable.onDrag(dragGesture);
+			this.state.draggable.onDrag(dragGesture);
 			return;
 		}
 
@@ -194,24 +173,22 @@ export default class InputHandler {
 			return;
 		}
 
-		let draggable = this.world.draggablesInView.find(draggable => draggable.dragging) as IDraggable;
-		if (draggable) {
-			let zIndex = this.getZIndex(draggable, this.getTruePosition(position));
+		if (this.state.draggable) {
+			let zIndex = this.getZIndex(this.state.draggable, this.getTruePosition(position));
 			let dragGesture = {
 				position,
 				zIndex
 			};
-			draggable.onDragEnd(dragGesture);
+			this.state.draggable.onDragEnd(dragGesture);
 		}
 	}
 
 	private onHover(position: Vector2D) {
-		let hovering = this.world.hoverablesInView.find(hoverable => hoverable.hovering);
-		if (hovering) {
-			if (hovering.isMouseOver(position))
-				hovering.onHovering();
+		if (this.state.hoverable) {
+			if (this.state.hoverable.isMouseOver(position))
+				this.state.hoverable.onHovering();
 			else
-				hovering.onExitHover();
+				this.state.hoverable.onExitHover();
 			return;
 		}
 		
