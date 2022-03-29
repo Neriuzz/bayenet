@@ -1,21 +1,22 @@
-import EntityType from "../EntityType";
 import ClickGesture from "../gestures/ClickGesture";
 import DragGesture from "../gestures/DragGesture";
 import KeyGesture from "../gestures/KeyGesture";
-import IClickable from "../interfaces/IClickable";
 import Vector2D from "../util/Vector2D";
 import World from "../World";
-import DraggableEntity from "./DraggableEntity";
+import WorldState from "../WorldState";
 
-export default class Board extends DraggableEntity implements IClickable {
-	public clickable = true;
-	public zIndex = 0;
+export default class Board {
+	public dragging = false;
 
-	constructor (private world: World) {
-		super(-1, EntityType.BOARD, new Vector2D(0, 0));
-	}
+	private initialPosition = new Vector2D(0, 0);
+	private currentPosition = new Vector2D(0, 0);
+	private dragStartPosition: Vector2D | null = null;
 
-	public onClick(clickGesture: ClickGesture) {
+	private state = WorldState.instance;
+
+	constructor (private world: World) {}
+
+	public onClick() {
 		this.state.clearClickables();
 	}
 	
@@ -23,12 +24,22 @@ export default class Board extends DraggableEntity implements IClickable {
 		this.world.createNode(clickGesture.position);
 	}
 
+	public onDragStart(dragGesture: DragGesture) {
+		this.dragging = true;
+		this.dragStartPosition = dragGesture.position;
+		this.initialPosition = new Vector2D(this.currentPosition.x, this.currentPosition.y);
+	}
+
 	public onDrag(dragGesture: DragGesture) {
-		super.onDrag(dragGesture);
+		let deltaPosition = new Vector2D(dragGesture.position.x - this.dragStartPosition!.x, dragGesture.position.y - this.dragStartPosition!.y);
+		this.currentPosition = new Vector2D(this.initialPosition!.x + deltaPosition.x, this.initialPosition!.y + deltaPosition.y);
 		this.world.camera.position = this.currentPosition;
 	}
 
-	public isMouseOver(position: Vector2D): boolean { return true }
+	public onDragEnd() {
+		this.dragging = false;
+		this.dragStartPosition = null;
+	}
 
 	public onKeyDown(keyGesture: KeyGesture) {
 		if (keyGesture.key == "Delete") {

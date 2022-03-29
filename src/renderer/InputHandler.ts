@@ -11,7 +11,6 @@ import ClickGesture from "./gestures/ClickGesture";
 import KeyGesture from "./gestures/KeyGesture";
 import DragGesture from "./gestures/DragGesture";
 import IHoverable from "./interfaces/IHoverable";
-import EntityType from "./EntityType";
 import WorldState from "./WorldState";
 
 export default class InputHandler {
@@ -96,7 +95,7 @@ export default class InputHandler {
 
 			let clickable = this.getInteractable(this.world.clickablesInView, position) as IClickable;
 
-			clickable ? clickable.onClick(clickGesture) : this.board.onClick(clickGesture);
+			clickable ? clickable.onClick(clickGesture) : this.board.onClick();
 		}, 200);
 	}
 
@@ -166,10 +165,7 @@ export default class InputHandler {
 		let position = new Vector2D(event.clientX, event.clientY);
 
 		if (this.board.dragging) {
-			let dragGesture: DragGesture = {
-				position
-			};
-			this.board.onDragEnd(dragGesture);
+			this.board.onDragEnd();
 			return;
 		}
 
