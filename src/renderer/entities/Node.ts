@@ -4,9 +4,7 @@ import IClickable from "../interfaces/IClickable";
 import IHoverable from "../interfaces/IHoverable";
 import IRenderable from "../interfaces/IRenderable";
 import Vector2D from "../util/Vector2D";
-import WorldState from "../WorldState";
 import DraggableEntity from "./DraggableEntity";
-import Edge from "./Edge";
 
 export default class Node extends DraggableEntity implements IRenderable, IClickable, IHoverable {
 	public renderable = true;
@@ -49,12 +47,15 @@ export default class Node extends DraggableEntity implements IRenderable, IClick
 	}
 
 	public onClick(clickGesture: ClickGesture) {
-		if (!clickGesture.alt)
-			this.state.clickables.forEach(clickable => clickable.selected = false);
-
 		this.selected = !this.selected;
-		this.state.clickables.push(this);
-		this.state.clickable = this;
+
+		if (!clickGesture.alt)
+			this.state.clearClickables();
+
+		if (this.selected)
+			this.state.addClickable(this);
+		else
+			this.state.removeClickable(this);
 	}
 
 	public onDoubleClick(clickGesture: ClickGesture) {

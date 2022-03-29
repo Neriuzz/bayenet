@@ -16,8 +16,7 @@ export default class Board extends DraggableEntity implements IClickable {
 	}
 
 	public onClick(clickGesture: ClickGesture) {
-		this.state.clickables.forEach(clickable => clickable.selected = false);
-		this.state.clickables = [];
+		this.state.clearClickables();
 	}
 	
 	public onDoubleClick(clickGesture: ClickGesture) {
@@ -33,15 +32,13 @@ export default class Board extends DraggableEntity implements IClickable {
 
 	public onKeyDown(keyGesture: KeyGesture) {
 		if (keyGesture.key == "Delete") {
-			this.state.clickables.forEach(clickable => this.world.removeEntity(clickable));
-			this.state.clickables = [];
+			this.state.removeAllClickables(this.world);
 		}
 		if(keyGesture.key == "a" && keyGesture.ctrl) {
-			this.state.clickables = [];
-			this.world.clickables.forEach(clickable => {
-				clickable.selected = true;
-				this.state.clickables.push(clickable);
-			});
+			if (this.state.clickables.length == this.world.clickables.length)
+				this.state.clearClickables();
+			else
+				this.state.selectAllClickables(this.world);
 		}
 	}
 }

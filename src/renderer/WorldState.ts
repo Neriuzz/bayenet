@@ -3,6 +3,7 @@ import Node from "./entities/Node";
 import IClickable from "./interfaces/IClickable";
 import IDraggable from "./interfaces/IDraggable";
 import IHoverable from "./interfaces/IHoverable";
+import World from "./World";
 
 export default class WorldState {
 	private static _instance: WorldState;
@@ -25,5 +26,30 @@ export default class WorldState {
 			WorldState._instance = new WorldState();
 		
 		return WorldState._instance;
+	}
+
+	public clearClickables() {
+		this.clickables.forEach(clickable => clickable.selected = false);
+		this.clickables = [];
+	}
+
+	public removeClickable(clickable: IClickable) {
+		this.clickables = this.clickables.filter(_clickable => _clickable.id !== clickable.id);
+		this.clickable = null;
+	}
+
+	public addClickable(clickable: IClickable) {
+		this.clickables.push(clickable);
+		this.clickable = clickable;
+	}
+
+	public selectAllClickables(world: World) {
+		world.clickables.forEach(clickable => clickable.selected = true);
+		this.clickables = world.clickables;
+	}
+
+	public removeAllClickables(world: World) {
+		this.clickables.forEach(clickable => world.removeEntity(clickable));
+		this.clickables = [];
 	}
 }
