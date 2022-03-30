@@ -61,6 +61,7 @@ export default class WorldState {
 
 	public saveState(world: World) {
 		this.previousStates.push([...world.entities]);
+		console.log(this.previousStates.length);
 	}
 
 	public restoreState(world: World) {

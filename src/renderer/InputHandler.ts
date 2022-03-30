@@ -148,7 +148,7 @@ export default class InputHandler {
 
 		if (this.state.currentlyDragging) {
 			let zIndex = Number.MAX_SAFE_INTEGER;
-			let dragGesture = {
+			let dragGesture: DragGesture = {
 				position,
 				zIndex
 			};
@@ -171,7 +171,7 @@ export default class InputHandler {
 
 		if (this.state.currentlyDragging) {
 			let zIndex = this.getZIndex(this.state.currentlyDragging, this.getTruePosition(position));
-			let dragGesture = {
+			let dragGesture: DragGesture = {
 				position,
 				zIndex
 			};

@@ -83,7 +83,7 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 		let deltaPosition = new Vector2D(dragGesture.position.x - this.dragStartPosition!.x, dragGesture.position.y - this.dragStartPosition!.y);
 		this.currentPosition = new Vector2D(this.initialPosition!.x + deltaPosition.x, this.initialPosition!.y + deltaPosition.y);
 	}
-
+	
 	public onDragEnd(dragGesture: DragGesture) {
 		this.dragging = false;
 		this.dragStartPosition = null;

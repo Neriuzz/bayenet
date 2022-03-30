@@ -21,6 +21,7 @@ export default class Board {
 	}
 	
 	public onDoubleClick(clickGesture: ClickGesture) {
+		this.state.saveState(this.world);
 		this.world.createNode(clickGesture.position);
 	}
 
@@ -42,7 +43,7 @@ export default class Board {
 	}
 
 	public onKeyDown(keyGesture: KeyGesture) {
-		if (keyGesture.key == "Delete") {
+		if (keyGesture.key == "Delete" && this.state.amountSelected > 0) {
 			this.state.saveState(this.world);
 			this.state.removeAllClickables(this.world);
 		}
