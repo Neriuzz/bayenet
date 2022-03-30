@@ -146,13 +146,13 @@ export default class InputHandler {
 			return;
 		}
 
-		if (this.state.draggable) {
+		if (this.state.currentlyDragging) {
 			let zIndex = Number.MAX_SAFE_INTEGER;
 			let dragGesture = {
 				position,
 				zIndex
 			};
-			this.state.draggable.onDrag(dragGesture);
+			this.state.currentlyDragging.onDrag(dragGesture);
 			return;
 		}
 
@@ -169,22 +169,22 @@ export default class InputHandler {
 			return;
 		}
 
-		if (this.state.draggable) {
-			let zIndex = this.getZIndex(this.state.draggable, this.getTruePosition(position));
+		if (this.state.currentlyDragging) {
+			let zIndex = this.getZIndex(this.state.currentlyDragging, this.getTruePosition(position));
 			let dragGesture = {
 				position,
 				zIndex
 			};
-			this.state.draggable.onDragEnd(dragGesture);
+			this.state.currentlyDragging.onDragEnd(dragGesture);
 		}
 	}
 
 	private onHover(position: Vector2D) {
-		if (this.state.hoverable) {
-			if (this.state.hoverable.isMouseOver(position))
-				this.state.hoverable.onHovering();
+		if (this.state.currentlyHovering) {
+			if (this.state.currentlyHovering.isMouseOver(position))
+				this.state.currentlyHovering.onHovering();
 			else
-				this.state.hoverable.onExitHover();
+				this.state.currentlyHovering.onExitHover();
 			return;
 		}
 		

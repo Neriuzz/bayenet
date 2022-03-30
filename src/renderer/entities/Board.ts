@@ -17,7 +17,7 @@ export default class Board {
 	constructor (private world: World) {}
 
 	public onClick() {
-		this.state.clearClickables();
+		this.state.clearSelected();
 	}
 	
 	public onDoubleClick(clickGesture: ClickGesture) {
@@ -43,13 +43,16 @@ export default class Board {
 
 	public onKeyDown(keyGesture: KeyGesture) {
 		if (keyGesture.key == "Delete") {
+			this.state.saveState(this.world);
 			this.state.removeAllClickables(this.world);
 		}
-		if(keyGesture.key == "a" && keyGesture.ctrl) {
-			if (this.state.clickables.length == this.world.clickables.length)
-				this.state.clearClickables();
+		if (keyGesture.key == "a" && keyGesture.ctrl) {
+			if (this.state.amountSelected == this.world.clickables.length)
+				this.state.clearSelected();
 			else
 				this.state.selectAllClickables(this.world);
 		}
+		if (keyGesture.key == "z" && keyGesture.ctrl)
+			this.state.restoreState(this.world);
 	}
 }

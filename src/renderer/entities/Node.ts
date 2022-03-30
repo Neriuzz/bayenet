@@ -59,12 +59,12 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 		this.selected = !this.selected;
 
 		if (!clickGesture.alt)
-			this.state.clearClickables();
+			this.state.clearSelected();
 
 		if (this.selected)
-			this.state.addClickable(this);
+			this.state.addToSelected(this);
 		else
-			this.state.removeClickable(this);
+			this.state.removeFromSelected(this);
 	}
 
 	public onDoubleClick(clickGesture: ClickGesture) {
@@ -75,7 +75,7 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 		this.dragging = true;
 		this.dragStartPosition = dragGesture.position;
 		this.initialPosition = new Vector2D(this.currentPosition.x, this.currentPosition.y);
-		this.state.draggable = this;
+		this.state.currentlyDragging = this;
 	}
 
 	public onDrag(dragGesture: DragGesture) {
@@ -88,7 +88,7 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 		this.dragging = false;
 		this.dragStartPosition = null;
 		this.zIndex = dragGesture.zIndex || this.zIndex;
-		this.state.draggable = null;
+		this.state.currentlyDragging = null;
 	}
 
 	public get position(): Vector2D {
@@ -98,7 +98,7 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 	public onEnterHover() {
 		this.hovering = true;
 		console.log(`Started hovering over node ${this.id}`);
-		this.state.hoverable = this;
+		this.state.currentlyHovering = this;
 	}
 
 	public onHovering() {
@@ -108,6 +108,6 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 	public onExitHover() {
 		this.hovering = false;
 		console.log(`Stopped hovering over node ${this.id}`);
-		this.state.hoverable = null;
+		this.state.currentlyHovering = null;
 	}
 };

@@ -17,7 +17,7 @@ import IEntity from "./interfaces/IEntity";
 
 
 export default class World {
-	private entities: IEntity[] = [];
+	public entities: IEntity[] = [];
 	private nextID: number = 0;
 
 	constructor(public readonly camera: Camera) {}

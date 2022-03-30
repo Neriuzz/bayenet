@@ -2,6 +2,7 @@ import Edge from "./entities/Edge";
 import Node from "./entities/Node";
 import IClickable from "./interfaces/IClickable";
 import IDraggable from "./interfaces/IDraggable";
+import IEntity from "./interfaces/IEntity";
 import IHoverable from "./interfaces/IHoverable";
 import World from "./World";
 
@@ -13,43 +14,60 @@ export default class WorldState {
 	public edgeBeingCreated: Edge | null = null;
 	public nodeCreatingEdge: Node | null = null;
 
-	public clickables: IClickable[] = [];
+	private selected: IClickable[] = [];
+	private previousStates: IEntity[][] = [];
 	
-	public clickable: IClickable | null = null;
-	public draggable: IDraggable | null = null;
-	public hoverable: IHoverable | null = null;
+	public currentlySelected: IClickable | null = null;
+	public currentlyDragging: IDraggable | null = null;
+	public currentlyHovering: IHoverable | null = null;
 
 	private constructor() {}
 
-	public static get instance() {
+	public static get instance(): WorldState {
 		if (!WorldState._instance)
 			WorldState._instance = new WorldState();
 		
 		return WorldState._instance;
 	}
 
-	public clearClickables() {
-		this.clickables.forEach(clickable => clickable.selected = false);
-		this.clickables = [];
+	public clearSelected() {
+		this.selected.forEach(clickable => clickable.selected = false);
+		this.selected = [];
 	}
 
-	public removeClickable(clickable: IClickable) {
-		this.clickables = this.clickables.filter(_clickable => _clickable.id !== clickable.id);
-		this.clickable = null;
+	public removeFromSelected(clickable: IClickable) {
+		this.selected = this.selected.filter(_clickable => _clickable.id !== clickable.id);
+		this.currentlySelected = null;
 	}
 
-	public addClickable(clickable: IClickable) {
-		this.clickables.push(clickable);
-		this.clickable = clickable;
+	public addToSelected(clickable: IClickable) {
+		this.selected.push(clickable);
+		this.currentlySelected = clickable;
 	}
 
 	public selectAllClickables(world: World) {
-		world.clickables.forEach(clickable => clickable.selected = true);
-		this.clickables = world.clickables;
+		this.selected = world.clickables;
+		this.selected.forEach(clickable => clickable.selected = true);
 	}
 
 	public removeAllClickables(world: World) {
-		this.clickables.forEach(clickable => world.removeEntity(clickable));
-		this.clickables = [];
+		this.selected.forEach(clickable => world.removeEntity(clickable));
+		this.selected = [];
+	}
+
+	public get amountSelected(): number {
+		return this.selected.length;
+	}
+
+	public saveState(world: World) {
+		this.previousStates.push([...world.entities]);
+	}
+
+	public restoreState(world: World) {
+		let previousState = this.previousStates.pop();
+		if (previousState) {
+			world.entities = [...previousState];
+			this.selected = world.clickables.filter(clickable => clickable.selected);
+		}
 	}
 }
