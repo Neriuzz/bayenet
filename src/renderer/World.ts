@@ -89,7 +89,7 @@ export default class World {
 	}
 	
 	public createNode(coords: Vector2D) {
-		let node = new Node(this.nextID++, coords, 20);
+		let node = new Node(this.nextID++, coords, 25);
 		this.addEntity(node);
 		return node;
 	}
