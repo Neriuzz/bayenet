@@ -18,11 +18,9 @@ export default class Board {
 
 	public onClick() {
 		if (this.state.edgeBeingCreated) {
-			console.log("gg");
 			this.world.deleteEdge(this.state.edgeBeingCreated);
 			this.state.edgeBeingCreated = null;
 		}
-		console.log("wp");
 		this.state.clearSelected();
 	}
 	
@@ -52,14 +50,21 @@ export default class Board {
 		if (keyGesture.key == "Delete" && this.state.amountSelected > 0) {
 			this.state.saveState(this.world);
 			this.state.removeAllClickables(this.world);
+			return;
 		}
+
 		if (keyGesture.key == "a" && keyGesture.ctrl) {
 			if (this.state.amountSelected == this.world.clickables.length)
 				this.state.clearSelected();
 			else
 				this.state.selectAllClickables(this.world);
+			return;
 		}
-		if (keyGesture.key == "z" && keyGesture.ctrl)
+
+
+		if (keyGesture.key == "z" && keyGesture.ctrl) {
 			this.state.restoreState(this.world);
+			return;
+		}
 	}
 }

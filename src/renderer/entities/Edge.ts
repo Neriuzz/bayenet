@@ -18,8 +18,8 @@ export default class Edge implements IRenderable, IClickable {
 	constructor(public id: number, public from: Node, public to?: Node) {}
 
 	public render(context: CanvasRenderingContext2D) {
-		let fromPos = new Vector2D(this.from.position.x - this.from.r, this.from.position.y);
-		let toPos = this.to ? new Vector2D(this.to.position.x - this.to.r, this.to.position.y) : this.state.mousePosition;
+		let fromPos = this.from.position;
+		let toPos = this.to ? this.to.position : this.state.mousePosition;
 		let angle = Math.atan2((toPos.y - fromPos.y), (toPos.x - fromPos.x));
 		let hypotenuse = Math.sqrt((fromPos.x- toPos.x) ** 2 + (fromPos.y - toPos.y) ** 2);
 
@@ -29,16 +29,16 @@ export default class Edge implements IRenderable, IClickable {
 		// Line
 		context.beginPath();
 		context.lineWidth = 2;
-		context.moveTo(0, 0);
-		context.lineTo(hypotenuse, 0);
+		context.moveTo(this.from.r, 0);
+		context.lineTo(hypotenuse - (this.to?.r || 0), 0);
 		context.stroke();
 		context.closePath();
 
 		// Arrow
 		context.beginPath();
-		context.lineTo(hypotenuse - 10, 10);
-		context.lineTo(hypotenuse, 0);
-		context.lineTo(hypotenuse - 10, -10);
+		context.lineTo(hypotenuse - 10 - (this.to?.r || 0), 10);
+		context.lineTo(hypotenuse - (this.to?.r || 0), 0);
+		context.lineTo(hypotenuse - 10 - (this.to?.r || 0), -10);
 		context.fill();
 		context.closePath();
 	 }
