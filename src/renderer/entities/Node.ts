@@ -7,6 +7,7 @@ import IHoverable from "../interfaces/IHoverable";
 import IRenderable from "../interfaces/IRenderable";
 import Vector2D from "../util/Vector2D";
 import WorldState from "../WorldState";
+import Edge from "./Edge";
 
 export default class Node implements IRenderable, IClickable, IDraggable, IHoverable {
 	public renderable = true;
@@ -18,12 +19,15 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 	public dragging = false;
 	public hovering = false;
 
+	public zIndex = 1;
+	public type = EntityType.NODE;
+
 	private initialPosition: Vector2D | null = null;
 	private dragStartPosition: Vector2D | null = null;
 
-	public zIndex = 1;
-
 	private state = WorldState.instance;
+
+	public edge: Edge | null = null;
 
 	constructor(public id: number, private currentPosition: Vector2D, public r: number) {}
 
@@ -57,17 +61,20 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 
 	public onClick(clickGesture: ClickGesture) {
 		if (this.state.edgeBeingCreated) {
-			if (this !== this.state.edgeBeingCreated.from)
+			if (this !== this.state.edgeBeingCreated.from) {
 				this.state.edgeBeingCreated.to = this;
+				this.edge = this.state.edgeBeingCreated;
+			}
 			else 
-				clickGesture.world!.deleteEdge(this.state.edgeBeingCreated);
-				
+				clickGesture.world!.removeEntity(this.state.edgeBeingCreated);
+
 			this.state.edgeBeingCreated = null;
 			return;
 		}
 
 		if (clickGesture.shift) {
-			this.state.edgeBeingCreated = clickGesture.world!.createEdge(this);
+			this.edge = clickGesture.world!.createEdge(this);
+			this.state.edgeBeingCreated = this.edge;
 			return;
 		}
 

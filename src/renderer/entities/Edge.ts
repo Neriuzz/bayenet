@@ -10,12 +10,12 @@ export default class Edge implements IRenderable, IClickable {
 	public renderable = true;
 	public clickable = true;
 
-	public zIndex = 1;
+	public zIndex = 0;
 	public type = EntityType.EDGE;
 
 	private state = WorldState.instance;
 
-	constructor(public id: number, public from: Node, public to?: Node) {}
+	constructor(public id: number, public size: number, public from: Node, public to?: Node) {}
 
 	public render(context: CanvasRenderingContext2D) {
 		let fromPos = this.from.position;
@@ -36,9 +36,9 @@ export default class Edge implements IRenderable, IClickable {
 
 		// Arrow
 		context.beginPath();
-		context.lineTo(hypotenuse - 10 - (this.to?.r || 0), 10);
+		context.lineTo(hypotenuse - this.size - (this.to?.r || 0), this.size);
 		context.lineTo(hypotenuse - (this.to?.r || 0), 0);
-		context.lineTo(hypotenuse - 10 - (this.to?.r || 0), -10);
+		context.lineTo(hypotenuse - this.size - (this.to?.r || 0), -this.size);
 		context.fill();
 		context.closePath();
 	 }
@@ -58,5 +58,4 @@ export default class Edge implements IRenderable, IClickable {
 	public onDoubleClick(clickGesture: ClickGesture) {
 		// TODO
 	}
-
 }

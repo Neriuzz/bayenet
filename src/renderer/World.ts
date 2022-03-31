@@ -16,6 +16,7 @@ import IInteractable from "./interfaces/IInteractable";
 import IClickable from "./interfaces/IClickable";
 import IDraggable from "./interfaces/IDraggable";
 import IHoverable from "./interfaces/IHoverable";
+import EntityType from "./EntityType";
 
 
 export default class World {
@@ -29,6 +30,21 @@ export default class World {
 	}
 
 	public removeEntity(entity: IEntity) {
+		switch (entity.type) {
+			case EntityType.NODE:
+				let node = entity as Node;
+				if (node.edge)
+					this.removeEntity(node.edge);
+				break;
+			case EntityType.EDGE:
+				let edge = entity as Edge;
+				edge.from.edge = null;
+				if (edge.to) 
+					edge.to.edge = null;
+				break;
+			default:
+				break;
+		}
 		this.entities = this.entities.filter(_entity => _entity.id !== entity.id);
 	}
 
@@ -78,17 +94,9 @@ export default class World {
 		return node;
 	}
 
-	public deleteNode(node: Node) {
-		this.removeEntity(node);
-	}
-
 	public createEdge(from: Node) {
-		let edge = new Edge(this.nextID++, from);
+		let edge = new Edge(this.nextID++, 10, from);
 		this.addEntity(edge);
 		return edge;
-	}
-
-	public deleteEdge(edge: Edge) {
-		this.removeEntity(edge);
 	}
 };
