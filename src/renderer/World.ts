@@ -33,14 +33,13 @@ export default class World {
 		switch (entity.type) {
 			case EntityType.NODE:
 				let node = entity as Node;
-				if (node.edge)
-					this.removeEntity(node.edge);
+				node.edges.forEach(edge => this.removeEntity(edge));
 				break;
 			case EntityType.EDGE:
 				let edge = entity as Edge;
-				edge.from.edge = null;
+				edge.from.edges = edge.from.edges.filter(_edge => _edge.id !== edge.id);
 				if (edge.to) 
-					edge.to.edge = null;
+					edge.to.edges = edge.to.edges.filter(_edge => _edge.id !== edge.id);
 				break;
 			default:
 				break;

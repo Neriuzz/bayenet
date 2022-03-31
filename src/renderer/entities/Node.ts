@@ -27,7 +27,7 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 
 	private state = WorldState.instance;
 
-	public edge: Edge | null = null;
+	public edges: Edge[] = [];
 
 	constructor(public id: number, private currentPosition: Vector2D, public r: number) {}
 
@@ -63,7 +63,7 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 		if (this.state.edgeBeingCreated) {
 			if (this !== this.state.edgeBeingCreated.from) {
 				this.state.edgeBeingCreated.to = this;
-				this.edge = this.state.edgeBeingCreated;
+				this.edges.push(this.state.edgeBeingCreated);
 			}
 			else 
 				clickGesture.world!.removeEntity(this.state.edgeBeingCreated);
@@ -73,8 +73,9 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 		}
 
 		if (clickGesture.shift) {
-			this.edge = clickGesture.world!.createEdge(this);
-			this.state.edgeBeingCreated = this.edge;
+			let edge = clickGesture.world!.createEdge(this);
+			this.edges.push(edge);
+			this.state.edgeBeingCreated = edge;
 			return;
 		}
 
