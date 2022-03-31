@@ -56,6 +56,21 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 	}
 
 	public onClick(clickGesture: ClickGesture) {
+		if (this.state.edgeBeingCreated) {
+			if (this !== this.state.edgeBeingCreated.from)
+				this.state.edgeBeingCreated.to = this;
+			else 
+				clickGesture.world!.deleteEdge(this.state.edgeBeingCreated);
+				
+			this.state.edgeBeingCreated = null;
+			return;
+		}
+
+		if (clickGesture.shift) {
+			this.state.edgeBeingCreated = clickGesture.world!.createEdge(this);
+			return;
+		}
+
 		this.selected = !this.selected;
 
 		if (!clickGesture.alt)

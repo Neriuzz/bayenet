@@ -1,19 +1,21 @@
-// Required imports
+// Camera
 import Camera from "./Camera";
+
+// Entities
 import Node from "./entities/Node";
+import Edge from "./entities/Edge";
 
 // Utilities
-import Vector2D from "./util/Vector2D";
 import { isRenderable, isClickable, isHoverable, isDraggable } from "./util/TypeGuard";
+import Vector2D from "./util/Vector2D";
 
 // Interfaces
-import IRenderable from "./interfaces/IRenderable";
-import IClickable from "./interfaces/IClickable";
-import IHoverable from "./interfaces/IHoverable";
-import IDraggable from "./interfaces/IDraggable";
-import IInteractable from "./interfaces/IInteractable";
-import Edge from "./entities/Edge";
 import IEntity from "./interfaces/IEntity";
+import IRenderable from "./interfaces/IRenderable";
+import IInteractable from "./interfaces/IInteractable";
+import IClickable from "./interfaces/IClickable";
+import IDraggable from "./interfaces/IDraggable";
+import IHoverable from "./interfaces/IHoverable";
 
 
 export default class World {
@@ -80,8 +82,8 @@ export default class World {
 		this.removeEntity(node);
 	}
 
-	public createEdge(fromNode: Node, coords: Vector2D) {
-		let edge = new Edge(this.nextID++, fromNode, coords);
+	public createEdge(from: Node) {
+		let edge = new Edge(this.nextID++, from);
 		this.addEntity(edge);
 		return edge;
 	}

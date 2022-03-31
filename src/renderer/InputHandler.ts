@@ -90,7 +90,8 @@ export default class InputHandler {
 			let clickGesture: ClickGesture = {
 				position,
 				alt: event.altKey,
-				shift: event.shiftKey
+				shift: event.shiftKey,
+				world: this.world
 			};
 
 			let clickable = this.getInteractable(this.world.clickablesInView, position) as IClickable;
@@ -112,7 +113,7 @@ export default class InputHandler {
 		 };
 
 		let clickable = this.getInteractable(this.world.clickablesInView, position) as IClickable;
-
+		console.log(clickable);
 		clickable ? clickable.onDoubleClick(clickGesture) : this.board.onDoubleClick(clickGesture);
 	}
 
@@ -135,6 +136,8 @@ export default class InputHandler {
 		event.preventDefault();
 		
 		let position = new Vector2D(event.clientX, event.clientY);
+
+		this.state.mousePosition = this.getTruePosition(position);
 
 		this.state.dragging = true;
 

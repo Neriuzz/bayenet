@@ -4,6 +4,7 @@ import IClickable from "./interfaces/IClickable";
 import IDraggable from "./interfaces/IDraggable";
 import IEntity from "./interfaces/IEntity";
 import IHoverable from "./interfaces/IHoverable";
+import Vector2D from "./util/Vector2D";
 import World from "./World";
 
 export default class WorldState {
@@ -20,6 +21,8 @@ export default class WorldState {
 	public currentlySelected: IClickable | null = null;
 	public currentlyDragging: IDraggable | null = null;
 	public currentlyHovering: IHoverable | null = null;
+
+	public mousePosition = new Vector2D(0, 0);
 
 	private constructor() {}
 

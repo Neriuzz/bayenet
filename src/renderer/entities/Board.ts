@@ -17,6 +17,12 @@ export default class Board {
 	constructor (private world: World) {}
 
 	public onClick() {
+		if (this.state.edgeBeingCreated) {
+			console.log("gg");
+			this.world.deleteEdge(this.state.edgeBeingCreated);
+			this.state.edgeBeingCreated = null;
+		}
+		console.log("wp");
 		this.state.clearSelected();
 	}
 	
