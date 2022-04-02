@@ -8,6 +8,7 @@ import IRenderable from "../interfaces/IRenderable";
 import Vector2D from "../util/Vector2D";
 import WorldState from "../WorldState";
 import Edge from "./Edge";
+import isCyclic from "../util/GraphUtil";
 
 export default class Node implements IRenderable, IClickable, IDraggable, IHoverable {
 	public renderable = true;
@@ -75,6 +76,7 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 				clickGesture.world!.removeEntity(this.state.edgeBeingCreated);
 
 			this.state.edgeBeingCreated = null;
+			console.log(isCyclic(clickGesture.world!.numberOfNodes, clickGesture.world!.adjacencyList))
 			return;
 		}
 
