@@ -14,10 +14,6 @@ export default class WorldState {
 	public dragging: boolean = false;
 	public edgeBeingCreated: Edge | null = null;
 
-	public currentlySelected: IClickable | null = null;
-	public currentlyDragging: IDraggable | null = null;
-	public currentlyHovering: IHoverable | null = null;
-
 	public mousePosition = new Vector2D(0, 0);
 
 	private constructor() {}
@@ -50,5 +46,17 @@ export default class WorldState {
 
 	public get amountSelected() {
 		return this.world!.clickables.filter(clickable => clickable.selected).length;
+	}
+
+	public get currentlySelected(): IClickable | undefined {
+		return this.world!.clickables.find(clickable => clickable.selected);
+	}
+
+	public get currentlyDragging(): IDraggable | undefined {
+		return this.world!.draggables.find(draggable => draggable.dragging);
+	}
+
+	public get currentlyHovering(): IHoverable | undefined {
+		return this.world!.hoverables.find(hoverable => hoverable.hovering);
 	}
 }
