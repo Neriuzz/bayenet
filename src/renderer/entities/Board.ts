@@ -46,6 +46,11 @@ export default class Board {
 		this.dragStartPosition = null;
 	}
 
+	// public onMouseWheel(event: WheelEvent) {
+	// 	console.log(event);
+	// 	this.world.camera.context.scale(2, 2);
+	// }
+
 	public onKeyDown(keyGesture: KeyGesture) {
 		if (keyGesture.key == "Delete" && this.state.amountSelected > 0) {
 			this.state.saveState(this.world);

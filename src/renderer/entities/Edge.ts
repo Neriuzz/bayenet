@@ -17,7 +17,13 @@ export default class Edge implements IRenderable, IClickable {
 
 	constructor(public id: number, public size: number, public from: Node, public to?: Node) {}
 
+	public copy(): Edge {
+		let copy = new Edge(this.id, this.size, this.from, this.to);
+		return copy;
+	}
+
 	public render(context: CanvasRenderingContext2D) {
+		// Coordinates to where to draw the line from and to, and the angle to draw the line at
 		let fromPos = this.from.position;
 		let toPos = this.to ? this.to.position : this.state.mousePosition;
 		let angle = Math.atan2((toPos.y - fromPos.y), (toPos.x - fromPos.x));
@@ -28,7 +34,7 @@ export default class Edge implements IRenderable, IClickable {
 
 		// Line
 		context.beginPath();
-		context.lineWidth = 2;
+		context.lineWidth = 2.5;
 		context.moveTo(this.from.r, 0);
 		context.lineTo(hypotenuse - (this.to?.r || 0), 0);
 		context.stroke();

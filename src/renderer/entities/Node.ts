@@ -31,6 +31,12 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 
 	constructor(public id: number, private currentPosition: Vector2D, public r: number) {}
 
+	public copy(): Node {
+		let copy = new Node(this.id, this.currentPosition, this.r);
+		copy.edges = this.edges;
+		return copy;
+	}
+
 	public render(context: CanvasRenderingContext2D) {
 		context.beginPath();
 		context.arc(this.position.x, this.position.y, this.r, 0, Math.PI * 2);
@@ -73,6 +79,7 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 		}
 
 		if (clickGesture.shift) {
+			this.state.saveState(clickGesture.world!);
 			let edge = clickGesture.world!.createEdge(this);
 			this.edges.push(edge);
 			this.state.edgeBeingCreated = edge;

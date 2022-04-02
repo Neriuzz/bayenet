@@ -63,14 +63,13 @@ export default class WorldState {
 	}
 
 	public saveState(world: World) {
-		this.previousStates.push([...world.entities]);
-		console.log(this.previousStates.length);
+		this.previousStates.push([...world.entities.map(entity => entity.copy())]);
 	}
 
 	public restoreState(world: World) {
 		let previousState = this.previousStates.pop();
 		if (previousState) {
-			world.entities = [...previousState];
+			world.entities = [...previousState.map(entity => entity.copy())];
 			this.selected = world.clickables.filter(clickable => clickable.selected);
 		}
 	}

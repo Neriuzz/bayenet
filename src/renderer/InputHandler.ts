@@ -36,6 +36,7 @@ export default class InputHandler {
 		this.world.camera.canvas.addEventListener("click", (event: MouseEvent) => this.onClick(event));
 		this.world.camera.canvas.addEventListener("dblclick", (event: MouseEvent) => this.onDoubleClick(event));
 		this.world.camera.canvas.addEventListener("keydown", (event: KeyboardEvent) => this.onKeyDown(event));
+		// this.world.camera.canvas.addEventListener("wheel", (event: WheelEvent) => this.onMouseWheel(event));
 
 		// Initial canvas resize
 		this.onResize();
@@ -76,6 +77,11 @@ export default class InputHandler {
 		this.board.onKeyDown(keyGesture);
 	}
 
+	// private onMouseWheel(event: WheelEvent) {
+	// 	event.preventDefault();
+	// 	this.board.onMouseWheel(event);
+	// }
+
 	private onClick(event: MouseEvent) {
 		event.preventDefault();
 
@@ -104,6 +110,9 @@ export default class InputHandler {
 		event.preventDefault();
 
 		clearTimeout(this.timer!);
+
+		if (this.state.edgeBeingCreated)
+			return;
 
 		let position = this.getTruePosition(new Vector2D(event.clientX, event.clientY));
 		let clickGesture: ClickGesture = { 
