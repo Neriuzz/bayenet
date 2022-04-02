@@ -1,6 +1,7 @@
 import Camera from "./Camera";
 import World from "./World";
 import InputHandler from "./InputHandler";
+import WorldState from "./WorldState";
 
 export default class Renderer {
 	private camera: Camera;
@@ -16,6 +17,7 @@ export default class Renderer {
 
 		// Initialise world
 		this.world = new World(this.camera);
+		WorldState.instance.registerWorld(this.world);
 
 		// Initialise input handler
 		this.inputHandler = new InputHandler(this.world);

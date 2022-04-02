@@ -18,8 +18,7 @@ export default class Edge implements IRenderable, IClickable {
 	constructor(public id: number, public size: number, public from: Node, public to?: Node) {}
 
 	public copy(): Edge {
-		let copy = new Edge(this.id, this.size, this.from, this.to);
-		return copy;
+		return new Edge(this.id, this.size, this.from, this.to);
 	}
 
 	public render(context: CanvasRenderingContext2D) {

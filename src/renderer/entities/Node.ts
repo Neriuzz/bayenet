@@ -34,7 +34,7 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 
 	public copy(): Node {
 		let copy = new Node(this.id, this.currentPosition, this.r);
-		copy.edges = this.edges;
+		copy.edges = [...this.edges.map(edge => edge.copy())];
 		return copy;
 	}
 
@@ -68,20 +68,16 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 
 	public onClick(clickGesture: ClickGesture) {
 		if (this.state.edgeBeingCreated) {
-			if (this !== this.state.edgeBeingCreated.from) {
-				this.state.edgeBeingCreated.to = this;
-				this.edges.push(this.state.edgeBeingCreated);
-			}
-			else 
-				clickGesture.world!.removeEntity(this.state.edgeBeingCreated);
+			this.state.edgeBeingCreated.to = this;
+			this.edges.push(this.state.edgeBeingCreated);
+			if (this.state.edgeBeingCreated.from.id === this.id || isCyclic(clickGesture.world!.nodes))
+					clickGesture.world!.removeEntity(this.state.edgeBeingCreated);
 
 			this.state.edgeBeingCreated = null;
-			console.log(isCyclic(clickGesture.world!.numberOfNodes, clickGesture.world!.adjacencyList))
 			return;
 		}
 
 		if (clickGesture.shift) {
-			this.state.saveState(clickGesture.world!);
 			let edge = clickGesture.world!.createEdge(this);
 			this.edges.push(edge);
 			this.state.edgeBeingCreated = edge;
@@ -91,12 +87,7 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 		this.selected = !this.selected;
 
 		if (!clickGesture.alt)
-			this.state.clearSelected();
-
-		if (this.selected)
-			this.state.addToSelected(this);
-		else
-			this.state.removeFromSelected(this);
+			this.state.clearSelected(this.id);
 	}
 
 	public onDoubleClick(clickGesture: ClickGesture) {

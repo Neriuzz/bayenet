@@ -87,21 +87,8 @@ export default class World {
 		return this.renderablesInView.filter(isDraggable) as any;
 	}
 
-	public get numberOfNodes(): number {
-		return this.entities.filter(entity => entity.type == EntityType.NODE).length;
-	}
-	
-	public get adjacencyList(): number[][] {
-		let nodes = this.entities.filter(entity => entity.type == EntityType.NODE).sort((a, b) => a.id - b.id) as Node[];
-		let adj: number[][] = nodes.map(() => []);
-
-		nodes.forEach(node => {
-			node.edges.forEach(edge => {
-				if (edge.to && edge.to.id !== node.id)
-					adj[nodes.indexOf(node)].push(nodes.indexOf(edge.to));
-			});
-		});
-		return adj;
+	public get nodes(): Node[] {
+		return this.entities.filter(entity => entity.type === EntityType.NODE).sort((a, b) => a.id - b.id) as Node[];
 	}
 
 	public createNode(coords: Vector2D) {
