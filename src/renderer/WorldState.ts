@@ -1,5 +1,4 @@
 import Edge from "./entities/Edge";
-import EntityType from "./EntityType";
 import IClickable from "./interfaces/IClickable";
 import IDraggable from "./interfaces/IDraggable";
 import IEntity from "./interfaces/IEntity";
@@ -17,7 +16,7 @@ export default class WorldState {
 
 	public mousePosition = new Vector2D(0, 0);
 
-	public recentlyCreatedEntities: IEntity[] = [];
+	public recentlyAlteredEntities: IEntity[] = [];
 
 	private constructor() {}
 
@@ -43,8 +42,11 @@ export default class WorldState {
 		this.world!.clickables.forEach(clickable => clickable.selected = true);
 	}
 
-	public removeAllClickables() {
-		this.world!.clickables.forEach(clickable => this.world!.removeEntity(clickable));
+	public removeAllSelectedClickables() {
+		this.world!.clickables.forEach(clickable => {
+			if (clickable.selected)
+				this.world!.removeEntity(clickable);
+		});
 	}
 
 	public get edgeBeingCreated(): Edge | undefined {
@@ -68,7 +70,7 @@ export default class WorldState {
 	}
 
 	public undo() {
-		let entity = this.recentlyCreatedEntities.pop();
+		let entity = this.recentlyAlteredEntities.pop();
 		if (entity)
 			this.world!.removeEntity(entity);
 	}

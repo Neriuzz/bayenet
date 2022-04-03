@@ -46,7 +46,7 @@ export default class Board {
 
 	public onKeyDown(keyGesture: KeyGesture) {
 		if (keyGesture.key == "Delete" && this.state.amountSelected > 0) {
-			this.state.removeAllClickables();
+			this.state.removeAllSelectedClickables();
 			return;
 		}
 
