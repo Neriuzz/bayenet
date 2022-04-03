@@ -101,7 +101,7 @@ export default class InputHandler {
 			};
 
 			let clickable = this.getInteractable(this.world.clickablesInView, position) as IClickable;
-
+			
 			clickable ? clickable.onClick(clickGesture) : this.board.onClick();
 		}, 200);
 	}
@@ -122,7 +122,7 @@ export default class InputHandler {
 		 };
 
 		let clickable = this.getInteractable(this.world.clickablesInView, position) as IClickable;
-		console.log(clickable);
+
 		clickable ? clickable.onDoubleClick(clickGesture) : this.board.onDoubleClick(clickGesture);
 	}
 

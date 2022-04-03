@@ -18,7 +18,7 @@ export default class Board {
 
 	public onClick() {
 		if (this.state.edgeBeingCreated)
-			this.world.removeEntity(this.state.edgeBeingCreated);
+			this.state.undo();
 		
 		this.state.clearSelected();
 	}

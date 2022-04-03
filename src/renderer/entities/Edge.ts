@@ -10,6 +10,7 @@ export default class Edge implements IRenderable, IClickable {
 	public clickable = true;
 
 	public zIndex = 0;
+	public selected = false;
 
 	private state = WorldState.instance;
 
@@ -30,6 +31,8 @@ export default class Edge implements IRenderable, IClickable {
 		context.lineWidth = 2.5;
 		context.moveTo(this.from.r, 0);
 		context.lineTo(hypotenuse - (this.to?.r || 0), 0);
+		if (this.selected)
+			context.strokeStyle = "blue";
 		context.stroke();
 		context.closePath();
 
@@ -38,6 +41,8 @@ export default class Edge implements IRenderable, IClickable {
 		context.lineTo(hypotenuse - this.size - (this.to?.r || 0), this.size);
 		context.lineTo(hypotenuse - (this.to?.r || 0), 0);
 		context.lineTo(hypotenuse - this.size - (this.to?.r || 0), -this.size);
+		if (this.selected)
+			context.fillStyle = "blue";
 		context.fill();
 		context.closePath();
 	 }
@@ -47,11 +52,22 @@ export default class Edge implements IRenderable, IClickable {
 	}
 
 	public isMouseOver(position: Vector2D): boolean {
-		return false;
+		if (!this.to)
+			return false;
+
+		let d1 = Math.sqrt((position.x - this.from.position.x) ** 2 + (position.y - this.from.position.y) ** 2);
+		let d2 = Math.sqrt((this.to.position.x - position.x) ** 2 + (position.y - this.to.position.y) ** 2);
+
+		let length = Math.sqrt((this.to.position.x - this.from.position.x) ** 2 + (this.to.position.y - this.from.position.y) ** 2);
+
+		return (d1 + d2 >= length - 0.25 && d1 + d2 <= length + 0.25);
 	}
 
 	public onClick(clickGesture: ClickGesture) {
-		// TODO
+		this.selected = !this.selected;
+
+		if (!clickGesture.alt)
+			this.state.clearSelected(this.id);
 	}
 
 	public onDoubleClick(clickGesture: ClickGesture) {
