@@ -1,4 +1,3 @@
-import EntityType from "../EntityType";
 import ClickGesture from "../gestures/ClickGesture";
 import DragGesture from "../gestures/DragGesture";
 import IClickable from "../interfaces/IClickable";
@@ -21,7 +20,6 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 	public hovering = false;
 
 	public zIndex = 1;
-	public type = EntityType.NODE;
 
 	private initialPosition: Vector2D | null = null;
 	private dragStartPosition: Vector2D | null = null;
@@ -31,11 +29,6 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 	public edges: Edge[] = [];
 
 	constructor(public id: number, private currentPosition: Vector2D, public r: number) {}
-
-	public copy(): Node {
-		let copy = new Node(this.id, this.currentPosition, this.r);
-		return copy;
-	}
 
 	public render(context: CanvasRenderingContext2D) {
 		context.beginPath();

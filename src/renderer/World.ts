@@ -16,7 +16,7 @@ import IInteractable from "./interfaces/IInteractable";
 import IClickable from "./interfaces/IClickable";
 import IDraggable from "./interfaces/IDraggable";
 import IHoverable from "./interfaces/IHoverable";
-import EntityType from "./EntityType";
+
 import WorldState from "./WorldState";
 
 
@@ -34,20 +34,18 @@ export default class World {
 	}
 
 	public removeEntity(entity: IEntity) {
-		switch (entity.type) {
-			case EntityType.NODE:
-				let node = entity as Node;
-				node.edges.forEach(edge => this.removeEntity(edge));
-				break;
-			case EntityType.EDGE:
-				let edge = entity as Edge;
-				edge.from.edges = edge.from.edges.filter(_edge => _edge.id !== edge.id);
-				if (edge.to) 
-					edge.to.edges = edge.to.edges.filter(_edge => _edge.id !== edge.id);
-				break;
-			default:
-				break;
+		if (entity instanceof Node) {
+			let node = entity as Node;
+			node.edges.forEach(edge => this.removeEntity(edge));
 		}
+
+		if (entity instanceof Edge) {
+			let edge = entity as Edge;
+			edge.from.edges = edge.from.edges.filter(_edge => _edge.id !== edge.id);
+			if (edge.to)
+				edge.to.edges = edge.to.edges.filter(_edge => _edge.id !== edge.id);
+		}
+
 		this.entities = this.entities.filter(_entity => _entity.id !== entity.id);
 	}
 
@@ -92,11 +90,11 @@ export default class World {
 	}
 
 	public get nodes(): Node[] {
-		return this.entities.filter(entity => entity.type === EntityType.NODE).sort((a, b) => a.id - b.id) as Node[];
+		return this.entities.filter(entity => entity instanceof Node).sort((a, b) => a.id - b.id) as Node[];
 	}
 
 	public get edges(): Edge[] {
-		return this.entities.filter(entity => entity.type === EntityType.EDGE) as Edge[];
+		return this.entities.filter(entity => entity instanceof Edge) as Edge[];
 	}
 
 	public createNode(coords: Vector2D) {

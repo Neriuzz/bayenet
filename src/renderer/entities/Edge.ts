@@ -1,4 +1,3 @@
-import EntityType from "../EntityType";
 import ClickGesture from "../gestures/ClickGesture";
 import IClickable from "../interfaces/IClickable";
 import IRenderable from "../interfaces/IRenderable";
@@ -11,15 +10,10 @@ export default class Edge implements IRenderable, IClickable {
 	public clickable = true;
 
 	public zIndex = 0;
-	public type = EntityType.EDGE;
 
 	private state = WorldState.instance;
 
 	constructor(public id: number, public size: number, public from: Node, public to?: Node) {}
-
-	public copy(): Edge {
-		return new Edge(this.id, this.size, this.from, this.to);
-	}
 
 	public render(context: CanvasRenderingContext2D) {
 		// Coordinates to where to draw the line from and to, and the angle to draw the line at
