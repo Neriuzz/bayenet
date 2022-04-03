@@ -9,14 +9,14 @@ import World from "./World";
 export default class WorldState {
 	private static _instance: WorldState;
 
-	private world: World | null = null;
+	public world: World | null = null;
 
 	// State variables
 	public dragging: boolean = false;
 
 	public mousePosition = new Vector2D(0, 0);
 
-	public recentlyAlteredEntities: IEntity[] = [];
+	public recentlyCreatedEntities: IEntity[] = [];
 
 	private constructor() {}
 
@@ -70,7 +70,7 @@ export default class WorldState {
 	}
 
 	public undo() {
-		let entity = this.recentlyAlteredEntities.pop();
+		let entity = this.recentlyCreatedEntities.pop();
 		if (entity)
 			this.world!.removeEntity(entity);
 	}

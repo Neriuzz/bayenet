@@ -5,8 +5,7 @@ import World from "../World";
 type ClickGesture = {
 	position: Vector2D,
 	alt: boolean,
-	shift: boolean,
-	world?: World
+	shift: boolean
 };
 
 export default ClickGesture;

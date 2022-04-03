@@ -23,19 +23,19 @@ export default class InputHandler {
 	// Object that handles events that happen on the board itself
 	private board: Board;
 
-	constructor(private world: World) {
-		this.board = new Board(this.world);
+	constructor() {
+		this.board = new Board();
 
 		// Register window event listeners
 		window.addEventListener("resize", () => this.onResize());
 
 		// Register canvas event listeners
-		this.world.camera.canvas.addEventListener("mousedown", (event: MouseEvent) => this.onMouseDown(event));
-		this.world.camera.canvas.addEventListener("mouseup", (event: MouseEvent) => this.onMouseUp(event));
-		this.world.camera.canvas.addEventListener("mousemove", (event: MouseEvent) => this.onMouseMove(event));
-		this.world.camera.canvas.addEventListener("click", (event: MouseEvent) => this.onClick(event));
-		this.world.camera.canvas.addEventListener("dblclick", (event: MouseEvent) => this.onDoubleClick(event));
-		this.world.camera.canvas.addEventListener("keydown", (event: KeyboardEvent) => this.onKeyDown(event));
+		this.state.world!.camera.canvas.addEventListener("mousedown", (event: MouseEvent) => this.onMouseDown(event));
+		this.state.world!.camera.canvas.addEventListener("mouseup", (event: MouseEvent) => this.onMouseUp(event));
+		this.state.world!.camera.canvas.addEventListener("mousemove", (event: MouseEvent) => this.onMouseMove(event));
+		this.state.world!.camera.canvas.addEventListener("click", (event: MouseEvent) => this.onClick(event));
+		this.state.world!.camera.canvas.addEventListener("dblclick", (event: MouseEvent) => this.onDoubleClick(event));
+		this.state.world!.camera.canvas.addEventListener("keydown", (event: KeyboardEvent) => this.onKeyDown(event));
 		// this.world.camera.canvas.addEventListener("wheel", (event: WheelEvent) => this.onMouseWheel(event));
 
 		// Initial canvas resize
@@ -52,7 +52,7 @@ export default class InputHandler {
 	}
 
 	public getZIndex(draggable: IDraggable, position: Vector2D): number {
-		let [interactable] = this.world.interactablesInView
+		let [interactable] = this.state.world!.interactablesInView
 				.filter(interactable => interactable.id !== draggable.id && interactable.isMouseOver(position))
 				.sort((a, b) => a.zIndex - b.zIndex)
 				.reverse();
@@ -61,7 +61,7 @@ export default class InputHandler {
 	}
 
 	public getTruePosition(position: Vector2D) {
-		return new Vector2D(position.x - this.world.camera.position.x, position.y - this.world.camera.position.y);
+		return new Vector2D(position.x - this.state.world!.camera.position.x, position.y - this.state.world!.camera.position.y);
 	}
 
 	private onKeyDown(event: KeyboardEvent) {
@@ -96,12 +96,11 @@ export default class InputHandler {
 			let clickGesture: ClickGesture = {
 				position,
 				alt: event.altKey,
-				shift: event.shiftKey,
-				world: this.world
+				shift: event.shiftKey
 			};
 
-			let clickable = this.getInteractable(this.world.clickablesInView, position) as IClickable;
-			
+			let clickable = this.getInteractable(this.state.world!.clickablesInView, position) as IClickable;
+
 			clickable ? clickable.onClick(clickGesture) : this.board.onClick();
 		}, 200);
 	}
@@ -121,7 +120,7 @@ export default class InputHandler {
 			shift: event.shiftKey
 		 };
 
-		let clickable = this.getInteractable(this.world.clickablesInView, position) as IClickable;
+		let clickable = this.getInteractable(this.state.world!.clickablesInView, position) as IClickable;
 
 		clickable ? clickable.onDoubleClick(clickGesture) : this.board.onDoubleClick(clickGesture);
 	}
@@ -136,7 +135,7 @@ export default class InputHandler {
 			position
 		};
 
-		let draggable = this.getInteractable(this.world.draggablesInView, this.getTruePosition(position)) as IDraggable;
+		let draggable = this.getInteractable(this.state.world!.draggablesInView, this.getTruePosition(position)) as IDraggable;
 
 		draggable ? draggable.onDragStart(dragGesture) : this.board.onDragStart(dragGesture);
 	}
@@ -200,14 +199,14 @@ export default class InputHandler {
 			return;
 		}
 		
-		let hoverable = this.getInteractable(this.world.hoverablesInView, position) as IHoverable;
+		let hoverable = this.getInteractable(this.state.world!.hoverablesInView, position) as IHoverable;
 		hoverable?.onEnterHover();
 	}
 
 	private onResize() {
 		// Scale and resize the canvas appropriately based on device width, height and pixel ratio
-		this.world.camera.canvas.width = window.innerWidth * window.devicePixelRatio;
-		this.world.camera.canvas.height = window.innerHeight * window.devicePixelRatio;
-		this.world.camera.canvas.style.transform = `scale(${1 / window.devicePixelRatio})`;
+		this.state.world!.camera.canvas.width = window.innerWidth * window.devicePixelRatio;
+		this.state.world!.camera.canvas.height = window.innerHeight * window.devicePixelRatio;
+		this.state.world!.camera.canvas.style.transform = `scale(${1 / window.devicePixelRatio})`;
 	}
 };

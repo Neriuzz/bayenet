@@ -2,7 +2,6 @@ import ClickGesture from "../gestures/ClickGesture";
 import DragGesture from "../gestures/DragGesture";
 import KeyGesture from "../gestures/KeyGesture";
 import Vector2D from "../util/Vector2D";
-import World from "../World";
 import WorldState from "../WorldState";
 
 export default class Board {
@@ -14,7 +13,7 @@ export default class Board {
 
 	private state = WorldState.instance;
 
-	constructor (private world: World) {}
+	constructor () {}
 
 	public onClick() {
 		if (this.state.edgeBeingCreated)
@@ -24,7 +23,7 @@ export default class Board {
 	}
 	
 	public onDoubleClick(clickGesture: ClickGesture) {
-		this.world.createNode(clickGesture.position);
+		this.state.world!.createNode(clickGesture.position);
 	}
 
 	public onDragStart(dragGesture: DragGesture) {
@@ -36,7 +35,7 @@ export default class Board {
 	public onDrag(dragGesture: DragGesture) {
 		let deltaPosition = new Vector2D(dragGesture.position.x - this.dragStartPosition!.x, dragGesture.position.y - this.dragStartPosition!.y);
 		this.currentPosition = new Vector2D(this.initialPosition!.x + deltaPosition.x, this.initialPosition!.y + deltaPosition.y);
-		this.world.camera.position = this.currentPosition;
+		this.state.world!.camera.position = this.currentPosition;
 	}
 
 	public onDragEnd() {
@@ -51,7 +50,7 @@ export default class Board {
 		}
 
 		if (keyGesture.key == "a" && keyGesture.ctrl) {
-			if (this.state.amountSelected == this.world.clickables.length)
+			if (this.state.amountSelected == this.state.world!.clickables.length)
 				this.state.clearSelected();
 			else
 				this.state.selectAllClickables();

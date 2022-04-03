@@ -58,18 +58,30 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 		);
 	}
 
+	public get parents(): Node[] {
+		return this.edges.filter(edge => edge.from !== this).map(edge => edge.from);
+	}
+
+	public get children(): Node[] {
+		return this.edges.filter(edge => edge.to && edge.to !== this).map(edge => edge.to!);
+	}
+
+	public get position(): Vector2D {
+		return this.currentPosition;
+	}
+
 	public onClick(clickGesture: ClickGesture) {
 		if (this.state.edgeBeingCreated) {
 			let edge = this.state.edgeBeingCreated
 			edge.to = this;
 			this.edges.push(edge);
-			if (edge.from.id === this.id || isCyclic(clickGesture.world!.nodes))
+			if (edge.from.id === this.id || isCyclic(this.state.world!.nodes))
 				this.state.undo();
 			return;
 		}
 
 		if (clickGesture.shift) {
-			let edge = clickGesture.world!.createEdge(this);
+			let edge = this.state.world!.createEdge(this);
 			this.edges.push(edge);
 			return;
 		}
@@ -100,10 +112,6 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 		this.dragging = false;
 		this.dragStartPosition = null;
 		this.zIndex = dragGesture.zIndex || this.zIndex;
-	}
-
-	public get position(): Vector2D {
-		return this.currentPosition;
 	}
 
 	public onEnterHover() {

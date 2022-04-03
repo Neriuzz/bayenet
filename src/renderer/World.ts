@@ -29,8 +29,8 @@ export default class World {
 	constructor(public readonly camera: Camera) {}
 
 	public addEntity(entity: IEntity) {
-		this.state.recentlyAlteredEntities.push(entity);
 		this.entities.push(entity);
+		this.state.recentlyCreatedEntities.push(entity);
 	}
 
 	public removeEntity(entity: IEntity) {

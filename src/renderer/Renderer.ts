@@ -20,7 +20,7 @@ export default class Renderer {
 		WorldState.instance.registerWorld(this.world);
 
 		// Initialise input handler
-		this.inputHandler = new InputHandler(this.world);
+		this.inputHandler = new InputHandler();
 			
 		// Begin the render loop
 		this.renderLoop();
