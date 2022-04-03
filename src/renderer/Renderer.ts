@@ -32,7 +32,7 @@ export default class Renderer {
 
 		// Sort renderables by increasing z-index
 		let renderables = this.world.renderablesInView.sort((a, b) => a.zIndex - b.zIndex);
-
+		
 		// Render out each renderable
 		renderables.forEach(renderable => {
 			this.context.save();
