@@ -17,15 +17,19 @@ import IClickable from "./interfaces/IClickable";
 import IDraggable from "./interfaces/IDraggable";
 import IHoverable from "./interfaces/IHoverable";
 import EntityType from "./EntityType";
+import WorldState from "./WorldState";
 
 
 export default class World {
 	public entities: IEntity[] = [];
 	private nextID: number = 0;
 
+	private state = WorldState.instance;
+
 	constructor(public readonly camera: Camera) {}
 
 	public addEntity(entity: IEntity) {
+		this.state.recentlyCreatedEntities.push(entity);
 		this.entities.push(entity);
 	}
 
@@ -89,6 +93,10 @@ export default class World {
 
 	public get nodes(): Node[] {
 		return this.entities.filter(entity => entity.type === EntityType.NODE).sort((a, b) => a.id - b.id) as Node[];
+	}
+
+	public get edges(): Edge[] {
+		return this.entities.filter(entity => entity.type === EntityType.EDGE) as Edge[];
 	}
 
 	public createNode(coords: Vector2D) {

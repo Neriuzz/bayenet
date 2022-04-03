@@ -1,5 +1,4 @@
 import Node from "../entities/Node";
-import World from "../World";
 
 function extractAdjacencyList(nodes: Node[]) {
 	let adj: number[][] = nodes.map(() => []);

@@ -34,7 +34,6 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 
 	public copy(): Node {
 		let copy = new Node(this.id, this.currentPosition, this.r);
-		copy.edges = [...this.edges.map(edge => edge.copy())];
 		return copy;
 	}
 
@@ -68,19 +67,17 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 
 	public onClick(clickGesture: ClickGesture) {
 		if (this.state.edgeBeingCreated) {
-			this.state.edgeBeingCreated.to = this;
-			this.edges.push(this.state.edgeBeingCreated);
-			if (this.state.edgeBeingCreated.from.id === this.id || isCyclic(clickGesture.world!.nodes))
-					clickGesture.world!.removeEntity(this.state.edgeBeingCreated);
-
-			this.state.edgeBeingCreated = null;
+			let edge = this.state.edgeBeingCreated
+			edge.to = this;
+			this.edges.push(edge);
+			if (edge.from.id === this.id || isCyclic(clickGesture.world!.nodes))
+				this.state.undo();
 			return;
 		}
 
 		if (clickGesture.shift) {
 			let edge = clickGesture.world!.createEdge(this);
 			this.edges.push(edge);
-			this.state.edgeBeingCreated = edge;
 			return;
 		}
 

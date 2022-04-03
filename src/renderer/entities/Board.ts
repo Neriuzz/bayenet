@@ -17,10 +17,9 @@ export default class Board {
 	constructor (private world: World) {}
 
 	public onClick() {
-		if (this.state.edgeBeingCreated) {
+		if (this.state.edgeBeingCreated)
 			this.world.removeEntity(this.state.edgeBeingCreated);
-			this.state.edgeBeingCreated = null;
-		}
+		
 		this.state.clearSelected();
 	}
 	
@@ -45,11 +44,6 @@ export default class Board {
 		this.dragStartPosition = null;
 	}
 
-	// public onMouseWheel(event: WheelEvent) {
-	// 	console.log(event);
-	// 	this.world.camera.context.scale(2, 2);
-	// }
-
 	public onKeyDown(keyGesture: KeyGesture) {
 		if (keyGesture.key == "Delete" && this.state.amountSelected > 0) {
 			this.state.removeAllClickables();
@@ -63,5 +57,8 @@ export default class Board {
 				this.state.selectAllClickables();
 			return;
 		}
+
+		if (keyGesture.key == "z" && keyGesture.ctrl)
+			this.state.undo();
 	}
 }
