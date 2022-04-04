@@ -8,6 +8,7 @@ import Vector2D from "../util/Vector2D";
 import WorldState from "../WorldState";
 import Edge from "./Edge";
 import isCyclic from "../util/GraphUtil";
+import EventBus from "@/events/EventBus";
 
 export default class Node implements IRenderable, IClickable, IDraggable, IHoverable {
 	public renderable = true;
@@ -25,6 +26,7 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 	private dragStartPosition: Vector2D | null = null;
 
 	private state = WorldState.instance;
+	private eventBus = EventBus.instance;
 
 	public edges: Edge[] = [];
 
@@ -93,7 +95,7 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 	}
 
 	public onDoubleClick(clickGesture: ClickGesture) {
-		console.log(`Double-clicked on node ${this.id}`);
+		this.eventBus.emit("nodeDoubleClicked", this);
 	}
 
 	public onDragStart(dragGesture: DragGesture) {
@@ -116,7 +118,7 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 
 	public onEnterHover() {
 		this.hovering = true;
-		console.log(`Started hovering over node ${this.id}`);;
+		console.log(`Started hovering over node ${this.id}`);
 	}
 
 	public onHovering() {
