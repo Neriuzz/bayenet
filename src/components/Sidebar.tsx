@@ -8,6 +8,7 @@ const Sidebar = () => {
 	const [node, setNode] = useState<Node | undefined>();
 
 	eventBus.on("nodeDoubleClicked", (node: Node) => {
+		setNode(undefined);
 		setNode(node);
 	});
 

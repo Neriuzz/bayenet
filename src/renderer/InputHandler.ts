@@ -91,7 +91,7 @@ export default class InputHandler {
 
 		
 		this.timer = setTimeout(() => {		
-			let position = this.getTruePosition(new Vector2D(event.clientX, event.clientY));
+			let position = this.getTruePosition(new Vector2D(event.offsetX, event.offsetY));
 
 			let clickGesture: ClickGesture = {
 				position,
@@ -113,7 +113,7 @@ export default class InputHandler {
 		if (this.state.edgeBeingCreated)
 			return;
 
-		let position = this.getTruePosition(new Vector2D(event.clientX, event.clientY));
+		let position = this.getTruePosition(new Vector2D(event.offsetX, event.offsetY));
 		let clickGesture: ClickGesture = { 
 			position,
 			alt: event.altKey,
@@ -130,7 +130,7 @@ export default class InputHandler {
 
 		this.state.dragging = false;
 
-		let position = new Vector2D(event.clientX, event.clientY);
+		let position = new Vector2D(event.offsetX, event.offsetY);
 		let dragGesture: DragGesture = {
 			position
 		};
@@ -143,7 +143,7 @@ export default class InputHandler {
 	private onMouseMove(event: MouseEvent) {
 		event.preventDefault();
 		
-		let position = new Vector2D(event.clientX, event.clientY);
+		let position = new Vector2D(event.offsetX, event.offsetY);
 
 		this.state.mousePosition = this.getTruePosition(position);
 
@@ -173,7 +173,7 @@ export default class InputHandler {
 	private onMouseUp(event: MouseEvent) {
 		event.preventDefault();
 
-		let position = new Vector2D(event.clientX, event.clientY);
+		let position = new Vector2D(event.offsetX, event.offsetY);
 
 		if (this.board.dragging) {
 			this.board.onDragEnd();

@@ -54,10 +54,7 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 	}
 
 	public isMouseOver(position: Vector2D): boolean {
-		return (
-			(position.x - this.position.x) ** 2 + 
-			(position.y - this.position.y) ** 2 <= this.r ** 2
-		);
+		return ((position.x - this.position.x) ** 2 + (position.y - this.position.y) ** 2) <= this.r ** 2;
 	}
 
 	public get parents(): Node[] {
