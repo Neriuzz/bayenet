@@ -35,8 +35,7 @@ export default class InputHandler {
 		this.state.world!.camera.canvas.addEventListener("mousemove", (event: MouseEvent) => this.onMouseMove(event));
 		this.state.world!.camera.canvas.addEventListener("click", (event: MouseEvent) => this.onClick(event));
 		this.state.world!.camera.canvas.addEventListener("dblclick", (event: MouseEvent) => this.onDoubleClick(event));
-		this.state.world!.camera.canvas.addEventListener("keydown", (event: KeyboardEvent) => this.onKeyDown(event));
-		// this.world.camera.canvas.addEventListener("wheel", (event: WheelEvent) => this.onMouseWheel(event));
+		this.state.world!.camera.canvas.addEventListener("keydown", (event: KeyboardEvent) => this.onKeyDown(event))
 
 		// Initial canvas resize
 		this.onResize();
@@ -77,11 +76,6 @@ export default class InputHandler {
 		this.board.onKeyDown(keyGesture);
 	}
 
-	// private onMouseWheel(event: WheelEvent) {
-	// 	event.preventDefault();
-	// 	this.board.onMouseWheel(event);
-	// }
-
 	private onClick(event: MouseEvent) {
 		event.preventDefault();
 
@@ -89,10 +83,9 @@ export default class InputHandler {
 		if (this.state.dragging || event.detail !== 1)
 			return;
 
-		
-		this.timer = setTimeout(() => {		
-			let position = this.getTruePosition(new Vector2D(event.offsetX, event.offsetY));
+		let position = this.getTruePosition(new Vector2D(event.offsetX, event.offsetY));
 
+		this.timer = setTimeout(() => {	
 			let clickGesture: ClickGesture = {
 				position,
 				alt: event.altKey,

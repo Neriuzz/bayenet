@@ -1,4 +1,3 @@
-import DraggableEntity from "./entities/DraggableEntity";
 import Vector2D from "./util/Vector2D";
 
 export default class Camera {
@@ -10,7 +9,7 @@ export default class Camera {
 	}
 
 	public clearScreen() {
-		this.context.setTransform(1, 0, 0, 1, 0, 0);
+		this.context.resetTransform();
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		this.context.translate(this.position.x, this.position.y);
 	}

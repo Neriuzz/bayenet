@@ -1,3 +1,5 @@
+
+import EventBus from "@/events/EventBus";
 import ClickGesture from "../gestures/ClickGesture";
 import DragGesture from "../gestures/DragGesture";
 import KeyGesture from "../gestures/KeyGesture";
@@ -12,10 +14,13 @@ export default class Board {
 	private dragStartPosition: Vector2D | null = null;
 
 	private state = WorldState.instance;
+	private eventBus = EventBus.instance;
 
 	constructor () {}
 
 	public onClick() {
+		this.eventBus.emit("toggleSidebar");
+
 		if (this.state.edgeBeingCreated)
 			this.state.undo();
 		

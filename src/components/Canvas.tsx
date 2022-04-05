@@ -14,10 +14,9 @@ const Canvas = () => {
 			contextRef.current = canvasRef.current?.getContext("2d");
 
 			if (canvasRef.current && contextRef.current) {
-				// TODO: Register canvas and context with renderer, register event listeners
 				rendererRef.current = new Renderer(canvasRef.current, contextRef.current);
 			} else {
-				console.log("Something went terribly wrong");
+				console.log("Something went terribly wrong!");
 			}
 		},
 		[]

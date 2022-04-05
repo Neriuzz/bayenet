@@ -23,4 +23,8 @@ export default class EventBus {
 		this.eventEmitter.emit(event, ...args);
 	}
 
+	public stopListening(event: string | symbol, callback: (...args: any[]) => void) {
+		this.eventEmitter.removeListener(event, callback);
+	}
+
 };

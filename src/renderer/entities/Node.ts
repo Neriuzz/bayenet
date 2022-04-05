@@ -30,9 +30,15 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 
 	public edges: Edge[] = [];
 
-	constructor(public id: number, private currentPosition: Vector2D, public r: number) {}
+	public name: string;
+
+	constructor(public id: number, private currentPosition: Vector2D, public r: number) {
+		this.name = `Node #${this.id}`;
+	}
 
 	public render(context: CanvasRenderingContext2D) {
+		// Draw circle
+		context.save();
 		context.beginPath();
 		context.arc(this.position.x, this.position.y, this.r, 0, Math.PI * 2);
 		context.fillStyle = "red";
@@ -44,6 +50,14 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 		}
  		context.fill();
 		context.closePath();
+		context.restore();
+
+		// Draw node name
+		context.save();
+		context.font = "11px Arial";
+		context.textBaseline = "middle";
+		context.fillText(this.name, this.position.x - this.r / 1.5, this.position.y);
+		context.restore();
 	}
 
 	public isInView(cameraPosition: Vector2D, canvasBounds: Vector2D): boolean {
@@ -92,7 +106,7 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 	}
 
 	public onDoubleClick(clickGesture: ClickGesture) {
-		this.eventBus.emit("nodeDoubleClicked", this);
+		this.eventBus.emit("toggleSidebar", this);
 	}
 
 	public onDragStart(dragGesture: DragGesture) {

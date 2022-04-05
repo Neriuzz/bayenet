@@ -27,6 +27,7 @@ export default class Edge implements IRenderable, IClickable {
 		context.rotate(angle);
 
 		// Line
+		context.save();
 		context.beginPath();
 		context.lineWidth = 2.5;
 		context.moveTo(this.from.r, 0);
@@ -35,8 +36,10 @@ export default class Edge implements IRenderable, IClickable {
 			context.strokeStyle = "blue";
 		context.stroke();
 		context.closePath();
+		context.restore();
 
 		// Arrow
+		context.save();
 		context.beginPath();
 		context.lineTo(hypotenuse - this.size - (this.to?.r || 0), this.size);
 		context.lineTo(hypotenuse - (this.to?.r || 0), 0);
@@ -45,6 +48,7 @@ export default class Edge implements IRenderable, IClickable {
 			context.fillStyle = "blue";
 		context.fill();
 		context.closePath();
+		context.restore();
 	 }
 
 	public isInView(cameraPosition: Vector2D, cameraBounds: Vector2D): boolean {
