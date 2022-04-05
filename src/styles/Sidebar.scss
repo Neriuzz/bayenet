@@ -1,0 +1,10 @@
+.sidebar {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+	top: 1%;
+	right: 1%;
+	z-index: 2;
+}
