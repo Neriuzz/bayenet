@@ -2,7 +2,6 @@ import ClickGesture from "../gestures/ClickGesture";
 import IClickable from "../interfaces/IClickable";
 import IRenderable from "../interfaces/IRenderable";
 import Vector2D from "../util/Vector2D";
-import WorldState from "../WorldState";
 import Node from "./Node";
 
 export default class Edge implements IRenderable, IClickable {
@@ -12,14 +11,12 @@ export default class Edge implements IRenderable, IClickable {
 	public zIndex = 0;
 	public selected = false;
 
-	private state = WorldState.instance;
-
-	constructor(public id: number, public size: number, public from: Node, public to?: Node) {}
+	constructor(public id: number, public size: number, public from: Node, public drawingPosition: Vector2D, public to?: Node) {}
 
 	public render(context: CanvasRenderingContext2D) {
 		// Coordinates to where to draw the line from and to, and the angle to draw the line at
 		let fromPos = this.from.position;
-		let toPos = this.to ? this.to.position : this.state.mousePosition;
+		let toPos = this.to ? this.to.position : this.drawingPosition;
 		let angle = Math.atan2((toPos.y - fromPos.y), (toPos.x - fromPos.x));
 		let hypotenuse = Math.sqrt((fromPos.x- toPos.x) ** 2 + (fromPos.y - toPos.y) ** 2);
 
@@ -74,7 +71,7 @@ export default class Edge implements IRenderable, IClickable {
 		this.selected = !this.selected;
 
 		if (!clickGesture.alt)
-			this.state.clearSelected(this.id);
+			clickGesture.world.deselectAllClickables(this.id);
 	}
 
 	public onDoubleClick(clickGesture: ClickGesture) {

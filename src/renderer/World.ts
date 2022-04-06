@@ -1,6 +1,3 @@
-// Camera
-import Camera from "./Camera";
-
 // Entities
 import Node from "./entities/Node";
 import Edge from "./entities/Edge";
@@ -17,20 +14,20 @@ import IClickable from "./interfaces/IClickable";
 import IDraggable from "./interfaces/IDraggable";
 import IHoverable from "./interfaces/IHoverable";
 
-import WorldState from "./WorldState";
+import Board from "./entities/Board";
 
 
 export default class World {
 	public entities: IEntity[] = [];
 	private nextID: number = 0;
 
-	private state = WorldState.instance;
+	private recentlyCreatedEntities: IEntity[] = [];
 
-	constructor(public readonly camera: Camera) {}
+	constructor(public readonly board: Board) {}
 
 	public addEntity(entity: IEntity) {
 		this.entities.push(entity);
-		this.state.recentlyCreatedEntities.push(entity);
+		this.recentlyCreatedEntities.push(entity);
 	}
 
 	public removeEntity(entity: IEntity) {
@@ -53,24 +50,44 @@ export default class World {
 		return this.entities.filter(isRenderable);
 	}
 
+	public get renderablesSize(): number {
+		return this.renderables.length;
+	}
+
 	public get interactables(): IInteractable[] {
 		return this.entities.filter(isClickable || isDraggable || isHoverable);
+	}
+
+	public get interactablesSize(): number {
+		return this.interactables.length;
 	}
 
 	public get clickables(): IClickable[] {
 		return this.entities.filter(isClickable);
 	} 
 
+	public get clickablesSize(): number {
+		return this.clickables.length;
+	}
+
 	public get hoverables(): IHoverable[] {
 		return this.entities.filter(isHoverable);
+	}
+
+	public get hoverablesSize(): number {
+		return this.hoverables.length;
 	}
 
 	public get draggables(): IDraggable[] {
 		return this.entities.filter(isDraggable);
 	}
 
+	public get draggablesSize(): number {
+		return this.draggables.length;
+	}
+
 	public get renderablesInView(): IRenderable[] {
-		return this.renderables.filter(renderable => renderable.isInView(this.camera.position, this.camera.bounds));
+		return this.renderables.filter(renderable => renderable.isInView(this.board.camera.position, this.board.camera.bounds));
 	}
 	
 	public get interactablesInView(): IInteractable[] {
@@ -97,6 +114,42 @@ export default class World {
 		return this.entities.filter(entity => entity instanceof Edge) as Edge[];
 	}
 
+	public get currentlySelectedClickables(): IClickable[] {
+		return this.clickables.filter(clickable => clickable.selected);
+	}
+
+	public get currentlyHoveringOver(): IHoverable | undefined {
+		return this.hoverables.find(hoverable => hoverable.hovering);
+	}
+
+	public get currentlyDragging(): IDraggable | undefined {
+		return this.draggables.find(draggable => draggable.dragging);
+	}
+
+	public get edgeBeingCreated(): Edge | undefined {
+		return this.edges.find(edge => !edge.to);
+	}
+
+	public get numberOfClickablesSelected(): number {
+		return this.clickables.filter(clickable => clickable.selected).length;
+	}
+
+	public deselectAllClickables(omit?: number) {
+		this.clickables.forEach(clickable => {
+			if (omit !== clickable.id)
+				clickable.selected = false;
+		});
+	}
+
+	public selectAllClickables() {
+		this.clickables.forEach(clickable => clickable.selected = true);
+	}
+
+	public removeAllSelectedClickables() {
+		this.clickables.filter(clickable => clickable.selected)
+			.forEach(clickable => this.removeEntity(clickable));
+	}
+
 	public createNode(coords: Vector2D) {
 		let node = new Node(this.nextID++, coords, 30);
 		this.addEntity(node);
@@ -104,8 +157,14 @@ export default class World {
 	}
 
 	public createEdge(from: Node) {
-		let edge = new Edge(this.nextID++, 10, from);
+		let edge = new Edge(this.nextID++, 10, from, from.position);
 		this.addEntity(edge);
 		return edge;
+	}
+
+	public undo() {
+		let entity = this.recentlyCreatedEntities.pop();
+		if (entity)
+			this.removeEntity(entity);
 	}
 };

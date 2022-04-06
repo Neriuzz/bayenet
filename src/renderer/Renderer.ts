@@ -1,26 +1,23 @@
-import Camera from "./Camera";
 import World from "./World";
 import InputHandler from "./InputHandler";
-import WorldState from "./WorldState";
+import Board from "./entities/Board";
 
 export default class Renderer {
-	private camera: Camera;
-	private world: World;
-	private inputHandler: InputHandler;
-
 	private frameCount: number = 0;
 	private animationFrameID: number = 0;
 
+	private world: World;
+	private board: Board;
+
 	constructor(private canvas: HTMLCanvasElement, private context: CanvasRenderingContext2D) {
-		// Initialise camera
-		this.camera = new Camera(this.canvas, this.context);
+		// Initialise board
+		this.board = new Board(this.canvas, this.context);
 
 		// Initialise world
-		this.world = new World(this.camera);
-		WorldState.instance.registerWorld(this.world);
+		this.world = new World(this.board);
 
 		// Initialise input handler
-		this.inputHandler = new InputHandler();
+		new InputHandler(this.world);
 			
 		// Begin the render loop
 		this.renderLoop();
@@ -28,7 +25,7 @@ export default class Renderer {
 
 	public draw() {
 		// Clear the bitmap
-		this.camera.clearScreen();
+		this.board.camera.clearScreen();
 
 		// Sort renderables by increasing z-index
 		let renderables = this.world.renderablesInView.sort((a, b) => a.zIndex - b.zIndex);

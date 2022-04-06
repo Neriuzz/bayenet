@@ -25,7 +25,6 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 	private initialPosition: Vector2D | null = null;
 	private dragStartPosition: Vector2D | null = null;
 
-	private state = WorldState.instance;
 	private eventBus = EventBus.instance;
 
 	public edges: Edge[] = [];
@@ -84,17 +83,17 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 	}
 
 	public onClick(clickGesture: ClickGesture) {
-		if (this.state.edgeBeingCreated) {
-			let edge = this.state.edgeBeingCreated
+		if (clickGesture.world.edgeBeingCreated) {
+			let edge = clickGesture.world.edgeBeingCreated
 			edge.to = this;
 			this.edges.push(edge);
-			if (edge.from.id === this.id || isCyclic(this.state.world!.nodes))
-				this.state.undo();
+			if (edge.from.id === this.id || isCyclic(clickGesture.world.nodes))
+				clickGesture.world.undo();
 			return;
 		}
 
 		if (clickGesture.shift) {
-			let edge = this.state.world!.createEdge(this);
+			let edge = clickGesture.world.createEdge(this);
 			this.edges.push(edge);
 			return;
 		}
@@ -102,7 +101,7 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 		this.selected = !this.selected;
 
 		if (!clickGesture.alt)
-			this.state.clearSelected(this.id);
+			clickGesture.world.deselectAllClickables(this.id);
 	}
 
 	public onDoubleClick(clickGesture: ClickGesture) {

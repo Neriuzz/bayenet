@@ -1,10 +1,10 @@
 
 import EventBus from "@/events/EventBus";
+import Camera from "../Camera";
 import ClickGesture from "../gestures/ClickGesture";
 import DragGesture from "../gestures/DragGesture";
 import KeyGesture from "../gestures/KeyGesture";
 import Vector2D from "../util/Vector2D";
-import WorldState from "../WorldState";
 
 export default class Board {
 	public dragging = false;
@@ -13,22 +13,25 @@ export default class Board {
 	private currentPosition = new Vector2D(0, 0);
 	private dragStartPosition: Vector2D | null = null;
 
-	private state = WorldState.instance;
 	private eventBus = EventBus.instance;
 
-	constructor () {}
+	public readonly camera: Camera;
 
-	public onClick() {
+	constructor (public readonly canvas: HTMLCanvasElement, public readonly context: CanvasRenderingContext2D) {
+		this.camera = new Camera(this.canvas, this.context);
+	}
+
+	public onClick(clickGesture: ClickGesture) {
 		this.eventBus.emit("toggleSidebar");
 
-		if (this.state.edgeBeingCreated)
-			this.state.undo();
+		if (clickGesture.world.edgeBeingCreated)
+			clickGesture.world.undo();
 		
-		this.state.clearSelected();
+		clickGesture.world.deselectAllClickables();
 	}
 	
 	public onDoubleClick(clickGesture: ClickGesture) {
-		this.state.world!.createNode(clickGesture.position);
+		clickGesture.world.createNode(clickGesture.position);
 	}
 
 	public onDragStart(dragGesture: DragGesture) {
@@ -40,7 +43,7 @@ export default class Board {
 	public onDrag(dragGesture: DragGesture) {
 		let deltaPosition = new Vector2D(dragGesture.position.x - this.dragStartPosition!.x, dragGesture.position.y - this.dragStartPosition!.y);
 		this.currentPosition = new Vector2D(this.initialPosition!.x + deltaPosition.x, this.initialPosition!.y + deltaPosition.y);
-		this.state.world!.camera.position = this.currentPosition;
+		this.camera.position = this.currentPosition;
 	}
 
 	public onDragEnd() {
@@ -49,20 +52,20 @@ export default class Board {
 	}
 
 	public onKeyDown(keyGesture: KeyGesture) {
-		if (keyGesture.key == "Delete" && this.state.amountSelected > 0) {
-			this.state.removeAllSelectedClickables();
+		if (keyGesture.key == "Delete" && keyGesture.world.numberOfClickablesSelected > 0) {
+			keyGesture.world.removeAllSelectedClickables();
 			return;
 		}
 
 		if (keyGesture.key == "a" && keyGesture.ctrl) {
-			if (this.state.amountSelected == this.state.world!.clickables.length)
-				this.state.clearSelected();
+			if (keyGesture.world.numberOfClickablesSelected == keyGesture.world.clickablesSize)
+				keyGesture.world.deselectAllClickables();
 			else
-				this.state.selectAllClickables();
+				keyGesture.world.selectAllClickables();
 			return;
 		}
 
 		if (keyGesture.key == "z" && keyGesture.ctrl)
-			this.state.undo();
+			keyGesture.world.undo();
 	}
 }
