@@ -4,8 +4,8 @@ import { useEffect, useRef } from "react";
 
 const Canvas = () => {
 
-	const canvasRef = useRef<HTMLCanvasElement | null>(null);
-	const contextRef = useRef<CanvasRenderingContext2D | null | undefined>(null);
+	const canvasRef = useRef<HTMLCanvasElement>(null);
+	const contextRef = useRef<CanvasRenderingContext2D | undefined | null>();
 
 	useEffect(
 		() => {
