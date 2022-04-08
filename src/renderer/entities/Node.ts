@@ -5,7 +5,6 @@ import IDraggable from "../interfaces/IDraggable";
 import IHoverable from "../interfaces/IHoverable";
 import IRenderable from "../interfaces/IRenderable";
 import Vector2D from "../util/Vector2D";
-import WorldState from "../WorldState";
 import Edge from "./Edge";
 import isCyclic from "../util/GraphUtil";
 import EventBus from "@/events/EventBus";
@@ -21,6 +20,7 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 	public hovering = false;
 
 	public zIndex = 1;
+	public previousZIndex = 1;
 
 	private initialPosition: Vector2D | null = null;
 	private dragStartPosition: Vector2D | null = null;
@@ -86,6 +86,8 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 		if (clickGesture.world.edgeBeingCreated) {
 			let edge = clickGesture.world.edgeBeingCreated
 			edge.to = this;
+			edge.zIndex = 0;
+			edge.from.zIndex = edge.from.previousZIndex;
 			this.edges.push(edge);
 			if (edge.from.id === this.id || isCyclic(clickGesture.world.nodes))
 				clickGesture.world.undo();
@@ -94,6 +96,9 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 
 		if (clickGesture.shift) {
 			let edge = clickGesture.world.createEdge(this);
+			edge.zIndex = Number.MAX_SAFE_INTEGER - 1;
+			this.previousZIndex = this.zIndex;
+			this.zIndex = Number.MAX_SAFE_INTEGER;
 			this.edges.push(edge);
 			return;
 		}

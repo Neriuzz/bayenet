@@ -9,6 +9,10 @@ const Sidebar = () => {
 	const [node, setNode] = useState<Node>(); 
 	const [_, forceUpdate] = useReducer(x => x + 1, 0);
 
+	const handleNameChange = (newName: string) => {
+		node!.name = newName;
+	};
+
 	useEffect(() => {
 		const handleToggleSidebar = (node: Node) => {
 			forceUpdate();
@@ -23,7 +27,7 @@ const Sidebar = () => {
 	if (node)
 		return (
 			<div className="sidebar">
-				<h1> {node.name} </h1>
+				<input type="text" name="node-name" className="node-name" defaultValue={node.name} autoComplete="off" onChange={(event) => handleNameChange(event.target.value)}/>
 				<p> {`Postion: (${node.position.x}, ${node.position.y})`} </p>
 			</div>
 		);

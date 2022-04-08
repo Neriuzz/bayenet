@@ -6,7 +6,6 @@ const Canvas = () => {
 
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
 	const contextRef = useRef<CanvasRenderingContext2D | null | undefined>(null);
-	const rendererRef = useRef<Renderer | null>(null);
 
 	useEffect(
 		() => {
@@ -14,7 +13,8 @@ const Canvas = () => {
 			contextRef.current = canvasRef.current?.getContext("2d");
 
 			if (canvasRef.current && contextRef.current) {
-				rendererRef.current = new Renderer(canvasRef.current, contextRef.current);
+				// Instantiate the renderer
+				new Renderer(canvasRef.current, contextRef.current);
 			} else {
 				console.log("Something went terribly wrong!");
 			}
@@ -23,7 +23,7 @@ const Canvas = () => {
 	);
 	
 	return (
-		<canvas ref={canvasRef} tabIndex={0} />
+		<canvas ref={canvasRef} tabIndex={1} onClick={() => canvasRef.current?.focus()}/>
 	);
 };
 
