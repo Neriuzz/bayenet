@@ -1,13 +1,14 @@
-import ClickGesture from "../gestures/ClickGesture";
-import DragGesture from "../gestures/DragGesture";
 import IClickable from "../interfaces/IClickable";
 import IDraggable from "../interfaces/IDraggable";
 import IHoverable from "../interfaces/IHoverable";
 import IRenderable from "../interfaces/IRenderable";
-import Vector2D from "../util/Vector2D";
+
 import Edge from "./Edge";
+import Vector2D from "../util/Vector2D";
 import isCyclic from "../util/GraphUtil";
 import EventBus from "@/events/EventBus";
+
+import { ClickGesture, DragGesture } from "../gestures";
 
 export default class Node implements IRenderable, IClickable, IDraggable, IHoverable {
 	public renderable = true;

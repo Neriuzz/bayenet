@@ -6,10 +6,9 @@ import Vector2D from "./util/Vector2D";
 import IInteractable from "./interfaces/IInteractable";
 import IClickable from "./interfaces/IClickable";
 import IDraggable from "./interfaces/IDraggable";
-import ClickGesture from "./gestures/ClickGesture";
-import KeyGesture from "./gestures/KeyGesture";
-import DragGesture from "./gestures/DragGesture";
 import IHoverable from "./interfaces/IHoverable";
+
+import { ClickGesture, HoverGesture, DragGesture, KeyGesture } from "./gestures";
 
 export default class InputHandler {
 	private draggingSomething: boolean = false;

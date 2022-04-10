@@ -1,10 +1,9 @@
 
 import EventBus from "@/events/EventBus";
 import Camera from "../Camera";
-import ClickGesture from "../gestures/ClickGesture";
-import DragGesture from "../gestures/DragGesture";
-import KeyGesture from "../gestures/KeyGesture";
 import Vector2D from "../util/Vector2D";
+
+import { ClickGesture, DragGesture, KeyGesture } from "../gestures";
 
 export default class Board {
 	public dragging = false;

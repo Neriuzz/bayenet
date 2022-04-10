@@ -1,8 +1,10 @@
-import ClickGesture from "../gestures/ClickGesture";
+import Node from "./Node";
+import Vector2D from "../util/Vector2D";
+
 import IClickable from "../interfaces/IClickable";
 import IRenderable from "../interfaces/IRenderable";
-import Vector2D from "../util/Vector2D";
-import Node from "./Node";
+
+import { ClickGesture } from "../gestures";
 
 export default class Edge implements IRenderable, IClickable {
 	public renderable = true;
