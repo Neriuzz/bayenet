@@ -1,4 +1,4 @@
-import DragGesture from "../gestures/DragGesture";
+import { DragGesture } from "../gestures";
 import IInteractable from "./IInteractable";
 
 export default interface IDraggable extends IInteractable {

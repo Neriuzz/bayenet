@@ -1,9 +1,9 @@
 
-import EventBus from "@/events/EventBus";
-import Camera from "../Camera";
-import Vector2D from "../util/Vector2D";
+import EventBus from "../../events/EventBus";
 
+import Camera from "../Camera";
 import { ClickGesture, DragGesture, KeyGesture } from "../gestures";
+import Vector2D from "../util/Vector2D";
 
 export default class Board {
 	public dragging = false;
@@ -40,7 +40,7 @@ export default class Board {
 	}
 
 	public onDrag(dragGesture: DragGesture) {
-		let deltaPosition = new Vector2D(dragGesture.position.x - this.dragStartPosition!.x, dragGesture.position.y - this.dragStartPosition!.y);
+		const deltaPosition = new Vector2D(dragGesture.position.x - this.dragStartPosition!.x, dragGesture.position.y - this.dragStartPosition!.y);
 		this.currentPosition = new Vector2D(this.initialPosition!.x + deltaPosition.x, this.initialPosition!.y + deltaPosition.y);
 		this.camera.position = this.currentPosition;
 	}

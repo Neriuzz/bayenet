@@ -1,29 +1,24 @@
-import Renderer from "@/renderer/Renderer";
-import "@styles/Canvas.scss";
+import Renderer from "../renderer/Renderer";
+import "../styles/Canvas.scss";
 import { useEffect, useRef } from "react";
 
 const Canvas = () => {
-
-	const canvasRef = useRef<HTMLCanvasElement>(null);
-	const contextRef = useRef<CanvasRenderingContext2D | undefined | null>();
+	const canvasRef = useRef<HTMLCanvasElement>(null!);
 
 	useEffect(
 		() => {
-			canvasRef.current?.focus();
-			contextRef.current = canvasRef.current?.getContext("2d");
+			// Focus the canvas and retrieve 2D context.
+			canvasRef.current.focus();
+			const context = canvasRef.current.getContext("2d")!;
 
-			if (canvasRef.current && contextRef.current) {
-				// Instantiate the renderer
-				new Renderer(canvasRef.current, contextRef.current);
-			} else {
-				console.log("Something went terribly wrong!");
-			}
+			// Spawn a new renderer.
+			new Renderer(canvasRef.current, context);
 		},
 		[]
 	);
 	
 	return (
-		<canvas ref={canvasRef} tabIndex={1} onClick={() => canvasRef.current?.focus()}/>
+		<canvas ref={canvasRef} tabIndex={1} onClick={() => canvasRef.current.focus()}/>
 	);
 };
 

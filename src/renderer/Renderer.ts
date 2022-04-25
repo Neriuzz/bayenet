@@ -1,10 +1,10 @@
-import World from "./World";
-import InputHandler from "./InputHandler";
 import Board from "./entities/Board";
+import InputHandler from "./InputHandler";
+import World from "./World";
 
 export default class Renderer {
-	private frameCount: number = 0;
-	private animationFrameID: number = 0;
+	private frameCount = 0;
+	private animationFrameID = 0;
 
 	private world: World;
 	private board: Board;
@@ -28,7 +28,7 @@ export default class Renderer {
 		this.board.camera.clearScreen();
 
 		// Sort renderables by increasing z-index
-		let renderables = this.world.renderablesInView.sort((a, b) => a.zIndex - b.zIndex);
+		const renderables = this.world.renderablesInView.sort((a, b) => a.zIndex - b.zIndex);
 		
 		// Render out each renderable
 		renderables.forEach(renderable => {

@@ -1,8 +1,8 @@
 // Styles
-import "@styles/App.scss";
+import "../styles/App.scss";
 
 // Components
-import Canvas from "@components/Canvas";
+import Canvas from "./Canvas";
 import Sidebar from "./Sidebar";
 
 

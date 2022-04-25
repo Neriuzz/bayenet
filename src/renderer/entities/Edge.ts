@@ -1,10 +1,8 @@
-import Node from "./Node";
-import Vector2D from "../util/Vector2D";
-
+import { ClickGesture } from "../gestures";
 import IClickable from "../interfaces/IClickable";
 import IRenderable from "../interfaces/IRenderable";
-
-import { ClickGesture } from "../gestures";
+import Vector2D from "../util/Vector2D";
+import Node from "./Node";
 
 export default class Edge implements IRenderable, IClickable {
 	public renderable = true;
@@ -17,10 +15,10 @@ export default class Edge implements IRenderable, IClickable {
 
 	public render(context: CanvasRenderingContext2D) {
 		// Coordinates to where to draw the line from and to, and the angle to draw the line at
-		let fromPos = this.from.position;
-		let toPos = this.to ? this.to.position : this.drawingPosition;
-		let angle = Math.atan2((toPos.y - fromPos.y), (toPos.x - fromPos.x));
-		let hypotenuse = Math.sqrt((fromPos.x- toPos.x) ** 2 + (fromPos.y - toPos.y) ** 2);
+		const fromPos = this.from.position;
+		const toPos = this.to ? this.to.position : this.drawingPosition;
+		const angle = Math.atan2((toPos.y - fromPos.y), (toPos.x - fromPos.x));
+		const hypotenuse = Math.sqrt((fromPos.x- toPos.x) ** 2 + (fromPos.y - toPos.y) ** 2);
 
 		context.translate(fromPos.x, fromPos.y);
 		context.rotate(angle);
@@ -49,7 +47,7 @@ export default class Edge implements IRenderable, IClickable {
 		context.fill();
 		context.closePath();
 		context.restore();
-	 }
+	}
 
 	public isInView(cameraPosition: Vector2D, cameraBounds: Vector2D): boolean {
 		if (!this.to)
@@ -62,10 +60,10 @@ export default class Edge implements IRenderable, IClickable {
 		if (!this.to)
 			return false;
 
-		let d1 = Math.sqrt((position.x - this.from.position.x) ** 2 + (position.y - this.from.position.y) ** 2);
-		let d2 = Math.sqrt((this.to.position.x - position.x) ** 2 + (position.y - this.to.position.y) ** 2);
+		const d1 = Math.sqrt((position.x - this.from.position.x) ** 2 + (position.y - this.from.position.y) ** 2);
+		const d2 = Math.sqrt((this.to.position.x - position.x) ** 2 + (position.y - this.to.position.y) ** 2);
 
-		let length = Math.sqrt((this.to.position.x - this.from.position.x) ** 2 + (this.to.position.y - this.from.position.y) ** 2);
+		const length = Math.sqrt((this.to.position.x - this.from.position.x) ** 2 + (this.to.position.y - this.from.position.y) ** 2);
 
 		return (d1 + d2 >= length - 0.25 && d1 + d2 <= length + 0.25);
 	}

@@ -1,17 +1,16 @@
-// Required imports
-import World from "./World";
-import Vector2D from "./util/Vector2D";
-
+// Gestures
+import { ClickGesture, DragGesture, HoverGesture, KeyGesture } from "./gestures";
 // Interfaces
-import IInteractable from "./interfaces/IInteractable";
 import IClickable from "./interfaces/IClickable";
 import IDraggable from "./interfaces/IDraggable";
 import IHoverable from "./interfaces/IHoverable";
-
-import { ClickGesture, HoverGesture, DragGesture, KeyGesture } from "./gestures";
+import IInteractable from "./interfaces/IInteractable";
+// Required imports
+import Vector2D from "./util/Vector2D";
+import World from "./World";
 
 export default class InputHandler {
-	private draggingSomething: boolean = false;
+	private draggingSomething = false;
 
 	// Timer for differentiating between clicks and double clicks
 	private timer: NodeJS.Timeout | null = null;
@@ -34,7 +33,7 @@ export default class InputHandler {
 	}
 
 	private getInteractable(interactables: IInteractable[], position: Vector2D): IInteractable {
-		let [interactable] = interactables
+		const [interactable] = interactables
 			.filter(interactable => interactable.isMouseOver(position))
 			.sort((a, b) => a.zIndex - b.zIndex)
 			.reverse();
@@ -43,10 +42,10 @@ export default class InputHandler {
 	}
 
 	public getZIndex(draggable: IDraggable, position: Vector2D): number {
-		let [interactable] = this.world.interactablesInView
-				.filter(interactable => interactable.id !== draggable.id && interactable.isMouseOver(position))
-				.sort((a, b) => a.zIndex - b.zIndex)
-				.reverse();
+		const [interactable] = this.world.interactablesInView
+			.filter(interactable => interactable.id !== draggable.id && interactable.isMouseOver(position))
+			.sort((a, b) => a.zIndex - b.zIndex)
+			.reverse();
 		
 		return interactable?.zIndex + 1 || 1;
 	}
@@ -58,7 +57,7 @@ export default class InputHandler {
 	private onKeyDown(event: KeyboardEvent) {
 		event.preventDefault();
 		
-		let keyGesture: KeyGesture = {
+		const keyGesture: KeyGesture = {
 			key: event.key,
 			ctrl: event.ctrlKey,
 			alt: event.altKey,
@@ -76,17 +75,17 @@ export default class InputHandler {
 		if (this.draggingSomething || event.detail !== 1)
 			return;
 
-		let position = this.getTruePosition(new Vector2D(event.offsetX, event.offsetY));
+		const position = this.getTruePosition(new Vector2D(event.offsetX, event.offsetY));
 
 		this.timer = setTimeout(() => {	
-			let clickGesture: ClickGesture = {
+			const clickGesture: ClickGesture = {
 				position,
 				alt: event.altKey,
 				shift: event.shiftKey,
 				world: this.world,
 			};
 
-			let clickable = this.getInteractable(this.world.clickablesInView, position) as IClickable;
+			const clickable = this.getInteractable(this.world.clickablesInView, position) as IClickable;
 
 			clickable ? clickable.onClick(clickGesture) : this.world.board.onClick(clickGesture);
 		}, 200);
@@ -100,15 +99,15 @@ export default class InputHandler {
 		if (this.world.edgeBeingCreated)
 			return;
 
-		let position = this.getTruePosition(new Vector2D(event.offsetX, event.offsetY));
-		let clickGesture: ClickGesture = { 
+		const position = this.getTruePosition(new Vector2D(event.offsetX, event.offsetY));
+		const clickGesture: ClickGesture = { 
 			position,
 			alt: event.altKey,
 			shift: event.shiftKey,
 			world: this.world
-		 };
+		};
 
-		let clickable = this.getInteractable(this.world.clickablesInView, position) as IClickable;
+		const clickable = this.getInteractable(this.world.clickablesInView, position) as IClickable;
 
 		clickable ? clickable.onDoubleClick(clickGesture) : this.world.board.onDoubleClick(clickGesture);
 	}
@@ -118,12 +117,12 @@ export default class InputHandler {
 
 		this.draggingSomething = false;
 
-		let position = new Vector2D(event.offsetX, event.offsetY);
-		let dragGesture: DragGesture = {
+		const position = new Vector2D(event.offsetX, event.offsetY);
+		const dragGesture: DragGesture = {
 			position
 		};
 
-		let draggable = this.getInteractable(this.world.draggablesInView, this.getTruePosition(position)) as IDraggable;
+		const draggable = this.getInteractable(this.world.draggablesInView, this.getTruePosition(position)) as IDraggable;
 
 		draggable ? draggable.onDragStart(dragGesture) : this.world.board.onDragStart(dragGesture);
 	}
@@ -131,7 +130,7 @@ export default class InputHandler {
 	private onMouseMove(event: MouseEvent) {
 		event.preventDefault();
 		
-		let position = new Vector2D(event.offsetX, event.offsetY);
+		const position = new Vector2D(event.offsetX, event.offsetY);
 
 		if (this.world.edgeBeingCreated)
 			this.world.edgeBeingCreated.drawingPosition = this.getTruePosition(position);
@@ -139,7 +138,7 @@ export default class InputHandler {
 		this.draggingSomething = true;
 
 		if (this.world.board.dragging) {
-			let dragGesture: DragGesture = {
+			const dragGesture: DragGesture = {
 				position
 			};
 			this.world.board.onDrag(dragGesture);
@@ -147,8 +146,8 @@ export default class InputHandler {
 		}
 
 		if (this.world.currentlyDragging) {
-			let zIndex = Number.MAX_SAFE_INTEGER;
-			let dragGesture: DragGesture = {
+			const zIndex = Number.MAX_SAFE_INTEGER;
+			const dragGesture: DragGesture = {
 				position,
 				zIndex
 			};
@@ -162,7 +161,7 @@ export default class InputHandler {
 	private onMouseUp(event: MouseEvent) {
 		event.preventDefault();
 
-		let position = new Vector2D(event.offsetX, event.offsetY);
+		const position = new Vector2D(event.offsetX, event.offsetY);
 
 		if (this.world.board.dragging) {
 			this.world.board.onDragEnd();
@@ -170,8 +169,8 @@ export default class InputHandler {
 		}
 
 		if (this.world.currentlyDragging) {
-			let zIndex = this.getZIndex(this.world.currentlyDragging, this.getTruePosition(position));
-			let dragGesture: DragGesture = {
+			const zIndex = this.getZIndex(this.world.currentlyDragging, this.getTruePosition(position));
+			const dragGesture: DragGesture = {
 				position,
 				zIndex
 			};
@@ -188,7 +187,7 @@ export default class InputHandler {
 			return;
 		}
 		
-		let hoverable = this.getInteractable(this.world.hoverablesInView, position) as IHoverable;
+		const hoverable = this.getInteractable(this.world.hoverablesInView, position) as IHoverable;
 		hoverable?.onEnterHover();
 	}
 

@@ -1,7 +1,7 @@
 import Node from "../entities/Node";
 
 function extractAdjacencyList(nodes: Node[]) {
-	let adj: number[][] = nodes.map(() => []);
+	const adj: number[][] = nodes.map(() => []);
 	nodes.forEach(node => {
 		node.edges.forEach(edge => {
 			if (edge.to && edge.to.id !== node.id){
@@ -15,7 +15,7 @@ function extractAdjacencyList(nodes: Node[]) {
 function checkCycle(node: number, adj: number[][], visited: boolean[], dfsVisited: boolean[]): boolean {
 	visited[node] = true;
 	dfsVisited[node] = true;
-	for(let child of adj[node]) {
+	for(const child of adj[node]) {
 		if (!visited[child] && checkCycle(child, adj, visited, dfsVisited))
 			return true;
 		else if (dfsVisited[child])
@@ -27,10 +27,10 @@ function checkCycle(node: number, adj: number[][], visited: boolean[], dfsVisite
 }
 
 export default function isCyclic(nodes: Node[]): boolean {
-	let adj = extractAdjacencyList(nodes);
-	let numberOfNodes = adj.length;
-	let visited = Array(numberOfNodes).fill(false);
-	let dfsVisited = Array(numberOfNodes).fill(false);
+	const adj = extractAdjacencyList(nodes);
+	const numberOfNodes = adj.length;
+	const visited = Array(numberOfNodes).fill(false);
+	const dfsVisited = Array(numberOfNodes).fill(false);
 
 	for (let i = 0; i < numberOfNodes; i++)
 		if (!visited[i] && checkCycle(i, adj, visited, dfsVisited))

@@ -1,14 +1,13 @@
+import EventBus from "../../events/EventBus";
+
+import { ClickGesture, DragGesture } from "../gestures";
 import IClickable from "../interfaces/IClickable";
 import IDraggable from "../interfaces/IDraggable";
 import IHoverable from "../interfaces/IHoverable";
 import IRenderable from "../interfaces/IRenderable";
-
-import Edge from "./Edge";
-import Vector2D from "../util/Vector2D";
 import isCyclic from "../util/GraphUtil";
-import EventBus from "@/events/EventBus";
-
-import { ClickGesture, DragGesture } from "../gestures";
+import Vector2D from "../util/Vector2D";
+import Edge from "./Edge";
 
 export default class Node implements IRenderable, IClickable, IDraggable, IHoverable {
 	public renderable = true;
@@ -48,7 +47,7 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 			context.lineCap = "round";
 			context.stroke();
 		}
- 		context.fill();
+		context.fill();
 		context.closePath();
 		context.restore();
 
@@ -85,7 +84,7 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 
 	public onClick(clickGesture: ClickGesture) {
 		if (clickGesture.world.edgeBeingCreated) {
-			let edge = clickGesture.world.edgeBeingCreated
+			const edge = clickGesture.world.edgeBeingCreated;
 			edge.to = this;
 			edge.zIndex = 0;
 			edge.from.zIndex = edge.from.previousZIndex;
@@ -96,7 +95,7 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 		}
 
 		if (clickGesture.shift) {
-			let edge = clickGesture.world.createEdge(this);
+			const edge = clickGesture.world.createEdge(this);
 			edge.zIndex = Number.MAX_SAFE_INTEGER - 1;
 			this.previousZIndex = this.zIndex;
 			this.zIndex = Number.MAX_SAFE_INTEGER;
@@ -122,7 +121,7 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 
 	public onDrag(dragGesture: DragGesture) {
 		this.zIndex = dragGesture.zIndex || this.zIndex;
-		let deltaPosition = new Vector2D(dragGesture.position.x - this.dragStartPosition!.x, dragGesture.position.y - this.dragStartPosition!.y);
+		const deltaPosition = new Vector2D(dragGesture.position.x - this.dragStartPosition!.x, dragGesture.position.y - this.dragStartPosition!.y);
 		this.currentPosition = new Vector2D(this.initialPosition!.x + deltaPosition.x, this.initialPosition!.y + deltaPosition.y);
 	}
 	
@@ -145,4 +144,4 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 		this.hovering = false;
 		console.log(`Stopped hovering over node ${this.id}`);
 	}
-};
+}

@@ -15,3 +15,11 @@ export type DragGesture = {
 
 export type HoverGesture = {
 };
+
+export type KeyGesture = {
+	key: string;
+	ctrl: boolean;
+	alt: boolean;
+	shift: boolean;
+	world: World
+};

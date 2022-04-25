@@ -1,25 +1,19 @@
-// Entities
-import Node from "./entities/Node";
+import Board from "./entities/Board";
 import Edge from "./entities/Edge";
-
-// Utilities
-import { isRenderable, isClickable, isHoverable, isDraggable } from "./util/TypeGuard";
-import Vector2D from "./util/Vector2D";
-
-// Interfaces
-import IEntity from "./interfaces/IEntity";
-import IRenderable from "./interfaces/IRenderable";
-import IInteractable from "./interfaces/IInteractable";
+import Node from "./entities/Node";
 import IClickable from "./interfaces/IClickable";
 import IDraggable from "./interfaces/IDraggable";
+import IEntity from "./interfaces/IEntity";
 import IHoverable from "./interfaces/IHoverable";
-
-import Board from "./entities/Board";
+import IInteractable from "./interfaces/IInteractable";
+import IRenderable from "./interfaces/IRenderable";
+import { isClickable, isDraggable,isHoverable, isRenderable } from "./util/TypeGuard";
+import Vector2D from "./util/Vector2D";
 
 
 export default class World {
 	public entities: IEntity[] = [];
-	private nextID: number = 0;
+	private nextID = 0;
 
 	private recentlyCreatedEntities: IEntity[] = [];
 
@@ -32,12 +26,12 @@ export default class World {
 
 	public removeEntity(entity: IEntity) {
 		if (entity instanceof Node) {
-			let node = entity as Node;
+			const node = entity as Node;
 			node.edges.forEach(edge => this.removeEntity(edge));
 		}
 
 		if (entity instanceof Edge) {
-			let edge = entity as Edge;
+			const edge = entity as Edge;
 			edge.from.edges = edge.from.edges.filter(_edge => _edge.id !== edge.id);
 			if (edge.to)
 				edge.to.edges = edge.to.edges.filter(_edge => _edge.id !== edge.id);
@@ -151,19 +145,19 @@ export default class World {
 	}
 
 	public createNode(coords: Vector2D) {
-		let node = new Node(this.nextID++, coords, 30);
+		const node = new Node(this.nextID++, coords, 30);
 		this.addEntity(node);
 		return node;
 	}
 
 	public createEdge(from: Node) {
-		let edge = new Edge(this.nextID++, 10, from, from.position);
+		const edge = new Edge(this.nextID++, 10, from, from.position);
 		this.addEntity(edge);
 		return edge;
 	}
 
 	public undo() {
-		let entity = this.recentlyCreatedEntities.pop();
+		const entity = this.recentlyCreatedEntities.pop();
 		if (entity)
 			this.removeEntity(entity);
 	}

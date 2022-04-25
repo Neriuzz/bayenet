@@ -1,7 +1,7 @@
-import EventBus from "@/events/EventBus";
-import Node from "@/renderer/entities/Node";
-import "@styles/Sidebar.scss";
-import { useEffect, useReducer, useRef, useState } from "react";
+import EventBus from "../events/EventBus";
+import Node from "../renderer/entities/Node";
+import "../styles/Sidebar.scss";
+import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 
 const eventBus = EventBus.instance;
 
@@ -9,30 +9,29 @@ const Sidebar = () => {
 	const [node, setNode] = useState<Node>(); 
 	const [_, forceUpdate] = useReducer(x => x + 1, 0);
 
-	const inputRef = useRef<HTMLInputElement>(null)
+	const inputRef = useRef<HTMLInputElement>(null!);
 
-	const handleNameChange = (newName: string) => {
+	const handleNameChange = useCallback((newName: string) => {
 		node!.name = newName;
-	};
+	}, []);
 
-	const handleKeyDown = (key: string) => {
+	const handleKeyDown = useCallback((key: string) => {
 		if (key === "Enter")
-			inputRef.current?.blur();
-	};
+			inputRef.current.blur();
+	}, []);
+
+	const handleToggleSidebar = useCallback((node: Node) => {
+		forceUpdate();
+		setNode(node);
+	}, []);
 
 	useEffect(() => {
-		const handleToggleSidebar = (node: Node) => {
-			forceUpdate();
-			setNode(node);
-		};
-
 		eventBus.on("toggleSidebar", handleToggleSidebar);
 		return () => eventBus.stopListening("toggleSidebar", handleToggleSidebar);
+		}, []);
 
-	}, [node]);
-
-	if (node)
-		return (
+	return (
+		node && (
 			<div className="sidebar">
 				<input
 					type="text"
@@ -41,14 +40,13 @@ const Sidebar = () => {
 					defaultValue={node.name} 
 					autoComplete="off" 
 					onChange={(event) => handleNameChange(event.target.value)}
-				 	ref={inputRef} 
+					ref={inputRef}
 					onKeyDown={(event) => handleKeyDown(event.key)}
 				/>
 				<p> {`Postion: (${node.position.x}, ${node.position.y})`} </p>
 			</div>
-		);
-	else
-		return null;
+		) || null
+	);
 };
 
 export default Sidebar;
