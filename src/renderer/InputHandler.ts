@@ -13,7 +13,7 @@ export default class InputHandler {
 	private draggingSomething = false;
 
 	// Timer for differentiating between clicks and double clicks
-	private timer: number = 0;
+	private timer = 0;
 
 	constructor(private world: World) {
 		// Register window event listeners

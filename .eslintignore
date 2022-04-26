@@ -1,0 +1,6 @@
+# Ignore artefacts
+dist
+node_modules
+
+#Ignore other files
+src/index.tsx

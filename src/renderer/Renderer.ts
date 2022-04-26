@@ -45,6 +45,6 @@ export default class Renderer {
 	}
 
 	public cancelDraw() {
-		cancelAnimationFrame(this.animationFrameID!);
+		cancelAnimationFrame(this.animationFrameID);
 	}
 }

@@ -9,14 +9,17 @@ const Sidebar = () => {
 	const [node, setNode] = useState<Node>();
 	const [_, forceUpdate] = useReducer((x) => x + 1, 0);
 
-	const inputRef = useRef<HTMLInputElement>(null!);
+	const inputRef = useRef<HTMLInputElement>(null);
 
-	const handleNameChange = useCallback((newName: string) => {
-		node!.name = newName;
-	}, []);
+	const handleNameChange = useCallback(
+		(newName: string) => {
+			if (node) node.name = newName;
+		},
+		[node]
+	);
 
 	const handleKeyDown = useCallback((key: string) => {
-		if (key === "Enter") inputRef.current.blur();
+		if (key === "Enter") inputRef.current?.blur();
 	}, []);
 
 	const handleToggleSidebar = useCallback((node: Node) => {
@@ -27,7 +30,7 @@ const Sidebar = () => {
 	useEffect(() => {
 		eventBus.on("toggleSidebar", handleToggleSidebar);
 		return () => eventBus.stopListening("toggleSidebar", handleToggleSidebar);
-	}, []);
+	}, [handleToggleSidebar]);
 
 	return (
 		(node && (
