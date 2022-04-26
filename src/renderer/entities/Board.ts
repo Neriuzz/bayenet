@@ -1,4 +1,3 @@
-
 import EventBus from "../../events/EventBus";
 
 import Camera from "../Camera";
@@ -16,19 +15,18 @@ export default class Board {
 
 	public readonly camera: Camera;
 
-	constructor (public readonly canvas: HTMLCanvasElement, public readonly context: CanvasRenderingContext2D) {
+	constructor(public readonly canvas: HTMLCanvasElement, public readonly context: CanvasRenderingContext2D) {
 		this.camera = new Camera(this.canvas, this.context);
 	}
 
 	public onClick(clickGesture: ClickGesture) {
 		this.eventBus.emit("toggleSidebar");
 
-		if (clickGesture.world.edgeBeingCreated)
-			clickGesture.world.undo();
-		
+		if (clickGesture.world.edgeBeingCreated) clickGesture.world.undo();
+
 		clickGesture.world.deselectAllClickables();
 	}
-	
+
 	public onDoubleClick(clickGesture: ClickGesture) {
 		clickGesture.world.createNode(clickGesture.position);
 	}
@@ -40,8 +38,14 @@ export default class Board {
 	}
 
 	public onDrag(dragGesture: DragGesture) {
-		const deltaPosition = new Vector2D(dragGesture.position.x - this.dragStartPosition!.x, dragGesture.position.y - this.dragStartPosition!.y);
-		this.currentPosition = new Vector2D(this.initialPosition!.x + deltaPosition.x, this.initialPosition!.y + deltaPosition.y);
+		const deltaPosition = new Vector2D(
+			dragGesture.position.x - this.dragStartPosition!.x,
+			dragGesture.position.y - this.dragStartPosition!.y
+		);
+		this.currentPosition = new Vector2D(
+			this.initialPosition!.x + deltaPosition.x,
+			this.initialPosition!.y + deltaPosition.y
+		);
 		this.camera.position = this.currentPosition;
 	}
 
@@ -59,12 +63,10 @@ export default class Board {
 		if (keyGesture.key == "a" && keyGesture.ctrl) {
 			if (keyGesture.world.numberOfClickablesSelected == keyGesture.world.clickablesSize)
 				keyGesture.world.deselectAllClickables();
-			else
-				keyGesture.world.selectAllClickables();
+			else keyGesture.world.selectAllClickables();
 			return;
 		}
 
-		if (keyGesture.key == "z" && keyGesture.ctrl)
-			keyGesture.world.undo();
+		if (keyGesture.key == "z" && keyGesture.ctrl) keyGesture.world.undo();
 	}
 }

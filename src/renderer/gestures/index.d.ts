@@ -13,13 +13,12 @@ export type DragGesture = {
 	zIndex?: number;
 };
 
-export type HoverGesture = {
-};
+export type HoverGesture = {};
 
 export type KeyGesture = {
 	key: string;
 	ctrl: boolean;
 	alt: boolean;
 	shift: boolean;
-	world: World
+	world: World;
 };

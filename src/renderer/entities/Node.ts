@@ -60,22 +60,24 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 	}
 
 	public isInView(cameraPosition: Vector2D, canvasBounds: Vector2D): boolean {
-		return ( 
-			(this.position.x + this.r + cameraPosition.x >= 0 && this.position.y + this.r + cameraPosition.y >= 0) && 
-			(this.position.x - this.r + cameraPosition.x < canvasBounds.x && this.position.y - this.r + cameraPosition.y < canvasBounds.y)
+		return (
+			this.position.x + this.r + cameraPosition.x >= 0 &&
+			this.position.y + this.r + cameraPosition.y >= 0 &&
+			this.position.x - this.r + cameraPosition.x < canvasBounds.x &&
+			this.position.y - this.r + cameraPosition.y < canvasBounds.y
 		);
 	}
 
 	public isMouseOver(position: Vector2D): boolean {
-		return ((position.x - this.position.x) ** 2 + (position.y - this.position.y) ** 2) <= this.r ** 2;
+		return (position.x - this.position.x) ** 2 + (position.y - this.position.y) ** 2 <= this.r ** 2;
 	}
 
 	public get parents(): Node[] {
-		return this.edges.filter(edge => edge.from !== this).map(edge => edge.from);
+		return this.edges.filter((edge) => edge.from !== this).map((edge) => edge.from);
 	}
 
 	public get children(): Node[] {
-		return this.edges.filter(edge => edge.to && edge.to !== this).map(edge => edge.to!);
+		return this.edges.filter((edge) => edge.to && edge.to !== this).map((edge) => edge.to!);
 	}
 
 	public get position(): Vector2D {
@@ -89,8 +91,7 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 			edge.zIndex = 0;
 			edge.from.zIndex = edge.from.previousZIndex;
 			this.edges.push(edge);
-			if (edge.from.id === this.id || isCyclic(clickGesture.world.nodes))
-				clickGesture.world.undo();
+			if (edge.from.id === this.id || isCyclic(clickGesture.world.nodes)) clickGesture.world.undo();
 			return;
 		}
 
@@ -105,8 +106,7 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 
 		this.selected = !this.selected;
 
-		if (!clickGesture.alt)
-			clickGesture.world.deselectAllClickables(this.id);
+		if (!clickGesture.alt) clickGesture.world.deselectAllClickables(this.id);
 	}
 
 	public onDoubleClick(clickGesture: ClickGesture) {
@@ -121,10 +121,16 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 
 	public onDrag(dragGesture: DragGesture) {
 		this.zIndex = dragGesture.zIndex || this.zIndex;
-		const deltaPosition = new Vector2D(dragGesture.position.x - this.dragStartPosition!.x, dragGesture.position.y - this.dragStartPosition!.y);
-		this.currentPosition = new Vector2D(this.initialPosition!.x + deltaPosition.x, this.initialPosition!.y + deltaPosition.y);
+		const deltaPosition = new Vector2D(
+			dragGesture.position.x - this.dragStartPosition!.x,
+			dragGesture.position.y - this.dragStartPosition!.y
+		);
+		this.currentPosition = new Vector2D(
+			this.initialPosition!.x + deltaPosition.x,
+			this.initialPosition!.y + deltaPosition.y
+		);
 	}
-	
+
 	public onDragEnd(dragGesture: DragGesture) {
 		this.dragging = false;
 		this.dragStartPosition = null;

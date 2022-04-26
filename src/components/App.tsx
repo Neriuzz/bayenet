@@ -5,7 +5,6 @@ import "../styles/App.scss";
 import Canvas from "./Canvas";
 import Sidebar from "./Sidebar";
 
-
 const App = () => {
 	return (
 		<>

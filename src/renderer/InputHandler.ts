@@ -13,10 +13,9 @@ export default class InputHandler {
 	private draggingSomething = false;
 
 	// Timer for differentiating between clicks and double clicks
-	private timer: NodeJS.Timeout | null = null;
+	private timer: number = 0;
 
 	constructor(private world: World) {
-
 		// Register window event listeners
 		window.addEventListener("resize", () => this.onResize());
 
@@ -26,7 +25,7 @@ export default class InputHandler {
 		this.world.board.canvas.addEventListener("mousemove", (event: MouseEvent) => this.onMouseMove(event));
 		this.world.board.canvas.addEventListener("click", (event: MouseEvent) => this.onClick(event));
 		this.world.board.canvas.addEventListener("dblclick", (event: MouseEvent) => this.onDoubleClick(event));
-		this.world.board.canvas.addEventListener("keydown", (event: KeyboardEvent) => this.onKeyDown(event))
+		this.world.board.canvas.addEventListener("keydown", (event: KeyboardEvent) => this.onKeyDown(event));
 
 		// Initial canvas resize
 		this.onResize();
@@ -34,7 +33,7 @@ export default class InputHandler {
 
 	private getInteractable(interactables: IInteractable[], position: Vector2D): IInteractable {
 		const [interactable] = interactables
-			.filter(interactable => interactable.isMouseOver(position))
+			.filter((interactable) => interactable.isMouseOver(position))
 			.sort((a, b) => a.zIndex - b.zIndex)
 			.reverse();
 
@@ -43,20 +42,23 @@ export default class InputHandler {
 
 	public getZIndex(draggable: IDraggable, position: Vector2D): number {
 		const [interactable] = this.world.interactablesInView
-			.filter(interactable => interactable.id !== draggable.id && interactable.isMouseOver(position))
+			.filter((interactable) => interactable.id !== draggable.id && interactable.isMouseOver(position))
 			.sort((a, b) => a.zIndex - b.zIndex)
 			.reverse();
-		
+
 		return interactable?.zIndex + 1 || 1;
 	}
 
 	public getTruePosition(position: Vector2D) {
-		return new Vector2D(position.x - this.world.board.camera.position.x, position.y - this.world.board.camera.position.y);
+		return new Vector2D(
+			position.x - this.world.board.camera.position.x,
+			position.y - this.world.board.camera.position.y
+		);
 	}
 
 	private onKeyDown(event: KeyboardEvent) {
 		event.preventDefault();
-		
+
 		const keyGesture: KeyGesture = {
 			key: event.key,
 			ctrl: event.ctrlKey,
@@ -72,17 +74,16 @@ export default class InputHandler {
 		event.preventDefault();
 
 		// Do not call on click handler if we are currently dragging or this is our second click
-		if (this.draggingSomething || event.detail !== 1)
-			return;
+		if (this.draggingSomething || event.detail !== 1) return;
 
 		const position = this.getTruePosition(new Vector2D(event.offsetX, event.offsetY));
 
-		this.timer = setTimeout(() => {	
+		this.timer = setTimeout(() => {
 			const clickGesture: ClickGesture = {
 				position,
 				alt: event.altKey,
 				shift: event.shiftKey,
-				world: this.world,
+				world: this.world
 			};
 
 			const clickable = this.getInteractable(this.world.clickablesInView, position) as IClickable;
@@ -96,11 +97,10 @@ export default class InputHandler {
 
 		clearTimeout(this.timer!);
 
-		if (this.world.edgeBeingCreated)
-			return;
+		if (this.world.edgeBeingCreated) return;
 
 		const position = this.getTruePosition(new Vector2D(event.offsetX, event.offsetY));
-		const clickGesture: ClickGesture = { 
+		const clickGesture: ClickGesture = {
 			position,
 			alt: event.altKey,
 			shift: event.shiftKey,
@@ -122,18 +122,20 @@ export default class InputHandler {
 			position
 		};
 
-		const draggable = this.getInteractable(this.world.draggablesInView, this.getTruePosition(position)) as IDraggable;
+		const draggable = this.getInteractable(
+			this.world.draggablesInView,
+			this.getTruePosition(position)
+		) as IDraggable;
 
 		draggable ? draggable.onDragStart(dragGesture) : this.world.board.onDragStart(dragGesture);
 	}
-		
+
 	private onMouseMove(event: MouseEvent) {
 		event.preventDefault();
-		
+
 		const position = new Vector2D(event.offsetX, event.offsetY);
 
-		if (this.world.edgeBeingCreated)
-			this.world.edgeBeingCreated.drawingPosition = this.getTruePosition(position);
+		if (this.world.edgeBeingCreated) this.world.edgeBeingCreated.drawingPosition = this.getTruePosition(position);
 
 		this.draggingSomething = true;
 
@@ -180,13 +182,11 @@ export default class InputHandler {
 
 	private onHover(position: Vector2D) {
 		if (this.world.currentlyHoveringOver) {
-			if (this.world.currentlyHoveringOver.isMouseOver(position))
-				this.world.currentlyHoveringOver.onHovering();
-			else
-				this.world.currentlyHoveringOver.onExitHover();
+			if (this.world.currentlyHoveringOver.isMouseOver(position)) this.world.currentlyHoveringOver.onHovering();
+			else this.world.currentlyHoveringOver.onExitHover();
 			return;
 		}
-		
+
 		const hoverable = this.getInteractable(this.world.hoverablesInView, position) as IHoverable;
 		hoverable?.onEnterHover();
 	}
@@ -197,4 +197,4 @@ export default class InputHandler {
 		this.world.board.canvas.height = window.innerHeight * window.devicePixelRatio;
 		this.world.board.canvas.style.transform = `scale(${1 / window.devicePixelRatio})`;
 	}
-};
+}

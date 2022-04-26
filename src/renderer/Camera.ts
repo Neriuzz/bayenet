@@ -1,11 +1,10 @@
 import Vector2D from "./util/Vector2D";
 
 export default class Camera {
-
 	public position: Vector2D;
 
 	constructor(public readonly canvas: HTMLCanvasElement, public readonly context: CanvasRenderingContext2D) {
-		this.position = new Vector2D(0, 0);		
+		this.position = new Vector2D(0, 0);
 	}
 
 	public clearScreen() {
@@ -17,4 +16,4 @@ export default class Camera {
 	public get bounds(): Vector2D {
 		return new Vector2D(this.canvas.width, this.canvas.height);
 	}
-};
+}

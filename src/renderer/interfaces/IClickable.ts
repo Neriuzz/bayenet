@@ -7,4 +7,4 @@ export default interface IClickable extends IInteractable {
 	selected: boolean;
 	onClick(clickGesture: ClickGesture): void;
 	onDoubleClick(clickGesture: ClickGesture): void;
-};
+}

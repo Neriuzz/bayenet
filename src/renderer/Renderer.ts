@@ -18,7 +18,7 @@ export default class Renderer {
 
 		// Initialise input handler
 		new InputHandler(this.world);
-			
+
 		// Begin the render loop
 		this.renderLoop();
 	}
@@ -29,9 +29,9 @@ export default class Renderer {
 
 		// Sort renderables by increasing z-index
 		const renderables = this.world.renderablesInView.sort((a, b) => a.zIndex - b.zIndex);
-		
+
 		// Render out each renderable
-		renderables.forEach(renderable => {
+		renderables.forEach((renderable) => {
 			this.context.save();
 			renderable.render(this.context);
 			this.context.restore();
@@ -47,4 +47,4 @@ export default class Renderer {
 	public cancelDraw() {
 		cancelAnimationFrame(this.animationFrameID!);
 	}
-};
+}

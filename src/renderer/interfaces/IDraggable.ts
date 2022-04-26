@@ -8,4 +8,4 @@ export default interface IDraggable extends IInteractable {
 	onDragStart(dragGesture: DragGesture): void;
 	onDrag(dragGesture: DragGesture): void;
 	onDragEnd(dragGesture: DragGesture): void;
-};
+}

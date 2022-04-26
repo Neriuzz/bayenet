@@ -7,9 +7,8 @@ import IEntity from "./interfaces/IEntity";
 import IHoverable from "./interfaces/IHoverable";
 import IInteractable from "./interfaces/IInteractable";
 import IRenderable from "./interfaces/IRenderable";
-import { isClickable, isDraggable,isHoverable, isRenderable } from "./util/TypeGuard";
+import { isClickable, isDraggable, isHoverable, isRenderable } from "./util/TypeGuard";
 import Vector2D from "./util/Vector2D";
-
 
 export default class World {
 	public entities: IEntity[] = [];
@@ -27,17 +26,16 @@ export default class World {
 	public removeEntity(entity: IEntity) {
 		if (entity instanceof Node) {
 			const node = entity as Node;
-			node.edges.forEach(edge => this.removeEntity(edge));
+			node.edges.forEach((edge) => this.removeEntity(edge));
 		}
 
 		if (entity instanceof Edge) {
 			const edge = entity as Edge;
-			edge.from.edges = edge.from.edges.filter(_edge => _edge.id !== edge.id);
-			if (edge.to)
-				edge.to.edges = edge.to.edges.filter(_edge => _edge.id !== edge.id);
+			edge.from.edges = edge.from.edges.filter((_edge) => _edge.id !== edge.id);
+			if (edge.to) edge.to.edges = edge.to.edges.filter((_edge) => _edge.id !== edge.id);
 		}
 
-		this.entities = this.entities.filter(_entity => _entity.id !== entity.id);
+		this.entities = this.entities.filter((_entity) => _entity.id !== entity.id);
 	}
 
 	public get renderables(): IRenderable[] {
@@ -58,7 +56,7 @@ export default class World {
 
 	public get clickables(): IClickable[] {
 		return this.entities.filter(isClickable);
-	} 
+	}
 
 	public get clickablesSize(): number {
 		return this.clickables.length;
@@ -81,9 +79,11 @@ export default class World {
 	}
 
 	public get renderablesInView(): IRenderable[] {
-		return this.renderables.filter(renderable => renderable.isInView(this.board.camera.position, this.board.camera.bounds));
+		return this.renderables.filter((renderable) =>
+			renderable.isInView(this.board.camera.position, this.board.camera.bounds)
+		);
 	}
-	
+
 	public get interactablesInView(): IInteractable[] {
 		return this.renderablesInView.filter(isClickable || isDraggable || isHoverable) as any;
 	}
@@ -101,47 +101,45 @@ export default class World {
 	}
 
 	public get nodes(): Node[] {
-		return this.entities.filter(entity => entity instanceof Node).sort((a, b) => a.id - b.id) as Node[];
+		return this.entities.filter((entity) => entity instanceof Node).sort((a, b) => a.id - b.id) as Node[];
 	}
 
 	public get edges(): Edge[] {
-		return this.entities.filter(entity => entity instanceof Edge) as Edge[];
+		return this.entities.filter((entity) => entity instanceof Edge) as Edge[];
 	}
 
 	public get currentlySelectedClickables(): IClickable[] {
-		return this.clickables.filter(clickable => clickable.selected);
+		return this.clickables.filter((clickable) => clickable.selected);
 	}
 
 	public get currentlyHoveringOver(): IHoverable | undefined {
-		return this.hoverables.find(hoverable => hoverable.hovering);
+		return this.hoverables.find((hoverable) => hoverable.hovering);
 	}
 
 	public get currentlyDragging(): IDraggable | undefined {
-		return this.draggables.find(draggable => draggable.dragging);
+		return this.draggables.find((draggable) => draggable.dragging);
 	}
 
 	public get edgeBeingCreated(): Edge | undefined {
-		return this.edges.find(edge => !edge.to);
+		return this.edges.find((edge) => !edge.to);
 	}
 
 	public get numberOfClickablesSelected(): number {
-		return this.clickables.filter(clickable => clickable.selected).length;
+		return this.clickables.filter((clickable) => clickable.selected).length;
 	}
 
 	public deselectAllClickables(omit?: number) {
-		this.clickables.forEach(clickable => {
-			if (omit !== clickable.id)
-				clickable.selected = false;
+		this.clickables.forEach((clickable) => {
+			if (omit !== clickable.id) clickable.selected = false;
 		});
 	}
 
 	public selectAllClickables() {
-		this.clickables.forEach(clickable => clickable.selected = true);
+		this.clickables.forEach((clickable) => (clickable.selected = true));
 	}
 
 	public removeAllSelectedClickables() {
-		this.clickables.filter(clickable => clickable.selected)
-			.forEach(clickable => this.removeEntity(clickable));
+		this.clickables.filter((clickable) => clickable.selected).forEach((clickable) => this.removeEntity(clickable));
 	}
 
 	public createNode(coords: Vector2D) {
@@ -158,7 +156,6 @@ export default class World {
 
 	public undo() {
 		const entity = this.recentlyCreatedEntities.pop();
-		if (entity)
-			this.removeEntity(entity);
+		if (entity) this.removeEntity(entity);
 	}
-};
+}
