@@ -6,12 +6,12 @@ import Canvas from "./Canvas";
 import Sidebar from "./Sidebar";
 
 const App = () => {
-	return (
-		<>
-			<Sidebar />
-			<Canvas />
-		</>
-	);
+    return (
+        <>
+            <Sidebar />
+            <Canvas />
+        </>
+    );
 };
 
 export default App;
