@@ -1,6 +1,8 @@
-import Renderer from "../renderer/Renderer";
-import "../styles/Canvas.scss";
 import { useEffect, useRef } from "react";
+
+import "./Canvas.scss";
+
+import Renderer from "../../renderer/Renderer";
 
 const Canvas = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);

@@ -1,9 +1,9 @@
 // Styles
-import "../styles/App.scss";
+import "./App.scss";
 
 // Components
-import Canvas from "./Canvas";
-import Sidebar from "./Sidebar";
+import Canvas from "../Canvas/Canvas";
+import Sidebar from "../Sidebar/Sidebar";
 
 const App = () => {
     return (

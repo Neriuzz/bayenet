@@ -1,7 +1,9 @@
-import EventBus from "../events/EventBus";
-import Node from "../renderer/entities/Node";
-import "../styles/Sidebar.scss";
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
+
+import "./Sidebar.scss";
+
+import EventBus from "../../events/EventBus";
+import Node from "../../renderer/entities/Node";
 
 const eventBus = EventBus.instance;
 
