@@ -85,19 +85,19 @@ export default class World {
     }
 
     public get interactablesInView(): IInteractable[] {
-        return this.renderablesInView.filter(isClickable || isDraggable || isHoverable) as any;
+        return (<unknown>this.renderablesInView.filter(isClickable || isDraggable || isHoverable)) as IInteractable[];
     }
 
     public get clickablesInView(): IClickable[] {
-        return this.renderablesInView.filter(isClickable) as any;
+        return (<unknown>this.renderablesInView.filter(isClickable)) as IClickable[];
     }
 
     public get hoverablesInView(): IHoverable[] {
-        return this.renderablesInView.filter(isHoverable) as any;
+        return (<unknown>this.renderablesInView.filter(isHoverable)) as IHoverable[];
     }
 
     public get draggablesInView(): IDraggable[] {
-        return this.renderablesInView.filter(isDraggable) as any;
+        return (<unknown>this.renderablesInView.filter(isDraggable)) as IDraggable[];
     }
 
     public get nodes(): Node[] {
