@@ -2,6 +2,7 @@
 import { ClickGesture, DragGesture, HoverGesture, KeyGesture } from "./gestures";
 // Interfaces
 import IClickable from "./interfaces/IClickable";
+import IDoubleClickable from "./interfaces/IDoubleClickable";
 import IDraggable from "./interfaces/IDraggable";
 import IHoverable from "./interfaces/IHoverable";
 import IInteractable from "./interfaces/IInteractable";
@@ -107,9 +108,9 @@ export default class InputHandler {
             world: this.world
         };
 
-        const clickable = this.getInteractable(this.world.clickablesInView, position) as IClickable;
+        const doubleClickable = this.getInteractable(this.world.doubleClickablesInView, position) as IDoubleClickable;
 
-        clickable ? clickable.onDoubleClick(clickGesture) : this.world.board.onDoubleClick(clickGesture);
+        doubleClickable ? doubleClickable.onDoubleClick(clickGesture) : this.world.board.onDoubleClick(clickGesture);
     }
 
     private onMouseDown(event: MouseEvent) {

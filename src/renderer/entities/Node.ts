@@ -2,23 +2,21 @@ import EventBus from "../../events/EventBus";
 
 import { ClickGesture, DragGesture } from "../gestures";
 import IClickable from "../interfaces/IClickable";
+import IDoubleClickable from "../interfaces/IDoubleClickable";
 import IDraggable from "../interfaces/IDraggable";
 import IHoverable from "../interfaces/IHoverable";
 import IRenderable from "../interfaces/IRenderable";
 import isCyclic from "../util/GraphUtil";
+import IDGenerator from "../util/IDGenerator";
 import Vector2D from "../util/Vector2D";
 import Edge from "./Edge";
 
-export default class Node implements IRenderable, IClickable, IDraggable, IHoverable {
-    public renderable = true;
-    public clickable = true;
-    public hoverable = true;
-    public draggable = true;
-
+export default class Node implements IRenderable, IClickable, IDoubleClickable, IDraggable, IHoverable {
     public selected = false;
     public dragging = false;
     public hovering = false;
 
+    public id = IDGenerator.next();
     public zIndex = 1;
     public previousZIndex = 1;
 
@@ -31,7 +29,7 @@ export default class Node implements IRenderable, IClickable, IDraggable, IHover
 
     public name: string;
 
-    constructor(public id: number, private currentPosition: Vector2D, public r: number) {
+    constructor(private currentPosition: Vector2D, public r: number) {
         this.name = `Node #${this.id}`;
     }
 

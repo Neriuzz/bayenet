@@ -2,18 +2,17 @@ import Board from "./entities/Board";
 import Edge from "./entities/Edge";
 import Node from "./entities/Node";
 import IClickable from "./interfaces/IClickable";
+import IDoubleClickable from "./interfaces/IDoubleClickable";
 import IDraggable from "./interfaces/IDraggable";
 import IEntity from "./interfaces/IEntity";
 import IHoverable from "./interfaces/IHoverable";
 import IInteractable from "./interfaces/IInteractable";
 import IRenderable from "./interfaces/IRenderable";
-import { isClickable, isDraggable, isHoverable, isRenderable } from "./util/TypeGuard";
+import { isClickable, isDoubleClickable, isDraggable, isHoverable, isRenderable } from "./util/TypeGuard";
 import Vector2D from "./util/Vector2D";
 
 export default class World {
     public entities: IEntity[] = [];
-    private nextID = 0;
-
     private recentlyCreatedEntities: IEntity[] = [];
 
     constructor(public readonly board: Board) {}
@@ -47,7 +46,7 @@ export default class World {
     }
 
     public get interactables(): IInteractable[] {
-        return this.entities.filter(isClickable || isDraggable || isHoverable);
+        return this.entities.filter(isClickable || isDoubleClickable || isDraggable || isHoverable);
     }
 
     public get interactablesSize(): number {
@@ -60,6 +59,14 @@ export default class World {
 
     public get clickablesSize(): number {
         return this.clickables.length;
+    }
+
+    public get doubleClickables(): IDoubleClickable[] {
+        return this.entities.filter(isDoubleClickable);
+    }
+
+    public get doubleClickablesSize(): number {
+        return this.doubleClickables.length;
     }
 
     public get hoverables(): IHoverable[] {
@@ -85,11 +92,17 @@ export default class World {
     }
 
     public get interactablesInView(): IInteractable[] {
-        return (<unknown>this.renderablesInView.filter(isClickable || isDraggable || isHoverable)) as IInteractable[];
+        return (<unknown>(
+            this.renderablesInView.filter(isClickable || isDoubleClickable || isDraggable || isHoverable)
+        )) as IInteractable[];
     }
 
     public get clickablesInView(): IClickable[] {
         return (<unknown>this.renderablesInView.filter(isClickable)) as IClickable[];
+    }
+
+    public get doubleClickablesInView(): IDoubleClickable[] {
+        return (<unknown>this.renderablesInView.filter(isDoubleClickable)) as IDoubleClickable[];
     }
 
     public get hoverablesInView(): IHoverable[] {
@@ -143,13 +156,13 @@ export default class World {
     }
 
     public createNode(coords: Vector2D) {
-        const node = new Node(this.nextID++, coords, 30);
+        const node = new Node(coords, 30);
         this.addEntity(node);
         return node;
     }
 
     public createEdge(from: Node) {
-        const edge = new Edge(this.nextID++, 10, from, from.position);
+        const edge = new Edge(10, from, from.position);
         this.addEntity(edge);
         return edge;
     }
