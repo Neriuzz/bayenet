@@ -7,7 +7,6 @@ import IDraggable from "../interfaces/IDraggable";
 import IHoverable from "../interfaces/IHoverable";
 import IRenderable from "../interfaces/IRenderable";
 import isCyclic from "../util/GraphUtil";
-import IDGenerator from "../util/IDGenerator";
 import Vector2D from "../util/Vector2D";
 import Edge from "./Edge";
 
@@ -16,7 +15,6 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
     public dragging = false;
     public hovering = false;
 
-    public id = IDGenerator.next();
     public zIndex = 1;
     public previousZIndex = 1;
 
@@ -29,7 +27,7 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
 
     public name: string;
 
-    constructor(private currentPosition: Vector2D, public r: number) {
+    constructor(public readonly id: number, private currentPosition: Vector2D, public r: number) {
         this.name = `Node #${this.id}`;
     }
 

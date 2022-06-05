@@ -1,16 +1,20 @@
 import { ClickGesture } from "../gestures";
 import IClickable from "../interfaces/IClickable";
 import IRenderable from "../interfaces/IRenderable";
-import IDGenerator from "../util/IDGenerator";
 import Vector2D from "../util/Vector2D";
 import Node from "./Node";
 
 export default class Edge implements IRenderable, IClickable {
-    public id = IDGenerator.next();
     public zIndex = 0;
     public selected = false;
 
-    constructor(public size: number, public from: Node, public drawingPosition: Vector2D, public to?: Node) {}
+    constructor(
+        public readonly id: number,
+        public size: number,
+        public from: Node,
+        public drawingPosition: Vector2D,
+        public to?: Node
+    ) {}
 
     public render(context: CanvasRenderingContext2D) {
         // Coordinates to where to draw the line from and to, and the angle to draw the line at

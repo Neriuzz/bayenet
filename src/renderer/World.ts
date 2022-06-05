@@ -12,6 +12,8 @@ import { isClickable, isDoubleClickable, isDraggable, isHoverable, isRenderable 
 import Vector2D from "./util/Vector2D";
 
 export default class World {
+    private nextID = 0;
+
     public entities: IEntity[] = [];
     private recentlyCreatedEntities: IEntity[] = [];
 
@@ -156,13 +158,13 @@ export default class World {
     }
 
     public createNode(coords: Vector2D) {
-        const node = new Node(coords, 30);
+        const node = new Node(this.nextID++, coords, 30);
         this.addEntity(node);
         return node;
     }
 
     public createEdge(from: Node) {
-        const edge = new Edge(10, from, from.position);
+        const edge = new Edge(this.nextID++, 10, from, from.position);
         this.addEntity(edge);
         return edge;
     }

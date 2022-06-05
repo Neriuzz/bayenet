@@ -49,8 +49,11 @@ const Sidebar = () => {
                 />
                 <p> {`Postion: (${node.position.x}, ${node.position.y})`} </p>
             </div>
-        )) ||
-        null
+        )) || (
+            <div className="sidebar">
+                <p>xd</p>
+            </div>
+        )
     );
 };
 
