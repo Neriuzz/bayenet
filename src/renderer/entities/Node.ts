@@ -28,7 +28,7 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
     public name: string;
 
     constructor(public readonly id: number, private currentPosition: Vector2D, public r: number) {
-        this.name = `Node #${this.id}`;
+        this.name = `Node ${this.id}`;
     }
 
     public render(context: CanvasRenderingContext2D) {
@@ -49,9 +49,22 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
 
         // Draw node name
         context.save();
-        context.font = "11px Arial";
+
+        // Truncate the name of the node if it too long
+        let name = this.name;
+        if (context.measureText(name).width * window.devicePixelRatio > 40) {
+            while (context.measureText(name).width * window.devicePixelRatio > 30)
+                name = name.substring(0, name.length - 1);
+            name += "...";
+        }
+
+        // Get new width of text
+        const textWidth = context.measureText(name).width * window.devicePixelRatio;
+
+        context.font = "12px Arial";
         context.textBaseline = "middle";
-        context.fillText(this.name, this.position.x - this.r / 1.5, this.position.y);
+        // TODO: Text doesn't look fully centered
+        context.fillText(name, this.position.x - textWidth / 2, this.position.y - this.r * 1.25);
         context.restore();
     }
 

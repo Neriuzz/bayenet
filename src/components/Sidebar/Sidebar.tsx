@@ -25,8 +25,8 @@ const Sidebar = () => {
     }, []);
 
     const handleToggleSidebar = useCallback((node: Node) => {
-        forceUpdate();
         setNode(node);
+        forceUpdate();
     }, []);
 
     useEffect(() => {
@@ -49,11 +49,8 @@ const Sidebar = () => {
                 />
                 <p> {`Postion: (${node.position.x}, ${node.position.y})`} </p>
             </div>
-        )) || (
-            <div className="sidebar">
-                <p>xd</p>
-            </div>
-        )
+        )) ||
+        null
     );
 };
 
