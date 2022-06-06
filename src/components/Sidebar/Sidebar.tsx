@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer, useRef, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 
 import "./Sidebar.scss";
 
@@ -13,39 +13,37 @@ const Sidebar = () => {
 
     const inputRef = useRef<HTMLInputElement>(null);
 
-    const handleNameChange = useCallback(
-        (newName: string) => {
-            if (node) node.name = newName;
-        },
-        [node]
-    );
+    const handleNameChange = (newName: string) => {
+        if (node) node.name = newName;
+    };
 
-    const handleKeyDown = useCallback((key: string) => {
+    const handleKeyDown = (key: string) => {
         if (key === "Enter") inputRef.current?.blur();
-    }, []);
-
-    const handleToggleSidebar = useCallback((node: Node) => {
-        setNode(node);
-        forceUpdate();
-    }, []);
+    };
 
     useEffect(() => {
+        const handleToggleSidebar = (node: Node) => {
+            setNode(node);
+            forceUpdate();
+        };
+
         eventBus.on("toggleSidebar", handleToggleSidebar);
         return () => eventBus.stopListening("toggleSidebar", handleToggleSidebar);
-    }, [handleToggleSidebar]);
+    }, [node]);
 
     return (
         (node && (
             <div className="sidebar">
                 <input
+                    key={Math.random()}
                     type="text"
                     name="node-name"
                     className="node-name"
                     defaultValue={node.name}
                     autoComplete="off"
                     onChange={(event) => handleNameChange(event.target.value)}
-                    ref={inputRef}
                     onKeyDown={(event) => handleKeyDown(event.key)}
+                    ref={inputRef}
                 />
                 <p> {`Postion: (${node.position.x}, ${node.position.y})`} </p>
             </div>
