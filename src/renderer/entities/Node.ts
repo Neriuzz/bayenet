@@ -1,4 +1,4 @@
-import EventBus from "../../events/EventBus";
+import EventBus from "../../shared/EventBus";
 
 import { ClickGesture, DragGesture } from "../gestures";
 import IClickable from "../interfaces/IClickable";

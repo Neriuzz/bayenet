@@ -1,15 +1,16 @@
 .sidebar {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    gap: 0.5em;
     align-items: center;
-    position: absolute;
-    top: 1%;
-    right: 1%;
+    gap: 0.5em;
+
+    padding: 2.5%;
+    width: 25%;
+    background-color: #74ccfc;
     z-index: 2;
 }
 
+// TODO: Make input field take up only required amount of space
 .node-name {
     border: 0px solid;
     font-size: larger;

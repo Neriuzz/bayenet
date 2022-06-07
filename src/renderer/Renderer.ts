@@ -1,7 +1,9 @@
+import WorldAPI from "../shared/WorldAPI";
 import Board from "./entities/Board";
 import InputHandler from "./InputHandler";
 import World from "./World";
 
+const worldAPI = WorldAPI.instance;
 export default class Renderer {
     private frameCount = 0;
     private animationFrameID = 0;
@@ -15,6 +17,9 @@ export default class Renderer {
 
         // Initialise world
         this.world = new World(this.board);
+
+        // Register the world to the WorldAPI
+        worldAPI.registerWorld(this.world);
 
         // Initialise input handler
         new InputHandler(this.world);

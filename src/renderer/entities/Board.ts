@@ -1,4 +1,4 @@
-import EventBus from "../../events/EventBus";
+import EventBus from "../../shared/EventBus";
 
 import Camera from "../Camera";
 import { ClickGesture, DragGesture, KeyGesture } from "../gestures";

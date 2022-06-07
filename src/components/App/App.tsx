@@ -8,8 +8,8 @@ import Sidebar from "../Sidebar/Sidebar";
 const App = () => {
     return (
         <>
-            <Sidebar />
             <Canvas />
+            <Sidebar />
         </>
     );
 };

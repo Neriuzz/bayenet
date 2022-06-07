@@ -1,3 +1,4 @@
+import EventBus from "../shared/EventBus";
 import Board from "./entities/Board";
 import Edge from "./entities/Edge";
 import Node from "./entities/Node";
@@ -11,6 +12,7 @@ import IRenderable from "./interfaces/IRenderable";
 import { isClickable, isDoubleClickable, isDraggable, isHoverable, isRenderable } from "./util/TypeGuard";
 import Vector2D from "./util/Vector2D";
 
+const eventBus = EventBus.instance;
 export default class World {
     private nextID = 0;
 
@@ -28,12 +30,16 @@ export default class World {
         if (entity instanceof Node) {
             const node = entity as Node;
             node.edges.forEach((edge) => this.removeEntity(edge));
+
+            eventBus.emit("nodeDeleted");
         }
 
         if (entity instanceof Edge) {
             const edge = entity as Edge;
             edge.from.edges = edge.from.edges.filter((_edge) => _edge.id !== edge.id);
             if (edge.to) edge.to.edges = edge.to.edges.filter((_edge) => _edge.id !== edge.id);
+
+            eventBus.emit("edgeDeleted");
         }
 
         this.entities = this.entities.filter((_entity) => _entity.id !== entity.id);
@@ -160,12 +166,18 @@ export default class World {
     public createNode(coords: Vector2D) {
         const node = new Node(this.nextID++, coords, 30);
         this.addEntity(node);
+
+        // TODO: Why is this running twice?
+        eventBus.emit("nodeCreated");
         return node;
     }
 
     public createEdge(from: Node) {
         const edge = new Edge(this.nextID++, 10, from, from.position);
         this.addEntity(edge);
+
+        eventBus.emit("edgeCreated");
+
         return edge;
     }
 

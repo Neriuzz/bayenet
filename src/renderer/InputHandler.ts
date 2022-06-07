@@ -194,8 +194,8 @@ export default class InputHandler {
 
     private onResize() {
         // Scale and resize the canvas appropriately based on device width, height and pixel ratio
-        this.world.board.canvas.width = window.innerWidth * window.devicePixelRatio;
-        this.world.board.canvas.height = window.innerHeight * window.devicePixelRatio;
+        this.world.board.canvas.width = this.world.board.canvas.clientWidth * window.devicePixelRatio;
+        this.world.board.canvas.height = this.world.board.canvas.clientHeight * window.devicePixelRatio;
         this.world.board.canvas.style.transform = `scale(${1 / window.devicePixelRatio})`;
     }
 }
