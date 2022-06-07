@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import "./Sidebar.scss";
 
@@ -9,8 +9,6 @@ const eventBus = EventBus.instance;
 
 const Sidebar = () => {
     const [node, setNode] = useState<Node>();
-    const [_, forceUpdate] = useReducer((x) => x + 1, 0);
-
     const inputRef = useRef<HTMLInputElement>(null);
 
     const handleNameChange = (newName: string) => {
@@ -21,15 +19,14 @@ const Sidebar = () => {
         if (key === "Enter") inputRef.current?.blur();
     };
 
-    useEffect(() => {
-        const handleToggleSidebar = (node: Node) => {
-            setNode(node);
-            forceUpdate();
-        };
+    const handleToggleSidebar = (node: Node) => {
+        setNode(node);
+    };
 
+    useEffect(() => {
         eventBus.on("toggleSidebar", handleToggleSidebar);
         return () => eventBus.stopListening("toggleSidebar", handleToggleSidebar);
-    }, [node]);
+    }, []);
 
     return (
         (node && (
