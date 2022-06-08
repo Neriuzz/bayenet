@@ -1,5 +1,4 @@
 import EventBus from "../../shared/EventBus";
-
 import { ClickGesture, DragGesture } from "../gestures";
 import IClickable from "../interfaces/IClickable";
 import IDoubleClickable from "../interfaces/IDoubleClickable";

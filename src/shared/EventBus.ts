@@ -5,6 +5,7 @@ export default class EventBus {
 
     private eventEmitter: EventEmitter = new EventEmitter();
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     private constructor() {}
 
     public static get instance(): EventBus {

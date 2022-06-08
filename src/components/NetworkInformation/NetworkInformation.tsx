@@ -5,15 +5,15 @@ import { BsInfoCircle } from "react-icons/bs";
 import { VscCircleLargeOutline } from "react-icons/vsc";
 import { AiOutlineNodeIndex } from "react-icons/ai";
 
-import WorldAPI from "../../shared/WorldAPI";
 import EventBus from "../../shared/EventBus";
+import WorldData from "../../shared/WorldData";
 
-const worldAPI = WorldAPI.instance;
 const eventBus = EventBus.instance;
+const worldData = WorldData.instance;
 
 const NetworkInformation = () => {
-    const [nodeCount, setNodeCount] = useState(worldAPI.numberOfNodes() || 0);
-    const [edgeCount, setEdgeCount] = useState(worldAPI.numberOfEdges() || 0);
+    const [nodeCount, setNodeCount] = useState(worldData.numberOfNodes);
+    const [edgeCount, setEdgeCount] = useState(worldData.numberOfEdges);
 
     const handleNodeCreated = () => {
         setNodeCount((nodeCount) => nodeCount + 1);

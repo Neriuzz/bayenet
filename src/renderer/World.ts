@@ -149,6 +149,14 @@ export default class World {
         return this.clickables.filter((clickable) => clickable.selected).length;
     }
 
+    public get numberOfNodes() {
+        return this.entities.filter((entity) => entity instanceof Node).length;
+    }
+
+    public get numberOfEdges() {
+        return this.entities.filter((entity) => entity instanceof Edge).length;
+    }
+
     public deselectAllClickables(omit?: number) {
         this.clickables.forEach((clickable) => {
             if (omit !== clickable.id) clickable.selected = false;
