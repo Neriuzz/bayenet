@@ -38,11 +38,11 @@ export default class World {
             edge.from.edges = edge.from.edges.filter((_edge) => _edge.id !== edge.id);
             if (edge.to) edge.to.edges = edge.to.edges.filter((_edge) => _edge.id !== edge.id);
 
-            console.log("Edge deleted");
             eventBus.emit("edgeDeleted");
         }
 
         this.entities = this.entities.filter((_entity) => _entity.id !== entity.id);
+        this.recentlyCreatedEntities = this.recentlyCreatedEntities.filter((_entity) => _entity.id !== entity.id);
     }
 
     public get renderables(): IRenderable[] {
