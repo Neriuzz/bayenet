@@ -30,7 +30,6 @@ export default class World {
         if (entity instanceof Node) {
             const node = entity as Node;
             node.edges.forEach((edge) => this.removeEntity(edge));
-
             eventBus.emit("nodeDeleted");
         }
 
@@ -39,6 +38,7 @@ export default class World {
             edge.from.edges = edge.from.edges.filter((_edge) => _edge.id !== edge.id);
             if (edge.to) edge.to.edges = edge.to.edges.filter((_edge) => _edge.id !== edge.id);
 
+            console.log("Edge deleted");
             eventBus.emit("edgeDeleted");
         }
 
@@ -160,14 +160,21 @@ export default class World {
     }
 
     public removeAllSelectedClickables() {
-        this.clickables.filter((clickable) => clickable.selected).forEach((clickable) => this.removeEntity(clickable));
+        // Remove nodes first as edges get removed with nodes
+        this.clickables
+            .filter((clickable) => clickable.selected && clickable instanceof Node)
+            .forEach((clickable) => this.removeEntity(clickable));
+
+        // Removing remaning edges
+        this.clickables
+            .filter((clickable) => clickable.selected && clickable instanceof Edge)
+            .forEach((clickable) => this.removeEntity(clickable));
     }
 
     public createNode(coords: Vector2D) {
         const node = new Node(this.nextID++, coords, 30);
         this.addEntity(node);
 
-        // TODO: Why is this running twice?
         eventBus.emit("nodeCreated");
         return node;
     }

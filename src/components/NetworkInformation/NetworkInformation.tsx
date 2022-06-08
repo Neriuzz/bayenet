@@ -16,20 +16,19 @@ const NetworkInformation = () => {
     const [edgeCount, setEdgeCount] = useState(worldAPI.numberOfEdges() || 0);
 
     const handleNodeCreated = () => {
-        console.log("Node created");
         setNodeCount((nodeCount) => nodeCount + 1);
     };
 
     const handleNodeDeleted = () => {
-        setNodeCount(nodeCount - 1);
+        setNodeCount((nodeCount) => nodeCount - 1);
     };
 
     const handleEdgeCreated = () => {
-        setEdgeCount(edgeCount + 1);
+        setEdgeCount((edgeCount) => edgeCount + 1);
     };
 
     const handleEdgeDeleted = () => {
-        setEdgeCount(edgeCount - 1);
+        setEdgeCount((edgeCount) => edgeCount - 1);
     };
 
     useEffect(() => {

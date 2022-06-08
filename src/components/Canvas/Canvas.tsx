@@ -15,7 +15,9 @@ const Canvas = () => {
             const context = canvasRef.current.getContext("2d");
 
             // Spawn a new renderer.
-            if (context) new Renderer(canvasRef.current, context);
+            if (context) {
+                new Renderer(canvasRef.current, context);
+            }
         }
     }, []);
 
