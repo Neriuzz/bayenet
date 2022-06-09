@@ -50,14 +50,17 @@ const NetworkInformation = () => {
     return (
         <div className="network-info">
             <BsInfoCircle className="icon" size={"72px"} />
+            <p className="info-desc">Number of nodes in the network</p>
             <div className="count">
-                <VscCircleLargeOutline className="icon" size={"50px"} />
-                <p>{nodeCount}</p>
+                <VscCircleLargeOutline className="icon" size={"40px"} />
+                <p className="count-number">{nodeCount}</p>
             </div>
+            <p className="info-desc">Number of edges in the network</p>
             <div className="count">
-                <AiOutlineNodeIndex className="icon" size={"50px"} />
-                <p>{edgeCount}</p>
+                <AiOutlineNodeIndex className="icon" size={"40px"} />
+                <p className="count-number">{edgeCount}</p>
             </div>
+            <p className="tool-tip">Double-click on a node to view its information.</p>
         </div>
     );
 };
