@@ -10,6 +10,9 @@ import IInteractable from "./interfaces/IInteractable";
 import Vector2D from "./util/Vector2D";
 import World from "./World";
 
+const MAX_ZOOM = 2;
+const MIN_ZOOM = 0.5;
+const SCROLL_SENSITIVITY = 0.0005;
 export default class InputHandler {
     private draggingSomething = false;
 
@@ -27,6 +30,7 @@ export default class InputHandler {
         this.world.board.canvas.addEventListener("click", (event: MouseEvent) => this.onClick(event));
         this.world.board.canvas.addEventListener("dblclick", (event: MouseEvent) => this.onDoubleClick(event));
         this.world.board.canvas.addEventListener("keydown", (event: KeyboardEvent) => this.onKeyDown(event));
+        this.world.board.canvas.addEventListener("wheel", (event: WheelEvent) => this.onScroll(event));
 
         // Initial canvas resize
         this.onResize();
@@ -52,9 +56,16 @@ export default class InputHandler {
 
     public getTruePosition(position: Vector2D) {
         return new Vector2D(
-            position.x - this.world.board.camera.position.x,
-            position.y - this.world.board.camera.position.y
+            (position.x - this.world.board.camera.position.x) / this.world.board.camera.scaleFactor,
+            (position.y - this.world.board.camera.position.y) / this.world.board.camera.scaleFactor
         );
+    }
+
+    private onScroll(event: WheelEvent) {
+        this.world.board.camera.scaleFactor += event.deltaY * SCROLL_SENSITIVITY;
+
+        this.world.board.camera.scaleFactor = Math.min(this.world.board.camera.scaleFactor, MAX_ZOOM);
+        this.world.board.camera.scaleFactor = Math.max(this.world.board.camera.scaleFactor, MIN_ZOOM);
     }
 
     private onKeyDown(event: KeyboardEvent) {

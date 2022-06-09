@@ -32,6 +32,9 @@ export default class Renderer {
         // Clear the bitmap
         this.board.camera.clearScreen();
 
+        // Handle zooming
+        this.board.camera.zoom();
+
         // Sort renderables by increasing z-index
         const renderables = this.world.renderablesInView.sort((a, b) => a.zIndex - b.zIndex);
 
