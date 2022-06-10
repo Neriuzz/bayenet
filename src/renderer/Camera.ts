@@ -11,7 +11,6 @@ export default class Camera {
     public clearScreen() {
         this.context.resetTransform();
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.context.translate(this.position.x, this.position.y);
     }
 
     public zoom() {

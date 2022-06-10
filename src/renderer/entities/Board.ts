@@ -7,9 +7,8 @@ import Vector2D from "../util/Vector2D";
 export default class Board {
     public dragging = false;
 
-    private initialPosition = new Vector2D(0, 0);
     private currentPosition = new Vector2D(0, 0);
-    private dragStartPosition: Vector2D | null = null;
+    private dragStartPosition = new Vector2D(0, 0);
 
     private eventBus = EventBus.instance;
 
@@ -33,25 +32,22 @@ export default class Board {
 
     public onDragStart(dragGesture: DragGesture) {
         this.dragging = true;
-        this.dragStartPosition = dragGesture.position;
-        this.initialPosition = new Vector2D(this.currentPosition.x, this.currentPosition.y);
+        this.dragStartPosition = new Vector2D(
+            dragGesture.position.x - this.currentPosition.x,
+            dragGesture.position.y - this.currentPosition.y
+        );
     }
 
     public onDrag(dragGesture: DragGesture) {
-        const deltaPosition = new Vector2D(
-            dragGesture.position.x - this.dragStartPosition!.x,
-            dragGesture.position.y - this.dragStartPosition!.y
-        );
         this.currentPosition = new Vector2D(
-            this.initialPosition!.x + deltaPosition.x,
-            this.initialPosition!.y + deltaPosition.y
+            dragGesture.position.x - this.dragStartPosition.x,
+            dragGesture.position.y - this.dragStartPosition.y
         );
         this.camera.position = this.currentPosition;
     }
 
     public onDragEnd() {
         this.dragging = false;
-        this.dragStartPosition = null;
     }
 
     public onKeyDown(keyGesture: KeyGesture) {

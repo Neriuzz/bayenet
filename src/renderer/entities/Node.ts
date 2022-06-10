@@ -16,9 +16,7 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
 
     public zIndex = 1;
     public previousZIndex = 1;
-
-    private initialPosition: Vector2D | null = null;
-    private dragStartPosition: Vector2D | null = null;
+    private dragStartPosition = new Vector2D(0, 0);
 
     private eventBus = EventBus.instance;
 
@@ -123,25 +121,22 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
 
     public onDragStart(dragGesture: DragGesture) {
         this.dragging = true;
-        this.dragStartPosition = dragGesture.position;
-        this.initialPosition = new Vector2D(this.currentPosition.x, this.currentPosition.y);
+        this.dragStartPosition = new Vector2D(
+            dragGesture.position.x - this.currentPosition.x,
+            dragGesture.position.y - this.currentPosition.y
+        );
     }
 
     public onDrag(dragGesture: DragGesture) {
         this.zIndex = dragGesture.zIndex || this.zIndex;
-        const deltaPosition = new Vector2D(
-            dragGesture.position.x - this.dragStartPosition!.x,
-            dragGesture.position.y - this.dragStartPosition!.y
-        );
         this.currentPosition = new Vector2D(
-            this.initialPosition!.x + deltaPosition.x,
-            this.initialPosition!.y + deltaPosition.y
+            dragGesture.position.x - this.dragStartPosition.x,
+            dragGesture.position.y - this.dragStartPosition.y
         );
     }
 
     public onDragEnd(dragGesture: DragGesture) {
         this.dragging = false;
-        this.dragStartPosition = null;
         this.zIndex = dragGesture.zIndex || this.zIndex;
     }
 

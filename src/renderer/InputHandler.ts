@@ -54,10 +54,17 @@ export default class InputHandler {
         return interactable?.zIndex + 1 || 1;
     }
 
-    public getTruePosition(position: Vector2D) {
+    public getTruePosition(event: MouseEvent) {
         return new Vector2D(
-            (position.x - this.world.board.camera.position.x) / this.world.board.camera.scaleFactor,
-            (position.y - this.world.board.camera.position.y) / this.world.board.camera.scaleFactor
+            event.clientX - this.world.board.camera.position.x / this.world.board.camera.scaleFactor,
+            event.clientY - this.world.board.camera.position.y / this.world.board.camera.scaleFactor
+        );
+    }
+
+    public getDragPosition(event: MouseEvent) {
+        return new Vector2D(
+            event.clientX / this.world.board.camera.scaleFactor,
+            event.clientY / this.world.board.camera.scaleFactor
         );
     }
 
@@ -88,7 +95,7 @@ export default class InputHandler {
         // Do not call on click handler if we are currently dragging or this is our second click
         if (this.draggingSomething || event.detail !== 1) return;
 
-        const position = this.getTruePosition(new Vector2D(event.offsetX, event.offsetY));
+        const position = this.getTruePosition(event);
 
         this.timer = setTimeout(() => {
             const clickGesture: ClickGesture = {
@@ -111,7 +118,7 @@ export default class InputHandler {
 
         if (this.world.edgeBeingCreated) return;
 
-        const position = this.getTruePosition(new Vector2D(event.offsetX, event.offsetY));
+        const position = this.getTruePosition(event);
         const clickGesture: ClickGesture = {
             position,
             alt: event.altKey,
@@ -129,15 +136,13 @@ export default class InputHandler {
 
         this.draggingSomething = false;
 
-        const position = new Vector2D(event.offsetX, event.offsetY);
+        const position = this.getDragPosition(event);
+
         const dragGesture: DragGesture = {
             position
         };
 
-        const draggable = this.getInteractable(
-            this.world.draggablesInView,
-            this.getTruePosition(position)
-        ) as IDraggable;
+        const draggable = this.getInteractable(this.world.draggablesInView, this.getTruePosition(event)) as IDraggable;
 
         draggable ? draggable.onDragStart(dragGesture) : this.world.board.onDragStart(dragGesture);
     }
@@ -145,9 +150,9 @@ export default class InputHandler {
     private onMouseMove(event: MouseEvent) {
         event.preventDefault();
 
-        const position = new Vector2D(event.offsetX, event.offsetY);
+        const position = this.getDragPosition(event);
 
-        if (this.world.edgeBeingCreated) this.world.edgeBeingCreated.drawingPosition = this.getTruePosition(position);
+        if (this.world.edgeBeingCreated) this.world.edgeBeingCreated.drawingPosition = this.getTruePosition(event);
 
         this.draggingSomething = true;
 
@@ -169,13 +174,13 @@ export default class InputHandler {
             return;
         }
 
-        this.onHover(this.getTruePosition(position));
+        this.onHover(this.getTruePosition(event));
     }
 
     private onMouseUp(event: MouseEvent) {
         event.preventDefault();
 
-        const position = new Vector2D(event.offsetX, event.offsetY);
+        const position = this.getDragPosition(event);
 
         if (this.world.board.dragging) {
             this.world.board.onDragEnd();
@@ -183,7 +188,7 @@ export default class InputHandler {
         }
 
         if (this.world.currentlyDragging) {
-            const zIndex = this.getZIndex(this.world.currentlyDragging, this.getTruePosition(position));
+            const zIndex = this.getZIndex(this.world.currentlyDragging, this.getTruePosition(event));
             const dragGesture: DragGesture = {
                 position,
                 zIndex
