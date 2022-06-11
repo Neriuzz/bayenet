@@ -31,7 +31,7 @@ const Canvas = () => {
 
     return (
         <>
-            <MdZoomOutMap className="reset-zoom-icon" size="30px" onClick={resetCameraZoom} />
+            <MdZoomOutMap className="reset-zoom-icon" size="30px" onClick={resetCameraZoom} title={"Reset zoom"} />
             <canvas ref={canvasRef} tabIndex={1} onClick={() => canvasRef.current?.focus()} />
         </>
     );

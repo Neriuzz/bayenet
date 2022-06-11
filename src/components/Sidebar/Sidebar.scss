@@ -9,16 +9,3 @@
     background-color: #36393f;
     z-index: 2;
 }
-
-// TODO: Make input field take up only required amount of space
-.node-name {
-    border: 0px solid;
-    font-size: larger;
-    text-align: center;
-    outline: none;
-
-    &:focus {
-        border-bottom: 1px solid blue;
-        padding-bottom: 2px;
-    }
-}

@@ -18,7 +18,7 @@ const NodeInformation = (props: NodeInformationProps) => {
     };
 
     return (
-        <>
+        <div className="node-information">
             <input
                 key={Math.random()}
                 type="text"
@@ -30,8 +30,8 @@ const NodeInformation = (props: NodeInformationProps) => {
                 onKeyDown={(event) => handleKeyDown(event.key)}
                 ref={inputRef}
             />
-            <p> {`Postion: (${props.node.position.x}, ${props.node.position.y})`} </p>
-        </>
+            <p className="position"> {`Postion: (${props.node.position.x}, ${props.node.position.y})`} </p>
+        </div>
     );
 };
 

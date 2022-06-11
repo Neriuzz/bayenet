@@ -33,7 +33,7 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
         context.save();
         context.beginPath();
         context.arc(this.position.x, this.position.y, this.r, 0, Math.PI * 2);
-        context.fillStyle = "red";
+        context.fillStyle = "#36393f";
         if (this.selected) {
             context.strokeStyle = "blue";
             context.lineWidth = 6;
