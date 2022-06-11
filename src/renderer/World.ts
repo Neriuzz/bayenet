@@ -95,7 +95,11 @@ export default class World {
 
     public get renderablesInView(): IRenderable[] {
         return this.renderables.filter((renderable) =>
-            renderable.isInView(this.board.camera.position, this.board.camera.bounds)
+            renderable.isInView(
+                this.board.camera.position,
+                this.board.camera.bounds,
+                this.board.camera.transformedOrigin
+            )
         );
     }
 

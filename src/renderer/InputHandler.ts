@@ -55,11 +55,9 @@ export default class InputHandler {
     }
 
     private getOffsetPosition(event: MouseEvent) {
-        const scaleFactor = this.world.board.camera.scaleFactor;
-
         return new Vector2D(
-            event.clientX - this.world.board.camera.position.x * scaleFactor,
-            event.clientY - this.world.board.camera.position.y * scaleFactor
+            event.clientX - this.world.board.camera.position.x * this.world.board.camera.scaleFactor,
+            event.clientY - this.world.board.camera.position.y * this.world.board.camera.scaleFactor
         );
     }
 
@@ -112,7 +110,7 @@ export default class InputHandler {
         // Do not call on click handler if we are currently dragging or this is our second click
         if (this.draggingSomething || event.detail !== 1) return;
 
-        // Get the position of the click, accounting for the offset of the camera
+        // Get the position of the click, accounting for context transformations
         const position = this.getTruePosition(event);
 
         this.timer = setTimeout(() => {

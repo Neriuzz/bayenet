@@ -2,3 +2,31 @@ canvas {
     width: 75%;
     height: 100%;
 }
+
+.reset-zoom-icon {
+    position: absolute;
+    z-index: 100;
+    margin: 0.5em;
+    color: grey;
+    transition: color 0.3s linear;
+
+    &:hover {
+        color: black;
+    }
+
+    &:active {
+        animation: click 1s linear;
+    }
+}
+
+@keyframes click {
+    0% {
+        transform: scale(0.8);
+    }
+    50% {
+        transform: scale(1.3);
+    }
+    100% {
+        transform: scale(1);
+    }
+}

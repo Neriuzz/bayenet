@@ -52,10 +52,13 @@ export default class Edge implements IRenderable, IClickable {
         context.restore();
     }
 
-    public isInView(cameraPosition: Vector2D, cameraBounds: Vector2D): boolean {
+    public isInView(cameraPosition: Vector2D, cameraBounds: Vector2D, transformedOrigin: Vector2D): boolean {
         if (!this.to) return true;
 
-        return this.from.isInView(cameraPosition, cameraBounds) || this.to.isInView(cameraPosition, cameraBounds);
+        return (
+            this.from.isInView(cameraPosition, cameraBounds, transformedOrigin) ||
+            this.to.isInView(cameraPosition, cameraBounds, transformedOrigin)
+        );
     }
 
     public isMouseOver(position: Vector2D): boolean {

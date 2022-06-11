@@ -65,12 +65,12 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
         context.restore();
     }
 
-    public isInView(cameraPosition: Vector2D, canvasBounds: Vector2D): boolean {
+    public isInView(cameraPosition: Vector2D, canvasBounds: Vector2D, transformedOrigin: Vector2D): boolean {
         return (
-            this.position.x + this.r + cameraPosition.x >= 0 &&
-            this.position.y + this.r + cameraPosition.y >= 0 &&
-            this.position.x - this.r + cameraPosition.x < canvasBounds.x &&
-            this.position.y - this.r + cameraPosition.y < canvasBounds.y
+            this.position.x + this.r + cameraPosition.x >= transformedOrigin.x &&
+            this.position.y + this.r + cameraPosition.y >= transformedOrigin.y &&
+            this.position.x - this.r + cameraPosition.x < transformedOrigin.x + canvasBounds.x &&
+            this.position.y - this.r + cameraPosition.y < transformedOrigin.y + canvasBounds.y
         );
     }
 
