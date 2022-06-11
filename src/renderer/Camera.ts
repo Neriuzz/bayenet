@@ -13,6 +13,7 @@ export default class Camera {
         eventBus.on("resetCameraZoom", () => this.resetZoom());
     }
 
+    // TODO: Smoothly reset the zoom if you have time in the future
     public resetZoom() {
         this.scaleFactor = 1;
     }
