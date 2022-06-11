@@ -54,10 +54,24 @@ export default class InputHandler {
         return interactable?.zIndex + 1 || 1;
     }
 
-    public getTruePosition(event: MouseEvent) {
+    private getOffsetPosition(event: MouseEvent) {
+        const scaleFactor = this.world.board.camera.scaleFactor;
+
         return new Vector2D(
-            event.clientX - this.world.board.camera.position.x / this.world.board.camera.scaleFactor,
-            event.clientY - this.world.board.camera.position.y / this.world.board.camera.scaleFactor
+            event.clientX - this.world.board.camera.position.x * scaleFactor,
+            event.clientY - this.world.board.camera.position.y * scaleFactor
+        );
+    }
+
+    public getTruePosition(event: MouseEvent) {
+        const canvasWidth = this.world.board.canvas.width;
+        const canvasHeight = this.world.board.canvas.height;
+        const scaleFactor = this.world.board.camera.scaleFactor;
+        const offsetPosition = this.getOffsetPosition(event);
+
+        return new Vector2D(
+            (canvasWidth - canvasWidth / scaleFactor) / 2 + offsetPosition.x / scaleFactor,
+            (canvasHeight - canvasHeight / scaleFactor) / 2 + offsetPosition.y / scaleFactor
         );
     }
 
@@ -69,8 +83,11 @@ export default class InputHandler {
     }
 
     private onScroll(event: WheelEvent) {
-        this.world.board.camera.scaleFactor += event.deltaY * SCROLL_SENSITIVITY;
+        // Update the scale factor
+        const deltaY = event.deltaY * SCROLL_SENSITIVITY;
+        this.world.board.camera.scaleFactor += deltaY;
 
+        // Clamp the scale factor to a maximum and minimum value
         this.world.board.camera.scaleFactor = Math.min(this.world.board.camera.scaleFactor, MAX_ZOOM);
         this.world.board.camera.scaleFactor = Math.max(this.world.board.camera.scaleFactor, MIN_ZOOM);
     }
@@ -95,6 +112,7 @@ export default class InputHandler {
         // Do not call on click handler if we are currently dragging or this is our second click
         if (this.draggingSomething || event.detail !== 1) return;
 
+        // Get the position of the click, accounting for the offset of the camera
         const position = this.getTruePosition(event);
 
         this.timer = setTimeout(() => {
@@ -105,8 +123,10 @@ export default class InputHandler {
                 world: this.world
             };
 
+            // Attempt the retrieve the clickable that the mouse is hovering over
             const clickable = this.getInteractable(this.world.clickablesInView, position) as IClickable;
 
+            // If there is a clickable, call its onclick handler, otherwise call the onclick handler of the board itself
             clickable ? clickable.onClick(clickGesture) : this.world.board.onClick(clickGesture);
         }, 200);
     }

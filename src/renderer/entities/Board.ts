@@ -39,6 +39,8 @@ export default class Board {
     }
 
     public onDrag(dragGesture: DragGesture) {
+        if (!this.dragging) return;
+
         this.currentPosition = new Vector2D(
             dragGesture.position.x - this.dragStartPosition.x,
             dragGesture.position.y - this.dragStartPosition.y
