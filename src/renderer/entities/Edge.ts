@@ -36,7 +36,7 @@ export default class Edge implements IRenderable, IClickable {
         // Lower the opacity of the edge if it is not in the current Markov blanket
         const markovBlanket = worldData.markovBlanket;
         if (markovBlanket.size > 0 && !markovBlanket.has(this.id)) {
-            context.globalAlpha = 0.5;
+            context.globalAlpha = 0.3;
         }
 
         // Line

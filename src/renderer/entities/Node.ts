@@ -34,7 +34,7 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
         // Lower the opacity of the node if it is not in the current Markov blanket
         const markovBlanket = worldData.markovBlanket;
         if (markovBlanket.size > 0 && !markovBlanket.has(this.id)) {
-            context.globalAlpha = 0.5;
+            context.globalAlpha = 0.3;
         }
 
         // Draw the circle
@@ -42,10 +42,13 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
         context.arc(this.position.x, this.position.y, this.r, 0, Math.PI * 2);
         context.fillStyle = "#36393f";
         if (this.selected) {
+            context.save();
+            context.globalAlpha = 0.5;
             context.strokeStyle = "blue";
             context.lineWidth = 6;
             context.lineCap = "round";
             context.stroke();
+            context.restore();
         }
         context.fill();
         context.closePath();
@@ -59,13 +62,10 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
             name += "...";
         }
 
-        // Get new width of text
-        const textWidth = context.measureText(name).width * window.devicePixelRatio;
-
         context.font = "12px Arial";
         context.textBaseline = "middle";
-        // TODO: Text doesn't look fully centered
-        context.fillText(name, this.position.x - textWidth / 2, this.position.y - this.r * 1.25);
+        context.textAlign = "center";
+        context.fillText(name, this.position.x, this.position.y - this.r * 1.25);
     }
 
     public isInView(cameraPosition: Vector2D, canvasBounds: Vector2D, transformedOrigin: Vector2D): boolean {
