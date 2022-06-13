@@ -1,4 +1,5 @@
 import EventBus from "../../shared/EventBus";
+import WorldData from "../../shared/WorldData";
 import { ClickGesture, DragGesture, HoverGesture } from "../gestures";
 import IClickable from "../interfaces/IClickable";
 import IDoubleClickable from "../interfaces/IDoubleClickable";
@@ -9,6 +10,7 @@ import isCyclic from "../util/GraphUtil";
 import Vector2D from "../util/Vector2D";
 import Edge from "./Edge";
 
+const worldData = WorldData.instance;
 export default class Node implements IRenderable, IClickable, IDoubleClickable, IDraggable, IHoverable {
     public selected = false;
     public dragging = false;
@@ -31,6 +33,13 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
     public render(context: CanvasRenderingContext2D) {
         // Draw circle
         context.save();
+
+        // Lower the opacity of the node if it is not in the current Markov blanket
+        const markovBlanket = worldData.markovBlanket;
+        if (markovBlanket.size > 0 && !markovBlanket.has(this.id)) {
+            context.globalAlpha = 0.5;
+        }
+
         context.beginPath();
         context.arc(this.position.x, this.position.y, this.r, 0, Math.PI * 2);
         context.fillStyle = "#36393f";
@@ -42,11 +51,8 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
         }
         context.fill();
         context.closePath();
-        context.restore();
 
         // Draw node name
-        context.save();
-
         // Truncate the name of the node if it too long
         let name = this.name;
         if (context.measureText(name).width * window.devicePixelRatio > 40) {
@@ -141,12 +147,13 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
     }
 
     public onEnterHover(hoverGesture: HoverGesture) {
+        if (hoverGesture.world.edgeBeingCreated) return;
         this.hovering = true;
-        console.log(`Started hovering over node ${this.id}`);
+        hoverGesture.world.setMarkovBlanket(this);
     }
 
     public onExitHover(hoverGesture: HoverGesture) {
         this.hovering = false;
-        console.log(`Stopped hovering over node ${this.id}`);
+        hoverGesture.world.clearMarkovBlanket();
     }
 }

@@ -19,6 +19,8 @@ export default class World {
     public entities: IEntity[] = [];
     private recentlyCreatedEntities: IEntity[] = [];
 
+    public markovBlanket: Set<number | undefined> = new Set();
+
     constructor(public readonly board: Board) {}
 
     public addEntity(entity: IEntity) {
@@ -43,6 +45,7 @@ export default class World {
 
         this.entities = this.entities.filter((_entity) => _entity.id !== entity.id);
         this.recentlyCreatedEntities = this.recentlyCreatedEntities.filter((_entity) => _entity.id !== entity.id);
+        this.markovBlanket = new Set();
     }
 
     public get renderables(): IRenderable[] {
@@ -203,5 +206,33 @@ export default class World {
     public undo() {
         const entity = this.recentlyCreatedEntities.pop();
         if (entity) this.removeEntity(entity);
+    }
+
+    public setMarkovBlanket(node: Node) {
+        // Get all the nodes in the Markov blanket
+        const parents = node.parents.map((parent) => parent.id);
+        const children = node.children.map((child) => child.id);
+        const childrensParents = node.children.flatMap((child) => child.parents.map((parent) => parent.id));
+
+        // Get all the edges in the Markov blanket
+        const edges = node.edges.map((edge) => edge.id);
+        const childrensParentsEdges = node.children.flatMap((child) =>
+            this.edges.filter((edge) => edge.to?.id === child.id).map((edge) => edge.id)
+        );
+
+        // Create Markov blanket set
+        this.markovBlanket = new Set([
+            node.id,
+            ...parents,
+            ...children,
+            ...childrensParents,
+            ...edges,
+            ...childrensParentsEdges
+        ]);
+    }
+
+    public clearMarkovBlanket() {
+        // Set Markov blanket to empty set
+        this.markovBlanket = new Set();
     }
 }

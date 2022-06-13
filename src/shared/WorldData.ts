@@ -25,4 +25,10 @@ export default class WorldData {
 
         return 0;
     }
+
+    public get markovBlanket() {
+        if (this.world) return this.world.markovBlanket;
+
+        return new Set();
+    }
 }

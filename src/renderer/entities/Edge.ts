@@ -1,9 +1,11 @@
+import WorldData from "../../shared/WorldData";
 import { ClickGesture } from "../gestures";
 import IClickable from "../interfaces/IClickable";
 import IRenderable from "../interfaces/IRenderable";
 import Vector2D from "../util/Vector2D";
 import Node from "./Node";
 
+const worldData = WorldData.instance;
 export default class Edge implements IRenderable, IClickable {
     public zIndex = 0;
     public selected = false;
@@ -33,16 +35,21 @@ export default class Edge implements IRenderable, IClickable {
 
         // Line
         context.save();
+
+        // Lower the opacity of the edge if it is not in the current Markov blanket
+        const markovBlanket = worldData.markovBlanket;
+        if (markovBlanket.size > 0 && !markovBlanket.has(this.id)) {
+            context.globalAlpha = 0.5;
+        }
+
         context.beginPath();
         context.lineWidth = 2.5;
         context.moveTo(this.from.r, 0);
         context.lineTo(hypotenuse - (this.to?.r || 0), 0);
         context.stroke();
         context.closePath();
-        context.restore();
 
         // Arrow
-        context.save();
         context.beginPath();
         context.lineTo(hypotenuse - this.size - (this.to?.r || 0), this.size);
         context.lineTo(hypotenuse - (this.to?.r || 0), 0);
