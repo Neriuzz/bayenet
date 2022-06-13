@@ -31,15 +31,13 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
     }
 
     public render(context: CanvasRenderingContext2D) {
-        // Draw circle
-        context.save();
-
         // Lower the opacity of the node if it is not in the current Markov blanket
         const markovBlanket = worldData.markovBlanket;
         if (markovBlanket.size > 0 && !markovBlanket.has(this.id)) {
             context.globalAlpha = 0.5;
         }
 
+        // Draw the circle
         context.beginPath();
         context.arc(this.position.x, this.position.y, this.r, 0, Math.PI * 2);
         context.fillStyle = "#36393f";
@@ -68,7 +66,6 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
         context.textBaseline = "middle";
         // TODO: Text doesn't look fully centered
         context.fillText(name, this.position.x - textWidth / 2, this.position.y - this.r * 1.25);
-        context.restore();
     }
 
     public isInView(cameraPosition: Vector2D, canvasBounds: Vector2D, transformedOrigin: Vector2D): boolean {

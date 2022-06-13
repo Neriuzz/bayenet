@@ -33,19 +33,17 @@ export default class Edge implements IRenderable, IClickable {
             context.fillStyle = "blue";
         }
 
-        // Line
-        context.save();
-
         // Lower the opacity of the edge if it is not in the current Markov blanket
         const markovBlanket = worldData.markovBlanket;
         if (markovBlanket.size > 0 && !markovBlanket.has(this.id)) {
             context.globalAlpha = 0.5;
         }
 
+        // Line
         context.beginPath();
         context.lineWidth = 2.5;
         context.moveTo(this.from.r, 0);
-        context.lineTo(hypotenuse - (this.to?.r || 0), 0);
+        context.lineTo(hypotenuse - this.size - (this.to?.r || 0), 0);
         context.stroke();
         context.closePath();
 
@@ -56,7 +54,6 @@ export default class Edge implements IRenderable, IClickable {
         context.lineTo(hypotenuse - this.size - (this.to?.r || 0), -this.size);
         context.fill();
         context.closePath();
-        context.restore();
     }
 
     public isInView(cameraPosition: Vector2D, cameraBounds: Vector2D, transformedOrigin: Vector2D): boolean {
