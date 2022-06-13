@@ -14,7 +14,7 @@ const MAX_ZOOM = 2;
 const MIN_ZOOM = 0.5;
 const SCROLL_SENSITIVITY = 0.0005;
 export default class InputHandler {
-    private draggingSomething = false;
+    private dragging = false;
 
     // Timer for differentiating between clicks and double clicks
     private timer = 0;
@@ -88,6 +88,9 @@ export default class InputHandler {
         // Clamp the scale factor to a maximum and minimum value
         this.world.board.camera.scaleFactor = Math.min(this.world.board.camera.scaleFactor, MAX_ZOOM);
         this.world.board.camera.scaleFactor = Math.max(this.world.board.camera.scaleFactor, MIN_ZOOM);
+
+        // Call the on mouse move event as the mouse position will change when scrolling
+        this.onMouseMove(event as MouseEvent);
     }
 
     private onKeyDown(event: KeyboardEvent) {
@@ -108,7 +111,7 @@ export default class InputHandler {
         event.preventDefault();
 
         // Do not call on click handler if we are currently dragging or this is our second click
-        if (this.draggingSomething || event.detail !== 1) return;
+        if (this.dragging || event.detail !== 1) return;
 
         // Get the position of the click, accounting for context transformations
         const position = this.getTruePosition(event);
@@ -126,6 +129,9 @@ export default class InputHandler {
 
             // If there is a clickable, call its onclick handler, otherwise call the onclick handler of the board itself
             clickable ? clickable.onClick(clickGesture) : this.world.board.onClick(clickGesture);
+
+            // Call on mouse move handler
+            this.onMouseMove(event);
         }, 200);
     }
 
@@ -147,12 +153,15 @@ export default class InputHandler {
         const doubleClickable = this.getInteractable(this.world.doubleClickablesInView, position) as IDoubleClickable;
 
         doubleClickable ? doubleClickable.onDoubleClick(clickGesture) : this.world.board.onDoubleClick(clickGesture);
+
+        // Call the on hover event as mouse will be over newly created node
+        this.onHover(position);
     }
 
     private onMouseDown(event: MouseEvent) {
         event.preventDefault();
 
-        this.draggingSomething = false;
+        this.dragging = false;
 
         const position = this.getDragPosition(event);
 
@@ -172,7 +181,7 @@ export default class InputHandler {
 
         if (this.world.edgeBeingCreated) this.world.edgeBeingCreated.drawingPosition = this.getTruePosition(event);
 
-        this.draggingSomething = true;
+        this.dragging = true;
 
         if (this.world.board.dragging) {
             const dragGesture: DragGesture = {

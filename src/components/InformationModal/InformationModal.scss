@@ -1,0 +1,134 @@
+.modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.information-modal {
+    width: auto;
+    height: 20%;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 1.5em;
+    border-radius: 10px;
+    position: relative;
+    padding: 10em;
+    animation: pop-in 0.3s;
+}
+
+.information-modal-close-button {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+}
+
+.information {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    font-size: x-large;
+}
+
+.shift {
+    animation: shift 2s 1s infinite;
+}
+
+.double-click {
+    animation: doubleClick 1.5s 1s infinite;
+}
+
+.click {
+    animation: click 1.5s 1s infinite;
+}
+
+.pan {
+    animation: pan 3s 1s infinite;
+}
+
+@keyframes pop-in {
+    from {
+        transform: scale(0.5);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+@keyframes doubleClick {
+    0% {
+        transform: scale(1) rotateX(0deg);
+    }
+
+    20% {
+        transform: scale(0.8) rotateX(25deg);
+    }
+
+    40% {
+        transform: scale(1) rotateX(0deg);
+    }
+
+    60% {
+        transform: scale(0.8) rotateX(25deg);
+    }
+
+    100% {
+        transform: scale(1) rotateX(0deg);
+    }
+}
+
+@keyframes click {
+    0% {
+        transform: scale(1) rotateX(0deg);
+    }
+    50% {
+        transform: scale(0.8) rotateX(25deg);
+    }
+    100% {
+        transform: scale(1) rotateX(0deg);
+    }
+}
+
+@keyframes pan {
+    0% {
+        transform: scale(1) rotateX(0deg) translateX(0);
+    }
+
+    25% {
+        transform: scale(0.8) rotateX(25deg) translateX(0);
+    }
+
+    50% {
+        transform: scale(0.8) rotateX(25deg) translateX(-5px);
+    }
+
+    75% {
+        transform: scale(1) rotateX(0deg) translateX(-5px);
+    }
+
+    100% {
+        transform: scale(1) rotateX(0deg) translateX(0);
+    }
+}
+
+@keyframes shift {
+    0% {
+        transform: scale(0.8);
+    }
+    50% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(0.8);
+    }
+}

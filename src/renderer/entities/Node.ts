@@ -10,7 +10,9 @@ import isCyclic from "../util/GraphUtil";
 import Vector2D from "../util/Vector2D";
 import Edge from "./Edge";
 
+// Singletons
 const worldData = WorldData.instance;
+const eventBus = EventBus.instance;
 export default class Node implements IRenderable, IClickable, IDoubleClickable, IDraggable, IHoverable {
     public selected = false;
     public dragging = false;
@@ -20,13 +22,12 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
     public previousZIndex = 1;
     private dragStartPosition = new Vector2D(0, 0);
 
-    private eventBus = EventBus.instance;
-
     public edges: Edge[] = [];
 
     public name: string;
 
     constructor(public readonly id: number, private currentPosition: Vector2D, public r: number) {
+        // Initialise name of the node
         this.name = `Node ${this.id}`;
     }
 
@@ -53,7 +54,6 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
         context.fill();
         context.closePath();
 
-        // Draw node name
         // Truncate the name of the node if it too long
         let name = this.name;
         if (context.measureText(name).width * window.devicePixelRatio > 40) {
@@ -62,6 +62,7 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
             name += "...";
         }
 
+        // Draw node name
         context.font = "12px Arial";
         context.textBaseline = "middle";
         context.textAlign = "center";
@@ -119,7 +120,7 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
     }
 
     public onDoubleClick(clickGesture: ClickGesture) {
-        this.eventBus.emit("toggleSidebar", this);
+        eventBus.emit("toggleSidebar", this);
     }
 
     public onDragStart(dragGesture: DragGesture) {

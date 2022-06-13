@@ -2,22 +2,3 @@ canvas {
     width: 75%;
     height: 100%;
 }
-
-.reset-zoom-icon {
-    position: absolute;
-    z-index: 100;
-    margin: 0.5em;
-    color: grey;
-    transform: scale(1);
-    transition: color 0.3s linear, transform 0.2s;
-
-    &:hover {
-        color: black;
-        transform: scale(1.05);
-    }
-
-    &:active {
-        transform: scale(0.9);
-        transition: transform 0.1s;
-    }
-}

@@ -1,19 +1,11 @@
 import { useEffect, useRef } from "react";
-import { MdZoomOutMap } from "react-icons/md";
 
 import "./Canvas.scss";
 
 import Renderer from "../../renderer/Renderer";
-import EventBus from "../../shared/EventBus";
-
-const eventBus = EventBus.instance;
 
 const Canvas = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-
-    const resetCameraZoom = () => {
-        eventBus.emit("resetCameraZoom");
-    };
 
     // Run when component mounts
     useEffect(() => {
@@ -29,12 +21,7 @@ const Canvas = () => {
         }
     }, []);
 
-    return (
-        <>
-            <MdZoomOutMap className="reset-zoom-icon" size="30px" onClick={resetCameraZoom} title={"Reset zoom"} />
-            <canvas ref={canvasRef} tabIndex={1} onClick={() => canvasRef.current?.focus()} />
-        </>
-    );
+    return <canvas ref={canvasRef} tabIndex={1} onClick={() => canvasRef.current?.focus()} />;
 };
 
 export default Canvas;
