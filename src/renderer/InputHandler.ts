@@ -216,14 +216,18 @@ export default class InputHandler {
     }
 
     private onHover(position: Vector2D) {
+        const hoverGesture: HoverGesture = {
+            world: this.world
+        };
+
         if (this.world.currentlyHoveringOver) {
-            if (this.world.currentlyHoveringOver.isMouseOver(position)) this.world.currentlyHoveringOver.onHovering();
-            else this.world.currentlyHoveringOver.onExitHover();
+            if (this.world.currentlyHoveringOver.isMouseOver(position)) return;
+            else this.world.currentlyHoveringOver.onExitHover(hoverGesture);
             return;
         }
 
         const hoverable = this.getInteractable(this.world.hoverablesInView, position) as IHoverable;
-        hoverable?.onEnterHover();
+        hoverable?.onEnterHover(hoverGesture);
     }
 
     private onResize() {

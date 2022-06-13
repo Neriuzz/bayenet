@@ -1,5 +1,5 @@
 import EventBus from "../../shared/EventBus";
-import { ClickGesture, DragGesture } from "../gestures";
+import { ClickGesture, DragGesture, HoverGesture } from "../gestures";
 import IClickable from "../interfaces/IClickable";
 import IDoubleClickable from "../interfaces/IDoubleClickable";
 import IDraggable from "../interfaces/IDraggable";
@@ -140,16 +140,12 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
         this.zIndex = dragGesture.zIndex || this.zIndex;
     }
 
-    public onEnterHover() {
+    public onEnterHover(hoverGesture: HoverGesture) {
         this.hovering = true;
         console.log(`Started hovering over node ${this.id}`);
     }
 
-    public onHovering() {
-        console.log(`Hovering over node ${this.id}`);
-    }
-
-    public onExitHover() {
+    public onExitHover(hoverGesture: HoverGesture) {
         this.hovering = false;
         console.log(`Stopped hovering over node ${this.id}`);
     }

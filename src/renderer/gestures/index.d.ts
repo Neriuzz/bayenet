@@ -13,7 +13,9 @@ export type DragGesture = {
     zIndex?: number;
 };
 
-export type HoverGesture = {};
+export type HoverGesture = {
+    world: World;
+};
 
 export type KeyGesture = {
     key: string;

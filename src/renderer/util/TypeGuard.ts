@@ -33,10 +33,7 @@ function isDraggable(object: unknown): object is IDraggable {
 function isHoverable(object: unknown): object is IHoverable {
     const hoverable = object as IHoverable;
     return (
-        hoverable.hovering !== undefined &&
-        hoverable.onHovering !== undefined &&
-        hoverable.onEnterHover !== undefined &&
-        hoverable.onExitHover !== undefined
+        hoverable.hovering !== undefined && hoverable.onEnterHover !== undefined && hoverable.onExitHover !== undefined
     );
 }
 
