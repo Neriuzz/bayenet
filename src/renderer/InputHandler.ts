@@ -116,23 +116,26 @@ export default class InputHandler {
         // Get the position of the click, accounting for context transformations
         const position = this.getTruePosition(event);
 
-        this.timer = setTimeout(() => {
-            const clickGesture: ClickGesture = {
-                position,
-                alt: event.altKey,
-                shift: event.shiftKey,
-                world: this.world
-            };
+        this.timer = setTimeout(
+            () => {
+                const clickGesture: ClickGesture = {
+                    position,
+                    alt: event.altKey,
+                    shift: event.shiftKey,
+                    world: this.world
+                };
 
-            // Attempt the retrieve the clickable that the mouse is hovering over
-            const clickable = this.getInteractable(this.world.clickablesInView, position) as IClickable;
+                // Attempt the retrieve the clickable that the mouse is hovering over
+                const clickable = this.getInteractable(this.world.clickablesInView, position) as IClickable;
 
-            // If there is a clickable, call its onclick handler, otherwise call the onclick handler of the board itself
-            clickable ? clickable.onClick(clickGesture) : this.world.board.onClick(clickGesture);
+                // If there is a clickable, call its onclick handler, otherwise call the onclick handler of the board itself
+                clickable ? clickable.onClick(clickGesture) : this.world.board.onClick(clickGesture);
 
-            // Call on mouse move handler
-            this.onMouseMove(event);
-        }, 200);
+                // Call on mouse move handler
+                this.onMouseMove(event);
+            },
+            this.world.edgeBeingCreated || event.shiftKey ? 0 : 200
+        );
     }
 
     private onDoubleClick(event: MouseEvent) {
