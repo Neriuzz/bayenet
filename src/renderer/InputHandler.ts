@@ -83,12 +83,12 @@ export default class InputHandler {
 
     private onScroll(event: WheelEvent) {
         // Update the scale factor
-        const deltaY = event.deltaY * SCROLL_SENSITIVITY;
-        if (this.world.board.camera.scrollInverted) {
-            this.world.board.camera.scaleFactor -= deltaY;
-        } else {
-            this.world.board.camera.scaleFactor += deltaY;
-        }
+        let deltaY = event.deltaY * SCROLL_SENSITIVITY;
+
+        // Invert scroll
+        if (this.world.board.camera.scrollInverted) deltaY = -deltaY;
+
+        this.world.board.camera.scaleFactor += deltaY;
 
         // Clamp the scale factor to a maximum and minimum value
         this.world.board.camera.scaleFactor = Math.min(this.world.board.camera.scaleFactor, MAX_ZOOM);
