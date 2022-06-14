@@ -5,17 +5,23 @@ const eventBus = EventBus.instance;
 export default class Camera {
     public position: Vector2D;
     public scaleFactor = 1;
+    public scrollInverted = false;
 
     constructor(public readonly canvas: HTMLCanvasElement, public readonly context: CanvasRenderingContext2D) {
         this.position = new Vector2D(0, 0);
 
         // Register event handler for resetting zoom level
         eventBus.on("resetCameraZoom", () => this.resetZoom());
+        eventBus.on("invertCameraScroll", () => this.invertScroll());
     }
 
     // TODO: Smoothly reset the zoom if you have time in the future
     public resetZoom() {
         this.scaleFactor = 1;
+    }
+
+    public invertScroll() {
+        this.scrollInverted = !this.scrollInverted;
     }
 
     public clearScreen() {

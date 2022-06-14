@@ -10,6 +10,7 @@ import IInteractable from "./interfaces/IInteractable";
 import Vector2D from "./util/Vector2D";
 import World from "./World";
 
+// Constants for zooming functionality
 const MAX_ZOOM = 2;
 const MIN_ZOOM = 0.5;
 const SCROLL_SENSITIVITY = 0.0005;
@@ -83,7 +84,11 @@ export default class InputHandler {
     private onScroll(event: WheelEvent) {
         // Update the scale factor
         const deltaY = event.deltaY * SCROLL_SENSITIVITY;
-        this.world.board.camera.scaleFactor += deltaY;
+        if (this.world.board.camera.scrollInverted) {
+            this.world.board.camera.scaleFactor -= deltaY;
+        } else {
+            this.world.board.camera.scaleFactor += deltaY;
+        }
 
         // Clamp the scale factor to a maximum and minimum value
         this.world.board.camera.scaleFactor = Math.min(this.world.board.camera.scaleFactor, MAX_ZOOM);
@@ -104,6 +109,7 @@ export default class InputHandler {
             world: this.world
         };
 
+        // Call the onKeyDown handler of the board
         this.world.board.onKeyDown(keyGesture);
     }
 
@@ -116,6 +122,7 @@ export default class InputHandler {
         // Get the position of the click, accounting for context transformations
         const position = this.getTruePosition(event);
 
+        // Set a click delay to differentiate between single and double clicks
         this.timer = setTimeout(
             () => {
                 const clickGesture: ClickGesture = {
@@ -134,6 +141,7 @@ export default class InputHandler {
                 // Call on mouse move handler
                 this.onMouseMove(event);
             },
+            // Set the click delay to 0 if we are currently creating an edge
             this.world.edgeBeingCreated || event.shiftKey ? 0 : 200
         );
     }
