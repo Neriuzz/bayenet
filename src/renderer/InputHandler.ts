@@ -1,19 +1,26 @@
 // Gestures
 import { ClickGesture, DragGesture, HoverGesture, KeyGesture } from "./gestures";
+
 // Interfaces
 import IClickable from "./interfaces/IClickable";
 import IDoubleClickable from "./interfaces/IDoubleClickable";
 import IDraggable from "./interfaces/IDraggable";
 import IHoverable from "./interfaces/IHoverable";
 import IInteractable from "./interfaces/IInteractable";
+
 // Required imports
 import Vector2D from "./util/Vector2D";
 import World from "./World";
+
+// Event bus
+import EventBus from "../shared/EventBus";
+const eventBus = EventBus.instance;
 
 // Constants for zooming functionality
 const MAX_ZOOM = 2;
 const MIN_ZOOM = 0.5;
 const SCROLL_SENSITIVITY = 0.0005;
+
 export default class InputHandler {
     private dragging = false;
 
@@ -170,6 +177,7 @@ export default class InputHandler {
     }
 
     private onMouseDown(event: MouseEvent) {
+        eventBus.emit("toggleNodeInformation");
         event.preventDefault();
 
         this.dragging = false;

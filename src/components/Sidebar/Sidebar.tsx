@@ -12,13 +12,13 @@ const eventBus = EventBus.instance;
 const Sidebar = () => {
     const [node, setNode] = useState<Node>();
 
-    const handleToggleSidebar = (node: Node) => {
+    const handleToggleNodeInformation = (node: Node) => {
         setNode(node);
     };
 
     useEffect(() => {
-        eventBus.on("toggleSidebar", handleToggleSidebar);
-        return () => eventBus.stopListening("toggleSidebar", handleToggleSidebar);
+        eventBus.on("toggleNodeInformation", handleToggleNodeInformation);
+        return () => eventBus.stopListening("toggleNodeInformation", handleToggleNodeInformation);
     }, []);
 
     return <div className="sidebar">{(node && <NodeInformation node={node} />) || <NetworkInformation />}</div>;

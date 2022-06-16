@@ -19,7 +19,7 @@ export default class Board {
     }
 
     public onClick(clickGesture: ClickGesture) {
-        this.eventBus.emit("toggleSidebar");
+        this.eventBus.emit("toggleNodeInformation");
 
         if (clickGesture.world.edgeBeingCreated) clickGesture.world.undo();
 

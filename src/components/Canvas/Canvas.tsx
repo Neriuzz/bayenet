@@ -7,6 +7,11 @@ import Renderer from "../../renderer/Renderer";
 const Canvas = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
+    const handleCanvasClick = () => {
+        // Focus on canvas when clicked
+        canvasRef.current?.focus();
+    };
+
     // Run when component mounts
     useEffect(() => {
         // Focus the canvas and retrieve 2D context.
@@ -21,7 +26,7 @@ const Canvas = () => {
         }
     }, []);
 
-    return <canvas ref={canvasRef} tabIndex={1} onClick={() => canvasRef.current?.focus()} />;
+    return <canvas ref={canvasRef} tabIndex={1} onClick={handleCanvasClick} />;
 };
 
 export default Canvas;

@@ -24,6 +24,7 @@ export default class World {
     constructor(public readonly board: Board) {}
 
     public addEntity(entity: IEntity) {
+        // Add entity to entity array and to recent entities for undo ability
         this.entities.push(entity);
         this.recentlyCreatedEntities.push(entity);
     }
@@ -31,20 +32,36 @@ export default class World {
     public removeEntity(entity: IEntity) {
         if (entity instanceof Node) {
             const node = entity as Node;
+
+            // Remove each edge of the node
             node.edges.forEach((edge) => this.removeEntity(edge));
+
+            // Send message to frontend
             eventBus.emit("nodeDeleted");
         }
 
         if (entity instanceof Edge) {
             const edge = entity as Edge;
-            edge.from.edges = edge.from.edges.filter((_edge) => _edge.id !== edge.id);
-            if (edge.to) edge.to.edges = edge.to.edges.filter((_edge) => _edge.id !== edge.id);
+            if (edge.to) {
+                // Remove edge from child node
+                edge.to.edges = edge.to.edges.filter((_edge) => _edge.id !== edge.id);
 
+                // Remove parent from child data
+                edge.to.data.parents = edge.to.data.parents.filter((id) => id !== `${edge.from.id}`);
+            }
+
+            // Remove edge from parent node
+            edge.from.edges = edge.from.edges.filter((_edge) => _edge.id !== edge.id);
+
+            // Send message to frontend
             eventBus.emit("edgeDeleted");
         }
 
+        // Remove edge from entities and recently created entities
         this.entities = this.entities.filter((_entity) => _entity.id !== entity.id);
         this.recentlyCreatedEntities = this.recentlyCreatedEntities.filter((_entity) => _entity.id !== entity.id);
+
+        // Reset the Markov blanket
         this.markovBlanket = new Set();
     }
 

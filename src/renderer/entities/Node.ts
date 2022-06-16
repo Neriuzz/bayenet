@@ -148,7 +148,7 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
     }
 
     public onDoubleClick(clickGesture: ClickGesture) {
-        eventBus.emit("toggleSidebar", this);
+        eventBus.emit("toggleNodeInformation", this);
     }
 
     public onDragStart(dragGesture: DragGesture) {
