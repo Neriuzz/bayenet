@@ -1,3 +1,4 @@
+import BayesianNode from "../../shared/DataModels/bayesian-node";
 import EventBus from "../../shared/EventBus";
 import WorldData from "../../shared/WorldData";
 import { ClickGesture, DragGesture, HoverGesture } from "../gestures";
@@ -24,11 +25,14 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
 
     public edges: Edge[] = [];
 
-    public name: string;
+    private _name: string;
+
+    public data: BayesianNode;
 
     constructor(public readonly id: number, private currentPosition: Vector2D, public r: number) {
         // Initialise name of the node
-        this.name = `Node ${this.id}`;
+        this._name = `Node ${this.id}`;
+        this.data = new BayesianNode(this._name, `${this.id}`, []);
     }
 
     public render(context: CanvasRenderingContext2D) {
@@ -55,7 +59,7 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
         context.closePath();
 
         // Truncate the name of the node if it too long
-        let name = this.name;
+        let name = this._name;
         if (context.measureText(name).width * window.devicePixelRatio > 40) {
             while (context.measureText(name).width * window.devicePixelRatio > 30)
                 name = name.substring(0, name.length - 1);
@@ -94,14 +98,38 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
         return this.currentPosition;
     }
 
+    public get name() {
+        return this._name;
+    }
+
+    public set name(newName: string) {
+        // Do not set a new name if the name provided is empty
+        if (newName.length === 0) return;
+
+        // Update node name
+        this._name = newName;
+        this.data.name = newName;
+    }
+
     public onClick(clickGesture: ClickGesture) {
+        console.log(this.data);
+
         if (clickGesture.world.edgeBeingCreated) {
+            // Retrieve the current edge being created
             const edge = clickGesture.world.edgeBeingCreated;
+
+            // Update edge data
             edge.to = this;
             edge.zIndex = 0;
             edge.from.zIndex = edge.from.previousZIndex;
             this.edges.push(edge);
+
+            // Don't allow to create edge if it creates a cycle in the network
             if (edge.from.id === this.id || isCyclic(clickGesture.world.nodes)) clickGesture.world.undo();
+
+            // Update parents in the data
+            this.data.parents.push(`${edge.from.id}`);
+
             return;
         }
 

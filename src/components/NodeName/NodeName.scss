@@ -1,0 +1,15 @@
+.node-name {
+    border: 0px solid #36393f;
+    font-size: larger;
+    text-align: center;
+    outline: none;
+    color: white;
+    background-color: #36393f;
+    transition: border 0.3s;
+    margin-bottom: 5px;
+    height: 1.5em;
+
+    &:focus {
+        border-bottom: 1px solid white;
+    }
+}

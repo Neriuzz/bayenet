@@ -1,36 +1,28 @@
-import { useRef } from "react";
-import Node from "../../renderer/entities/Node";
+// Styling
 import "./NodeInformation.scss";
 
-interface NodeInformationProps {
+// Components
+import NodeName from "../NodeName/NodeName";
+
+// Node entity
+import Node from "../../renderer/entities/Node";
+import NodeStates from "../NodeStates/NodeStates";
+import NodeCPT from "../NodeCPT/NodeCPT";
+
+export interface NodeInformationProps {
     node: Node;
 }
 
-const NodeInformation = (props: NodeInformationProps) => {
-    const inputRef = useRef<HTMLInputElement>(null);
-
-    const handleNameChange = (newName: string) => {
-        props.node.name = newName;
-    };
-
-    const handleKeyDown = (key: string) => {
-        if (key === "Enter") inputRef.current?.blur();
+const NodeInformation = ({ node }: NodeInformationProps) => {
+    const updateName = (newName: string) => {
+        node.name = newName;
     };
 
     return (
         <div className="node-information">
-            <input
-                key={Math.random()}
-                type="text"
-                name="node-name"
-                className="node-name"
-                defaultValue={props.node.name}
-                autoComplete="off"
-                onChange={(event) => handleNameChange(event.target.value)}
-                onKeyDown={(event) => handleKeyDown(event.key)}
-                ref={inputRef}
-            />
-            <p className="position"> {`Postion: (${props.node.position.x}, ${props.node.position.y})`} </p>
+            <NodeName name={node.name} updateName={updateName} />
+            <NodeStates states={node.data.states} stateProbabilities={node.data.stateProbabilities} />
+            <NodeCPT cpt={node.data.cpt} />
         </div>
     );
 };

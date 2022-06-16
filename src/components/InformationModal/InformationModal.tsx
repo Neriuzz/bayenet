@@ -6,7 +6,7 @@ import { CgScrollV } from "react-icons/cg";
 
 import "./InformationModal.scss";
 
-interface InformationalModalProps {
+export interface InformationalModalProps {
     setShowModal: (value: React.SetStateAction<boolean>) => void;
 }
 
