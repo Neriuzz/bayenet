@@ -1,20 +1,28 @@
+// Styles
 import "./NetworkInformation.scss";
 
+// React
 import { useEffect, useState } from "react";
+
+// Icons
 import { BsInfoCircle } from "react-icons/bs";
 import { VscCircleLargeOutline } from "react-icons/vsc";
 import { AiOutlineNodeIndex } from "react-icons/ai";
 
+// Singleton data classes
 import EventBus from "../../shared/EventBus";
 import WorldData from "../../shared/WorldData";
 
+// Setup singleton instances
 const eventBus = EventBus.instance;
 const worldData = WorldData.instance;
 
 const NetworkInformation = () => {
+    // State for network information
     const [nodeCount, setNodeCount] = useState(worldData.numberOfNodes);
     const [edgeCount, setEdgeCount] = useState(worldData.numberOfEdges);
 
+    // Event handlers
     const handleNodeCreated = () => {
         setNodeCount((nodeCount) => nodeCount + 1);
     };

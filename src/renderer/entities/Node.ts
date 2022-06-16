@@ -173,13 +173,19 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
     }
 
     public onEnterHover(hoverGesture: HoverGesture) {
+        // Do not call hover events if we are currently creating an edge
         if (hoverGesture.world.edgeBeingCreated) return;
+
         this.hovering = true;
+
+        // Get this nodes Markov blanket
         hoverGesture.world.setMarkovBlanket(this);
     }
 
     public onExitHover(hoverGesture: HoverGesture) {
         this.hovering = false;
+
+        // Clear the current Markov blanket
         hoverGesture.world.clearMarkovBlanket();
     }
 }
