@@ -5,7 +5,6 @@
     justify-content: center;
     gap: 1em;
     color: white;
-    margin-top: 2em;
     width: 100%;
 }
 
@@ -23,7 +22,7 @@
 }
 
 .state-name {
-    font-size: large;
+    font-size: small;
     color: rgba(255, 255, 255, 0.9);
     min-width: 3em;
     max-width: 3em;
@@ -32,7 +31,7 @@
 }
 
 .state-probability {
-    font-size: small;
+    font-size: smaller;
     color: rgba(255, 255, 255, 0.75);
     margin-left: 0.5em;
 }

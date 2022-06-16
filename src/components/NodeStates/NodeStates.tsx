@@ -27,7 +27,9 @@ const NodeStates = ({ states, stateProbabilities }: NodeStatesProps) => {
                             backgroundColor: colourHash.hex(state)
                         }}
                     ></div>
-                    <p className="state-probability">{`${Math.floor(stateProbabilities[state] * 100)}%`}</p>
+                    <p className="state-probability" title={stateProbabilities[state].toString()}>{`${Math.floor(
+                        stateProbabilities[state] * 100
+                    )}%`}</p>
                 </div>
             ))}
         </div>

@@ -21,7 +21,9 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
     return (
         <div className="node-information">
             <NodeName name={node.name} updateName={updateName} />
+            <p className="node-information-tooltip">States</p>
             <NodeStates states={node.data.states} stateProbabilities={node.data.stateProbabilities} />
+            <p className="node-information-tooltip">Conditional Probability Table</p>
             <NodeCPT cpt={node.data.cpt} />
         </div>
     );

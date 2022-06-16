@@ -3,8 +3,15 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 2em;
 
     animation: fade-in 2s;
+}
+
+.node-information-tooltip {
+    align-self: flex-start;
+    font-size: larger;
+    color: white;
 }
 
 @keyframes fade-in {
