@@ -15,4 +15,8 @@ export default class BayesianNode {
         this.stateProbabilities = { True: 0.5, False: 0.5 };
         this.cpt = { True: 0.5, False: 0.5 };
     }
+
+    public hasParents() {
+        return this.parents.length > 0;
+    }
 }
