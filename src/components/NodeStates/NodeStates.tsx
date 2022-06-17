@@ -59,7 +59,10 @@ const NodeStates = ({ states, stateProbabilities, addState }: NodeStatesProps) =
                     <div
                         className="state-probability-bar"
                         style={{
-                            width: `${Math.floor(stateProbabilities[state] * 100)}%`,
+                            width:
+                                stateProbabilities[state] > 0.025
+                                    ? `${Math.floor(stateProbabilities[state] * 100)}%`
+                                    : "2%",
                             backgroundColor: colourHash.hex(state)
                         }}
                         title={stateProbabilities[state].toString()}
