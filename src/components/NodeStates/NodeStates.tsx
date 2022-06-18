@@ -5,7 +5,7 @@ import { AiFillPlusCircle } from "react-icons/ai";
 import { BsTrash } from "react-icons/bs";
 
 // Types
-import { StateProbabilities } from "../../shared/DataModels/bayesian-node";
+import { INodeResult } from "bayesjs";
 
 // For probability bar colours
 import ColorHash from "color-hash";
@@ -14,7 +14,7 @@ import ColorHash from "color-hash";
 import "./NodeStates.scss";
 export interface NodeStatesProps {
     states: string[];
-    stateProbabilities: StateProbabilities;
+    stateProbabilities: INodeResult;
     addState: (name: string) => void;
     removeState: (index: number) => void;
 }

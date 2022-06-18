@@ -27,10 +27,11 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
     };
 
     const addState = (state: string) => {
+        // Add new state to node states and set initial probability to 0
         node.data.states.push(state);
-        node.data.stateProbabilities[state] = 0.0;
+        node.data.probabilities[state] = 0.0;
 
-        if (node.data.hasParents()) {
+        if (node.hasParents()) {
             //
         } else {
             // Node does not have parents
@@ -47,9 +48,9 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
 
         // Remove state from node states and state probabilities
         node.data.states.splice(index, 1);
-        delete node.data.stateProbabilities[state];
+        delete node.data.probabilities[state];
 
-        if (node.data.hasParents()) {
+        if (node.hasParents()) {
             //
         } else {
             delete (node.data.cpt as ICptWithoutParents)[state];
@@ -65,12 +66,12 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
             <p className="node-information-tooltip">States</p>
             <NodeStates
                 states={node.data.states}
-                stateProbabilities={node.data.stateProbabilities}
+                stateProbabilities={node.data.probabilities}
                 addState={addState}
                 removeState={removeState}
             />
             <p className="node-information-tooltip">Conditional Probability Table</p>
-            <NodeCPT cpt={node.data.cpt} hasParents={node.data.hasParents()} />
+            <NodeCPT cpt={node.data.cpt} hasParents={node.hasParents()} />
         </div>
     );
 };

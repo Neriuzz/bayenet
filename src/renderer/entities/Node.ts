@@ -1,19 +1,30 @@
-import BayesianNode from "../../shared/DataModels/bayesian-node";
-import EventBus from "../../shared/EventBus";
-import WorldData from "../../shared/WorldData";
+// BayesJS types
+import { INode, INodeResult } from "bayesjs";
+
+// Gestures
 import { ClickGesture, DragGesture, HoverGesture } from "../gestures";
+
+// Interfaces
 import IClickable from "../interfaces/IClickable";
 import IDoubleClickable from "../interfaces/IDoubleClickable";
 import IDraggable from "../interfaces/IDraggable";
 import IHoverable from "../interfaces/IHoverable";
 import IRenderable from "../interfaces/IRenderable";
+
+// Utility functions
 import isCyclic from "../util/GraphUtil";
 import Vector2D from "../util/Vector2D";
+
+// Edge entity
 import Edge from "./Edge";
 
 // Singletons
+import WorldData from "../../shared/WorldData";
+import EventBus from "../../shared/EventBus";
+import { INodeData } from "../../shared/DataModels/bayesian-network";
 const worldData = WorldData.instance;
 const eventBus = EventBus.instance;
+
 export default class Node implements IRenderable, IClickable, IDoubleClickable, IDraggable, IHoverable {
     public selected = false;
     public dragging = false;
@@ -27,12 +38,20 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
 
     private _name: string;
 
-    public data: BayesianNode;
+    public data: INodeData;
 
     constructor(public readonly id: number, private currentPosition: Vector2D, public r: number) {
         // Initialise name of the node
         this._name = `Node ${this.id}`;
-        this.data = new BayesianNode(this._name, `${this.id}`, []);
+
+        // Initialise node as a simple Bayesian node
+        this.data = {
+            id: this.id.toString(),
+            states: ["True", "False"],
+            parents: [],
+            cpt: { True: 0.5, False: 0.5 },
+            probabilities: { True: 0.5, False: 0.5 }
+        };
     }
 
     public render(context: CanvasRenderingContext2D) {
@@ -90,6 +109,10 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
         return this.edges.filter((edge) => edge.from !== this).map((edge) => edge.from);
     }
 
+    public hasParents(): boolean {
+        return this.parents.length > 0;
+    }
+
     public get children(): Node[] {
         return this.edges.filter((edge) => edge.to && edge.to !== this).map((edge) => edge.to!);
     }
@@ -108,7 +131,6 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
 
         // Update node name
         this._name = newName;
-        this.data.name = newName;
     }
 
     public onClick(clickGesture: ClickGesture) {

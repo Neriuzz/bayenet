@@ -1,3 +1,4 @@
+import BayesianNetwork from "../shared/DataModels/bayesian-network";
 import EventBus from "../shared/EventBus";
 import Board from "./entities/Board";
 import Edge from "./entities/Edge";
@@ -20,6 +21,7 @@ export default class World {
     private recentlyCreatedEntities: IEntity[] = [];
 
     public markovBlanket: Set<number | undefined> = new Set();
+    public bayesianNetwork: BayesianNetwork = new BayesianNetwork();
 
     constructor(public readonly board: Board) {}
 
@@ -35,6 +37,9 @@ export default class World {
 
             // Remove each edge of the node
             node.edges.forEach((edge) => this.removeEntity(edge));
+
+            // Remove node from Bayesian network
+            this.bayesianNetwork.removeNode(node.id.toString());
 
             // Send message to frontend
             eventBus.emit("nodeDeleted");
@@ -204,10 +209,19 @@ export default class World {
     }
 
     public createNode(coords: Vector2D) {
+        // Create new node
         const node = new Node(this.nextID++, coords, 30);
+
+        // Add node to rendering world
         this.addEntity(node);
 
+        // Add node to Bayesian network
+        this.bayesianNetwork.addNode(node.id.toString(), node.data);
+
+        // Let frontend know that a node has been created
         eventBus.emit("nodeCreated");
+
+        // Return newly created node
         return node;
     }
 
