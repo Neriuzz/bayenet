@@ -1,4 +1,4 @@
-import BayesianNetwork from "../shared/DataModels/bayesian-network";
+import BayesianNetwork from "../shared/compute/bayesian-network";
 import EventBus from "../shared/EventBus";
 import Board from "./entities/Board";
 import Edge from "./entities/Edge";

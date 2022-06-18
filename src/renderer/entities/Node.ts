@@ -21,7 +21,7 @@ import Edge from "./Edge";
 // Singletons
 import WorldData from "../../shared/WorldData";
 import EventBus from "../../shared/EventBus";
-import { INodeData } from "../../shared/DataModels/bayesian-network";
+import { INodeData } from "../../shared/compute/bayesian-network";
 const worldData = WorldData.instance;
 const eventBus = EventBus.instance;
 
