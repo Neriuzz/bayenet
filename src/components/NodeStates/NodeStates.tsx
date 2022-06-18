@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 
 // Icons
 import { AiFillPlusCircle } from "react-icons/ai";
+import { BsTrash } from "react-icons/bs";
 
 // Types
 import { StateProbabilities } from "../../shared/DataModels/bayesian-node";
@@ -15,9 +16,10 @@ export interface NodeStatesProps {
     states: string[];
     stateProbabilities: StateProbabilities;
     addState: (name: string) => void;
+    removeState: (index: number) => void;
 }
 
-const NodeStates = ({ states, stateProbabilities, addState }: NodeStatesProps) => {
+const NodeStates = ({ states, stateProbabilities, addState, removeState }: NodeStatesProps) => {
     const [addingState, setAddingState] = useState(false);
 
     const inputRef = useRef<HTMLInputElement>(null);
@@ -26,6 +28,10 @@ const NodeStates = ({ states, stateProbabilities, addState }: NodeStatesProps) =
 
     const handleAddStateButtonClicked = () => {
         setAddingState(true);
+    };
+
+    const handleRemoveStateButtonClicked = (index: number) => {
+        removeState(index);
     };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -76,6 +82,14 @@ const NodeStates = ({ states, stateProbabilities, addState }: NodeStatesProps) =
                         title={stateProbabilities[state].toString()}
                     ></div>
                     <p className="state-probability">{`${Math.floor(stateProbabilities[state] * 100)}%`}</p>
+                    <div className="node-state-buttons">
+                        <BsTrash
+                            className="node-state-button"
+                            size="20px"
+                            title="Remove state"
+                            onClick={() => handleRemoveStateButtonClicked(index)}
+                        />
+                    </div>
                 </div>
             ))}
             <div className="add-state">
@@ -95,7 +109,7 @@ const NodeStates = ({ states, stateProbabilities, addState }: NodeStatesProps) =
                 ) : (
                     <AiFillPlusCircle
                         size="35px"
-                        className="add-state-button"
+                        className="node-state-button"
                         onClick={handleAddStateButtonClicked}
                         title="Add new state to node"
                     />

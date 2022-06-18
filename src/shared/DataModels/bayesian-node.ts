@@ -12,7 +12,7 @@ export default class BayesianNode {
     constructor(public name: string, public id: string, public parents: string[]) {
         // Initialise the Bayesian node as a simple two-state node
         this.states = ["True", "False"];
-        this.stateProbabilities = { True: 0.5, False: 0.5 };
+        this.stateProbabilities = { True: 1, False: 0.5 };
         this.cpt = { True: 0.5, False: 0.5 };
     }
 

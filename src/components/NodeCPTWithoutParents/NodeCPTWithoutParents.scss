@@ -1,0 +1,27 @@
+.cpt-table-no-parents {
+    width: 100%;
+    border-collapse: collapse;
+    color: white;
+}
+
+.table-state {
+    min-width: 5em;
+    overflow: auto;
+}
+
+.cpt-table-no-parents,
+.table-states,
+.table-probabilities,
+.table-state,
+.table-probability {
+    border: 1px solid;
+}
+
+.table-state,
+.table-probability {
+    padding: 0.5em;
+}
+
+.table-probabilities {
+    text-align: center;
+}
