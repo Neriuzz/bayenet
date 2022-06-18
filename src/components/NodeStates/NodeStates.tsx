@@ -19,6 +19,7 @@ export interface NodeStatesProps {
 
 const NodeStates = ({ states, stateProbabilities, addState }: NodeStatesProps) => {
     const [addingState, setAddingState] = useState(false);
+
     const inputRef = useRef<HTMLInputElement>(null);
 
     const colourHash = new ColorHash();
@@ -33,10 +34,17 @@ const NodeStates = ({ states, stateProbabilities, addState }: NodeStatesProps) =
             const name = inputRef.current?.value || "";
 
             // Do not allow a state that is empty
-            if (name.length <= 0) return;
+            if (name.length <= 0) {
+                // Set input field border to red to indicate that there is an error
+                inputRef.current!.style.borderBottom = "1px solid red";
+                return;
+            }
 
             // Do not allow a state that already exists
-            if (states.find((state) => state.toLowerCase() === name.toLowerCase())) return;
+            if (states.find((state) => state.toLowerCase() === name.toLowerCase())) {
+                inputRef.current!.style.borderBottom = "1px solid red";
+                return;
+            }
 
             // Add new state to the node
             addState(name);
