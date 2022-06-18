@@ -52,7 +52,10 @@ export default class World {
                 edge.to.edges = edge.to.edges.filter((_edge) => _edge.id !== edge.id);
 
                 // Remove parent from child data
-                edge.to.data.parents = edge.to.data.parents.filter((id) => id !== `${edge.from.id}`);
+                edge.to.data.parents = edge.to.data.parents.filter((id) => id !== edge.from.id.toString());
+
+                // Revert child node cpt back to one without parents if it has no more parents
+                if (!edge.to.hasParents()) edge.to.data.cpt = edge.to.data.probabilities;
             }
 
             // Remove edge from parent node

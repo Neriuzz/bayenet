@@ -46,6 +46,7 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
 
         // Initialise node as a simple Bayesian node
         this.data = {
+            name: this.name,
             id: this.id.toString(),
             states: ["True", "False"],
             parents: [],
@@ -131,11 +132,10 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
 
         // Update node name
         this._name = newName;
+        this.data.name = newName;
     }
 
     public onClick(clickGesture: ClickGesture) {
-        console.log(this.data);
-
         if (clickGesture.world.edgeBeingCreated) {
             // Retrieve the current edge being created
             const edge = clickGesture.world.edgeBeingCreated;
@@ -150,7 +150,7 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
             if (edge.from.id === this.id || isCyclic(clickGesture.world.nodes)) clickGesture.world.undo();
 
             // Update parents in the data
-            this.data.parents.push(`${edge.from.id}`);
+            this.data.parents.push(edge.from.id.toString());
 
             return;
         }
