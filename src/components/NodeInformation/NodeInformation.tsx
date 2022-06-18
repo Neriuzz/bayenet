@@ -1,19 +1,27 @@
+import { useReducer } from "react";
+
 // Styling
 import "./NodeInformation.scss";
 
 // Components
 import NodeName from "../NodeName/NodeName";
-
-// Node entity
-import Node from "../../renderer/entities/Node";
 import NodeStates from "../NodeStates/NodeStates";
 import NodeCPT from "../NodeCPT/NodeCPT";
 
+// Node entity
+import Node from "../../renderer/entities/Node";
+
+// Types
+import { ICptWithoutParents } from "bayesjs";
+
+// Component prop types
 export interface NodeInformationProps {
     node: Node;
 }
 
 const NodeInformation = ({ node }: NodeInformationProps) => {
+    const [, forceRender] = useReducer((s) => s + 1, 0);
+
     const updateName = (newName: string) => {
         node.name = newName;
     };
@@ -22,7 +30,15 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
         node.data.states.push(name);
         node.data.stateProbabilities[name] = 0.0;
 
-        // TODO: Add new state to CPT depending on whether the node has parents or not
+        if (node.data.hasParents()) {
+            return;
+        }
+
+        // Node does not have parents
+        (node.data.cpt as ICptWithoutParents)[name] = 0.0;
+
+        // Rerender the component forcefully, so CPTs are updated
+        forceRender();
     };
 
     return (
