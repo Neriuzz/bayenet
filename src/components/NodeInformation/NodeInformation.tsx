@@ -59,10 +59,6 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
         forceRender();
     };
 
-    const renameState = (state: string, newName: string) => {
-        //
-    };
-
     return (
         <div className="node-information">
             <NodeName name={node.name} updateName={updateName} />
