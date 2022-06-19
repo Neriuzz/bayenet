@@ -12,15 +12,16 @@ import "./NodeCPT.scss";
 export interface NodeCPTProps {
     cpt: ICptWithParents | ICptWithoutParents;
     hasParents: boolean;
+    updateCPT: (newCpt: ICptWithParents | ICptWithoutParents) => void;
 }
 
-const NodeCPT = ({ cpt, hasParents }: NodeCPTProps) => {
+const NodeCPT = ({ cpt, hasParents, updateCPT }: NodeCPTProps) => {
     return (
         <div className="node-cpt">
             {hasParents ? (
                 <NodeCPTWithParents cpt={cpt as ICptWithParents} />
             ) : (
-                <NodeCPTWithoutParents cpt={cpt as ICptWithoutParents} />
+                <NodeCPTWithoutParents cpt={cpt as ICptWithoutParents} updateCPT={updateCPT} />
             )}
         </div>
     );

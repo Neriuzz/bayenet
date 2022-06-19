@@ -12,7 +12,11 @@ import NodeCPT from "../NodeCPT/NodeCPT";
 import Node from "../../renderer/entities/Node";
 
 // Types
-import { ICptWithoutParents } from "bayesjs";
+import { ICptWithoutParents, ICptWithParents } from "bayesjs";
+
+// EventBus singleton
+import EventBus from "../../shared/EventBus";
+const eventBus = EventBus.instance;
 
 // Component prop types
 export interface NodeInformationProps {
@@ -66,6 +70,17 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
         forceRender();
     };
 
+    const updateCPT = (newCpt: ICptWithParents | ICptWithoutParents) => {
+        // Update node cpt
+        node.data.cpt = newCpt;
+
+        // Infer new state probabilities for entire network
+        eventBus.emit("inferAll");
+
+        // Rerender for visual updates
+        forceRender();
+    };
+
     return (
         <div className="node-information">
             <NodeName name={node.name} updateName={updateName} />
@@ -77,7 +92,7 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
                 removeState={removeState}
             />
             <p className="node-information-tooltip">Conditional Probability Table</p>
-            <NodeCPT cpt={node.data.cpt} hasParents={node.hasParents()} />
+            <NodeCPT cpt={node.data.cpt} hasParents={node.hasParents()} updateCPT={updateCPT} />
         </div>
     );
 };

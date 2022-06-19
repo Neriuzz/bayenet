@@ -81,7 +81,7 @@ const NodeStates = ({ states, stateProbabilities, addState, removeState }: NodeS
                         }}
                         title={stateProbabilities[state].toString()}
                     ></div>
-                    <p className="state-probability">{`${Math.floor(stateProbabilities[state] * 100)}%`}</p>
+                    <p className="state-probability">{`${Math.round(stateProbabilities[state] * 100)}%`}</p>
                     <div className="node-state-buttons">
                         <BsTrash
                             className="node-state-button"
