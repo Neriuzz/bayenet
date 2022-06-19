@@ -1,3 +1,7 @@
+/**
+ * @description Utility class to provide run-time interface type checking
+ */
+
 // Interfaces
 import IClickable from "../interfaces/IClickable";
 import IDoubleClickable from "../interfaces/IDoubleClickable";

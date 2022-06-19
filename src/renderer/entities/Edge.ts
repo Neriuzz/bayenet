@@ -1,10 +1,18 @@
-import WorldData from "../../shared/WorldData";
+// Gestures
 import { ClickGesture } from "../gestures";
+
+// Interaces
 import IClickable from "../interfaces/IClickable";
 import IRenderable from "../interfaces/IRenderable";
-import Vector2D from "../util/Vector2D";
+
+// Entities
 import Node from "./Node";
 
+// Utility
+import Vector2D from "../util/Vector2D";
+
+// World data instance
+import WorldData from "../../shared/WorldData";
 const worldData = WorldData.instance;
 export default class Edge implements IRenderable, IClickable {
     public zIndex = 0;

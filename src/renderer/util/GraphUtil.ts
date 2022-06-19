@@ -1,6 +1,8 @@
 /**
  * @author Nerius Ilmonas
  */
+
+// Entities
 import Node from "../entities/Node";
 
 /**

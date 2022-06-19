@@ -1,16 +1,20 @@
-import EventBus from "../../shared/EventBus";
-
+// Camera
 import Camera from "../Camera";
+
+// Gestures
 import { ClickGesture, DragGesture, KeyGesture } from "../gestures";
+
+// Utility
 import Vector2D from "../util/Vector2D";
 
+// Eventbus singleton
+import EventBus from "../../shared/EventBus";
+const eventBus = EventBus.instance;
 export default class Board {
     public dragging = false;
 
     private currentPosition = new Vector2D(0, 0);
     private dragStartPosition = new Vector2D(0, 0);
-
-    private eventBus = EventBus.instance;
 
     public readonly camera: Camera;
 
@@ -19,7 +23,7 @@ export default class Board {
     }
 
     public onClick(clickGesture: ClickGesture) {
-        this.eventBus.emit("toggleNodeInformation");
+        eventBus.emit("toggleNodeInformation");
 
         if (clickGesture.world.edgeBeingCreated) clickGesture.world.undo();
 

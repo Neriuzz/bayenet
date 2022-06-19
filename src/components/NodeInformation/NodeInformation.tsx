@@ -38,7 +38,10 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
             (node.data.cpt as ICptWithoutParents)[state] = 0.0;
         }
 
-        // Rerender the component forcefully, so CPTs are updated
+        // If node has children, refresh all of their CPTs
+        if (node.hasChildren()) node.children.forEach((child) => child.refreshCPT());
+
+        // Rerender the component so visual changes are displayed
         forceRender();
     };
 
@@ -50,16 +53,16 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
         node.data.states.splice(index, 1);
         delete node.data.probabilities[state];
 
-        // If the node has children, all of their CPTs have to be refreshed
-        if (node.hasChildren()) node.children.forEach((child) => child.refreshCPT());
-
         if (node.hasParents()) {
             //
         } else {
             delete (node.data.cpt as ICptWithoutParents)[state];
         }
 
-        // Rerender the component, so states are updated
+        // If the node has children, refresh all of their CPTs
+        if (node.hasChildren()) node.children.forEach((child) => child.refreshCPT());
+
+        // Rerender the component so visual changes are displayed
         forceRender();
     };
 

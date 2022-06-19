@@ -12,20 +12,24 @@ export interface NodeCPTWithoutParentsProps {
 const NodeCPTWithoutParents = ({ cpt }: NodeCPTWithoutParentsProps) => {
     return (
         <table className="cpt-table-no-parents">
-            <tr className="table-states">
-                {Object.keys(cpt).map((state, index) => (
-                    <th className="table-state" key={index}>
-                        {state}
-                    </th>
-                ))}
-            </tr>
-            <tr className="table-probabilities">
-                {Object.keys(cpt).map((state, index) => (
-                    <td className="table-probability" key={index}>
-                        {cpt[state]}
-                    </td>
-                ))}
-            </tr>
+            <thead>
+                <tr className="table-states">
+                    {Object.keys(cpt).map((state, index) => (
+                        <th className="table-state" key={index}>
+                            {state}
+                        </th>
+                    ))}
+                </tr>
+            </thead>
+            <tbody>
+                <tr className="table-probabilities">
+                    {Object.keys(cpt).map((state, index) => (
+                        <td className="table-probability" key={index}>
+                            {cpt[state]}
+                        </td>
+                    ))}
+                </tr>
+            </tbody>
         </table>
     );
 };

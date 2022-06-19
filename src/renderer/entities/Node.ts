@@ -1,5 +1,6 @@
 // BayesJS types
-import { INode, INodeResult } from "bayesjs";
+import { ICptWithParents } from "bayesjs";
+import { INodeData } from "../../shared/compute/bayesian-network";
 
 // Gestures
 import { ClickGesture, DragGesture, HoverGesture } from "../gestures";
@@ -14,6 +15,7 @@ import IRenderable from "../interfaces/IRenderable";
 // Utility functions
 import isCyclic from "../util/GraphUtil";
 import Vector2D from "../util/Vector2D";
+import generateParentStateCombinations, { ParentAndStates } from "../util/Combinations";
 
 // Edge entity
 import Edge from "./Edge";
@@ -21,8 +23,6 @@ import Edge from "./Edge";
 // Singletons
 import WorldData from "../../shared/WorldData";
 import EventBus from "../../shared/EventBus";
-import { INodeData } from "../../shared/compute/bayesian-network";
-import generateParentStateCombinations, { ParentAndStates } from "../util/Combinations";
 const worldData = WorldData.instance;
 const eventBus = EventBus.instance;
 
@@ -141,6 +141,7 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
     }
 
     public onClick(clickGesture: ClickGesture) {
+        console.log(this.data);
         if (clickGesture.world.edgeBeingCreated) {
             // Retrieve the current edge being created
             const edge = clickGesture.world.edgeBeingCreated;
@@ -232,5 +233,17 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
 
         // Get all possible state combinations
         const stateCombinations = generateParentStateCombinations(parents);
+
+        // If this is the first parent
+        if (this.parents.length === 1) {
+            this.data.cpt = stateCombinations.map((combination) => {
+                return { when: combination, then: this.data.probabilities };
+            });
+        }
+
+        // Otherwise
+        this.data.cpt = stateCombinations.map((combination, index) => {
+            return { when: combination, then: (this.data.cpt as ICptWithParents)[index % this.data.cpt.length].then };
+        });
     }
 }

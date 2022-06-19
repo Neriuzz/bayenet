@@ -10,7 +10,7 @@ export interface ParentAndStates {
 }
 
 /**
- * Generates a key-value pair object
+ * @description Generates a key-value pair object
  *
  * @param key The provided key.
  * @param value The provided value.
@@ -23,7 +23,7 @@ function generateKeyValuePair(key: string, value: string): Record<string, string
 }
 
 /**
- * Generates state combinations for a specific parent node
+ * @description Generates state combinations for a specific parent node
  *
  * @param parent The parent node to generate state combinations for
  * @returns An object containing all possible states
@@ -36,7 +36,7 @@ function createCombinationsForParent(parent: ParentAndStates): Record<string, st
 }
 
 /**
- * Generates all possible combinations of parent states
+ * @description Generates all possible combinations of parent states
  *
  * @param parents List of all parent nodes
  * @returns Returns all possible combinations of parent states, which is then used in the conditional probability table
