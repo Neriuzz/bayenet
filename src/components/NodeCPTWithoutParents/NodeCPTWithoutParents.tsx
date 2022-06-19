@@ -21,11 +21,15 @@ const NodeCPTWithoutParents = ({ cpt, updateCPT }: NodeCPTWithoutParentsProps) =
     // Use a copy to temporarily store changes to the cpt
     const cptCopy = useRef({ ...cpt });
 
+    const badValues = useRef<HTMLInputElement[]>([]);
+
     const handleOnSubmit = () => {
         if (allowSubmit) updateCPT(cptCopy.current);
     };
 
-    const handleOnChange = (state: string, value: number) => {
+    const handleOnChange = (state: string, value: number, inputRef: HTMLInputElement) => {
+        badValues.current.forEach((inputRef) => (inputRef.style.color = "white"));
+
         // Update cpt copy
         cptCopy.current[state] = value;
 
@@ -37,11 +41,19 @@ const NodeCPTWithoutParents = ({ cpt, updateCPT }: NodeCPTWithoutParentsProps) =
 
         // If probabilities do not sum up to 1, don't allow user to save the cpt
         if (sumOfAllStates !== 1) {
+            // Add input element to bad values so that it can be highlighted
+            badValues.current.push(inputRef);
+
+            badValues.current.forEach((inputRef) => (inputRef.style.color = "rgba(255, 0, 0, 0.8)"));
+
             setAllowSubmit(false);
             return;
         }
 
         // Otherwise the new values are good
+
+        // Remove the input element from the bad values if it exists
+        badValues.current = badValues.current.filter((_inputRef) => _inputRef !== inputRef);
 
         // Allow user to save CPT
         setAllowSubmit(true);
@@ -71,7 +83,9 @@ const NodeCPTWithoutParents = ({ cpt, updateCPT }: NodeCPTWithoutParentsProps) =
                                         min="0"
                                         max="1"
                                         step="0.01"
-                                        onChange={(event) => handleOnChange(state, event.target.valueAsNumber)}
+                                        onChange={(event) =>
+                                            handleOnChange(state, event.target.valueAsNumber, event.target)
+                                        }
                                     />
                                 </td>
                             ))}

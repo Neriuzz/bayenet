@@ -22,7 +22,7 @@
     height: 1em;
     border-radius: 25px;
     animation: animate-bar 1s ease-in-out;
-    transition: width 0.5s;
+    transition: width 1s ease-out;
 }
 
 .state-name {
