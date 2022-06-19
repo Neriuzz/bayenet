@@ -22,6 +22,7 @@ import Edge from "./Edge";
 import WorldData from "../../shared/WorldData";
 import EventBus from "../../shared/EventBus";
 import { INodeData } from "../../shared/compute/bayesian-network";
+import generateParentStateCombinations, { ParentAndStates } from "../util/Combinations";
 const worldData = WorldData.instance;
 const eventBus = EventBus.instance;
 
@@ -152,6 +153,9 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
             // Update parents in the data
             this.data.parents.push(edge.from.id.toString());
 
+            // Update node cpt to account for parents
+            this.refreshCPT();
+
             return;
         }
 
@@ -209,5 +213,18 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
 
         // Clear the current Markov blanket
         hoverGesture.world.clearMarkovBlanket();
+    }
+
+    public refreshCPT() {
+        // If node has no more parents left, just set its cpt to the current state probabilities
+        if (!this.hasParents()) {
+            this.data.cpt = this.data.probabilities;
+            return;
+        }
+
+        // If node does have parents, update the cpt so that it includes all possible parent state combinations
+        const parents = this.parents.map((parent) => parent.data as ParentAndStates);
+        const stateCombinations = generateParentStateCombinations(parents);
+        console.log(stateCombinations);
     }
 }

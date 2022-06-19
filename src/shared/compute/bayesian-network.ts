@@ -43,7 +43,7 @@ export default class BayesianNetwork {
         this.calculateProbabilities();
     }
 
-    private removeEvidence(id: string) {
+    public removeEvidence(id: string) {
         delete this.evidence[id];
         this.calculateProbabilities();
     }

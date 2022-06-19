@@ -41,6 +41,9 @@ export default class World {
             // Remove node from Bayesian network
             this.bayesianNetwork.removeNode(node.id.toString());
 
+            // Remove evidence from network if it was selected for this node
+            this.bayesianNetwork.removeEvidence(node.id.toString());
+
             // Send message to frontend
             eventBus.emit("nodeDeleted");
         }
@@ -55,7 +58,7 @@ export default class World {
                 edge.to.data.parents = edge.to.data.parents.filter((id) => id !== edge.from.id.toString());
 
                 // Revert child node cpt back to one without parents if it has no more parents
-                if (!edge.to.hasParents()) edge.to.data.cpt = edge.to.data.probabilities;
+                edge.to.refreshCPT();
             }
 
             // Remove edge from parent node
