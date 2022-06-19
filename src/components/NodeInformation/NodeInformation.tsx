@@ -50,6 +50,9 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
         node.data.states.splice(index, 1);
         delete node.data.probabilities[state];
 
+        // If the node has children, all of their CPTs have to be refreshed
+        if (node.hasChildren()) node.children.forEach((child) => child.refreshCPT());
+
         if (node.hasParents()) {
             //
         } else {

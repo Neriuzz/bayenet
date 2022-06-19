@@ -119,6 +119,10 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
         return this.edges.filter((edge) => edge.to && edge.to !== this).map((edge) => edge.to!);
     }
 
+    public hasChildren(): boolean {
+        return this.children.length > 0;
+    }
+
     public get position(): Vector2D {
         return this.currentPosition;
     }
@@ -223,8 +227,10 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
         }
 
         // If node does have parents, update the cpt so that it includes all possible parent state combinations
+        // Retrieve all parents and their states
         const parents = this.parents.map((parent) => parent.data as ParentAndStates);
+
+        // Get all possible state combinations
         const stateCombinations = generateParentStateCombinations(parents);
-        console.log(stateCombinations);
     }
 }
