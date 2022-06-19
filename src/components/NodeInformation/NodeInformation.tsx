@@ -60,11 +60,22 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
         if (node.hasParents()) {
             //
         } else {
+            // Get current probability value of the state to delete
+            const value = (node.data.cpt as ICptWithoutParents)[state];
+
+            // Remove the state from node cpt
             delete (node.data.cpt as ICptWithoutParents)[state];
+
+            // Split share of probability value from deleted state between remaining states
+            const toAdd = value / Object.keys(node.data.cpt).length;
+            Object.keys(node.data.cpt).forEach((state) => ((node.data.cpt as ICptWithoutParents)[state] += toAdd));
         }
 
         // If the node has children, refresh all of their CPTs
         if (node.hasChildren()) node.children.forEach((child) => child.refreshCPT());
+
+        // Infer new state probabilites for entire network
+        eventBus.emit("inferAll");
 
         // Rerender the component so visual changes are displayed
         forceRender();
@@ -92,7 +103,12 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
                 removeState={removeState}
             />
             <p className="node-information-tooltip">Conditional Probability Table</p>
-            <NodeCPT cpt={node.data.cpt} hasParents={node.hasParents()} updateCPT={updateCPT} />
+            <NodeCPT
+                key={Object.keys(node.data.cpt).length}
+                cpt={node.data.cpt}
+                hasParents={node.hasParents()}
+                updateCPT={updateCPT}
+            />
         </div>
     );
 };

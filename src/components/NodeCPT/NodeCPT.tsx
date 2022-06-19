@@ -10,6 +10,7 @@ import "./NodeCPT.scss";
 
 // Component props
 export interface NodeCPTProps {
+    key: React.Key;
     cpt: ICptWithParents | ICptWithoutParents;
     hasParents: boolean;
     updateCPT: (newCpt: ICptWithParents | ICptWithoutParents) => void;
