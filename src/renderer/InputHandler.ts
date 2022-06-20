@@ -177,7 +177,6 @@ export default class InputHandler {
     }
 
     private onMouseDown(event: MouseEvent) {
-        eventBus.emit("toggleNodeInformation");
         event.preventDefault();
 
         this.dragging = false;

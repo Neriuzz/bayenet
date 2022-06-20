@@ -145,6 +145,9 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
     }
 
     public onClick(clickGesture: ClickGesture) {
+        // Toggle the node information sidebar when clicking on a node
+        eventBus.emit("toggleNodeInformation");
+
         if (clickGesture.world.edgeBeingCreated) {
             // Retrieve the current edge being created
             const edge = clickGesture.world.edgeBeingCreated;

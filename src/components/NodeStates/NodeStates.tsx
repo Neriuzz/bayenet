@@ -35,7 +35,8 @@ const NodeStates = ({ states, stateProbabilities, addState, removeState }: NodeS
     };
 
     const handleRemoveStateButtonClicked = (index: number) => {
-        removeState(index);
+        // Only allow to remove a states if it does not leave the node stateless
+        if (states.length > 1) removeState(index);
     };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
