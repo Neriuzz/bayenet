@@ -19,11 +19,13 @@ export interface NodeCPTWithParentsProps {
 
 const NodeCPTWithParents = ({ cpt, parents, states, updateCPT }: NodeCPTWithParentsProps) => {
     const [allowSubmit, setAllowSubmit] = useState(false);
-    const cptCopy = useRef({ ...cpt });
+    const cptCopy = useRef<ICptWithParents>([...cpt]);
     const badValues = useRef<HTMLInputElement[]>([]);
 
     const handleOnSubmit = () => {
-        if (allowSubmit) updateCPT(cptCopy.current);
+        if (allowSubmit) {
+            updateCPT(cptCopy.current);
+        }
     };
 
     const handleOnChange = (state: string, entryNumber: number, value: number, inputRef: HTMLInputElement) => {
@@ -60,7 +62,7 @@ const NodeCPTWithParents = ({ cpt, parents, states, updateCPT }: NodeCPTWithPare
         // Otherwise the new values are good
 
         // Remove the input element from the bad values if it exists
-        badValues.current = badValues.current.filter((_inputRef) => _inputRef !== inputRef);
+        badValues.current = [];
 
         // Allow user to save CPT
         setAllowSubmit(true);
@@ -113,7 +115,7 @@ const NodeCPTWithParents = ({ cpt, parents, states, updateCPT }: NodeCPTWithPare
                 </table>
             </div>
             <FaSave
-                className="submit-no-parent-cpt"
+                className="submit-parent-cpt"
                 size="30px"
                 onClick={handleOnSubmit}
                 title="Save conditional probability table"

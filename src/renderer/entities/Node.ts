@@ -145,7 +145,6 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
     }
 
     public onClick(clickGesture: ClickGesture) {
-        console.log(this.data);
         if (clickGesture.world.edgeBeingCreated) {
             // Retrieve the current edge being created
             const edge = clickGesture.world.edgeBeingCreated;

@@ -22,6 +22,10 @@ export interface NodeStatesProps {
 const NodeStates = ({ states, stateProbabilities, addState, removeState }: NodeStatesProps) => {
     const [addingState, setAddingState] = useState(false);
 
+    const roundNumber = (num: number) => {
+        return Number.isInteger(num) ? num : +num.toFixed(2);
+    };
+
     const inputRef = useRef<HTMLInputElement>(null);
 
     const colourHash = new ColorHash();
@@ -81,7 +85,7 @@ const NodeStates = ({ states, stateProbabilities, addState, removeState }: NodeS
                         }}
                         title={stateProbabilities[state].toString()}
                     ></div>
-                    <p className="state-probability">{`${Math.round(stateProbabilities[state] * 100)}%`}</p>
+                    <p className="state-probability">{`${roundNumber(stateProbabilities[state] * 100)}%`}</p>
                     <div className="node-state-buttons">
                         <BsTrash
                             className="node-state-button"

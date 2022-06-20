@@ -19,8 +19,9 @@ const NodeCPTWithoutParents = ({ cpt, updateCPT }: NodeCPTWithoutParentsProps) =
     const [allowSubmit, setAllowSubmit] = useState(false);
 
     // Use a copy to temporarily store changes to the cpt
-    const cptCopy = useRef({ ...cpt });
+    const cptCopy = useRef<ICptWithoutParents>({ ...cpt });
 
+    // Stores all the input fields that currently have incorrect values in them
     const badValues = useRef<HTMLInputElement[]>([]);
 
     const handleOnSubmit = () => {
@@ -28,6 +29,7 @@ const NodeCPTWithoutParents = ({ cpt, updateCPT }: NodeCPTWithoutParentsProps) =
     };
 
     const handleOnChange = (state: string, value: number, inputRef: HTMLInputElement) => {
+        // Initially, do not show an error
         badValues.current.forEach((inputRef) => (inputRef.style.color = "white"));
 
         // Update cpt copy
@@ -44,16 +46,20 @@ const NodeCPTWithoutParents = ({ cpt, updateCPT }: NodeCPTWithoutParentsProps) =
             // Add input element to bad values so that it can be highlighted
             badValues.current.push(inputRef);
 
+            // For each input field containing a bad probability value, set the text colour to red
             badValues.current.forEach((inputRef) => (inputRef.style.color = "rgba(255, 0, 0, 0.8)"));
 
+            // Do not allow submission
             setAllowSubmit(false);
+
+            // Early return
             return;
         }
 
         // Otherwise the new values are good
 
         // Remove the input element from the bad values if it exists
-        badValues.current = badValues.current.filter((_inputRef) => _inputRef !== inputRef);
+        badValues.current = [];
 
         // Allow user to save CPT
         setAllowSubmit(true);
