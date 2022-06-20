@@ -227,7 +227,7 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
     public refreshCPT() {
         // If node has no more parents left, just set its cpt to the current state probabilities
         if (!this.hasParents()) {
-            this.data.cpt = this.data.probabilities;
+            this.data.cpt = { ...this.data.probabilities };
             return;
         }
 
@@ -241,13 +241,16 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
         // If this is the first parent
         if (this.parents.length === 1) {
             this.data.cpt = stateCombinations.map((combination) => {
-                return { when: combination, then: this.data.probabilities };
+                return { when: combination, then: { ...this.data.probabilities } };
             });
         }
 
         // Otherwise
         this.data.cpt = stateCombinations.map((combination, index) => {
-            return { when: combination, then: (this.data.cpt as ICptWithParents)[index % this.data.cpt.length].then };
+            return {
+                when: combination,
+                then: { ...(this.data.cpt as ICptWithParents)[index % this.data.cpt.length].then }
+            };
         });
     }
 }

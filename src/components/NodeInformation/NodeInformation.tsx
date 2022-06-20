@@ -36,7 +36,11 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
         node.data.probabilities[state] = 0.0;
 
         if (node.hasParents()) {
-            //
+            // For each entry in the CPT
+            (node.data.cpt as ICptWithParents).forEach((entry) => {
+                // Initialise the new state for each entry with probability 0
+                entry.then[state] = 0.0;
+            });
         } else {
             // Node does not have parents
             (node.data.cpt as ICptWithoutParents)[state] = 0.0;
@@ -44,6 +48,9 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
 
         // If node has children, refresh all of their CPTs
         if (node.hasChildren()) node.children.forEach((child) => child.refreshCPT());
+
+        // Infer new state probabilities for entire network
+        eventBus.emit("inferAll");
 
         // Rerender the component so visual changes are displayed
         forceRender();
@@ -58,7 +65,18 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
         delete node.data.probabilities[state];
 
         if (node.hasParents()) {
-            //
+            // For each entry in the CPT
+            (node.data.cpt as ICptWithParents).forEach((entry) => {
+                // Get current probability value of the state we are deleting
+                const value = entry.then[state];
+
+                // Remove that state from the CPT entry
+                delete entry.then[state];
+
+                // Split share of probability value from deleted state between remaining states
+                const toAdd = value / node.data.states.length;
+                Object.keys(entry.then).forEach((state) => (entry.then[state] += toAdd));
+            });
         } else {
             // Get current probability value of the state to delete
             const value = (node.data.cpt as ICptWithoutParents)[state];
@@ -67,7 +85,7 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
             delete (node.data.cpt as ICptWithoutParents)[state];
 
             // Split share of probability value from deleted state between remaining states
-            const toAdd = value / Object.keys(node.data.cpt).length;
+            const toAdd = value / node.data.states.length;
             Object.keys(node.data.cpt).forEach((state) => ((node.data.cpt as ICptWithoutParents)[state] += toAdd));
         }
 
@@ -104,7 +122,7 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
             />
             <p className="node-information-tooltip">Conditional Probability Table</p>
             <NodeCPT
-                key={Object.keys(node.data.cpt).length}
+                key={node.data.states.length}
                 cpt={node.data.cpt}
                 hasParents={node.hasParents()}
                 parents={node.parentNames}
