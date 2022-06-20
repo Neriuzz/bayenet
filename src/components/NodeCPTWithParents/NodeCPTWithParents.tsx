@@ -20,13 +20,50 @@ export interface NodeCPTWithParentsProps {
 const NodeCPTWithParents = ({ cpt, parents, states, updateCPT }: NodeCPTWithParentsProps) => {
     const [allowSubmit, setAllowSubmit] = useState(false);
     const cptCopy = useRef({ ...cpt });
+    const badValues = useRef<HTMLInputElement[]>([]);
 
     const handleOnSubmit = () => {
         if (allowSubmit) updateCPT(cptCopy.current);
     };
 
-    const handleOnChange = () => {
-        console.log("weed");
+    const handleOnChange = (state: string, entryNumber: number, value: number, inputRef: HTMLInputElement) => {
+        // Initially, do not show an error
+        badValues.current.forEach((inputRef) => (inputRef.style.color = "white"));
+
+        // Update cpt copy
+        cptCopy.current[entryNumber].then[state] = value;
+
+        // Get all other state probabilites
+        const otherStates = Object.keys(cpt[entryNumber].then).filter((_state) => _state !== state);
+
+        // Get the sum of all the probabilities
+        const sumOfAllStates = otherStates.reduce(
+            (acc, state) => acc + cptCopy.current[entryNumber].then[state],
+            value
+        );
+
+        // If probabilities do not sum up to 1, don't allow user to save the cpt
+        if (sumOfAllStates !== 1) {
+            // Add input element to bad values so that it can be highlighted
+            badValues.current.push(inputRef);
+
+            // For each input field containing a bad probability value, set the text colour to red
+            badValues.current.forEach((inputRef) => (inputRef.style.color = "rgba(255, 0, 0, 0.8)"));
+
+            // Do not allow submission
+            setAllowSubmit(false);
+
+            // Early return
+            return;
+        }
+
+        // Otherwise the new values are good
+
+        // Remove the input element from the bad values if it exists
+        badValues.current = badValues.current.filter((_inputRef) => _inputRef !== inputRef);
+
+        // Allow user to save CPT
+        setAllowSubmit(true);
     };
 
     return (
@@ -59,7 +96,14 @@ const NodeCPTWithParents = ({ cpt, parents, states, updateCPT }: NodeCPTWithPare
                                             max="1.0"
                                             step="0.01"
                                             defaultValue={entry.then[state]}
-                                            onChange={(event) => handleOnChange()}
+                                            onChange={(event) =>
+                                                handleOnChange(
+                                                    state,
+                                                    entryNumber,
+                                                    event.target.valueAsNumber,
+                                                    event.target
+                                                )
+                                            }
                                         />
                                     </td>
                                 ))}
