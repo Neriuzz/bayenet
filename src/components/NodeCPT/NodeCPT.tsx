@@ -13,14 +13,21 @@ export interface NodeCPTProps {
     key: React.Key;
     cpt: ICptWithParents | ICptWithoutParents;
     hasParents: boolean;
+    parents: string[];
+    states: string[];
     updateCPT: (newCpt: ICptWithParents | ICptWithoutParents) => void;
 }
 
-const NodeCPT = ({ cpt, hasParents, updateCPT }: NodeCPTProps) => {
+const NodeCPT = ({ cpt, hasParents, parents, states, updateCPT }: NodeCPTProps) => {
     return (
         <div className="node-cpt">
             {hasParents ? (
-                <NodeCPTWithParents cpt={cpt as ICptWithParents} />
+                <NodeCPTWithParents
+                    cpt={cpt as ICptWithParents}
+                    parents={parents}
+                    states={states}
+                    updateCPT={updateCPT}
+                />
             ) : (
                 <NodeCPTWithoutParents cpt={cpt as ICptWithoutParents} updateCPT={updateCPT} />
             )}

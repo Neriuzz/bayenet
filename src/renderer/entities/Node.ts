@@ -111,6 +111,10 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
         return this.edges.filter((edge) => edge.from !== this).map((edge) => edge.from);
     }
 
+    public get parentNames(): string[] {
+        return this.parents.map((parent) => parent.name);
+    }
+
     public hasParents(): boolean {
         return this.parents.length > 0;
     }

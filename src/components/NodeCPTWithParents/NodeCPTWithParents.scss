@@ -1,0 +1,53 @@
+.cpt-table-parents-container {
+    width: 100%;
+    overflow: auto;
+    padding-bottom: 1em;
+}
+
+.cpt-table-parents {
+    width: 100%;
+    border-collapse: collapse;
+    color: white;
+}
+
+.cpt-parents-header {
+    min-width: 5em;
+    padding: 0.5em 0;
+    overflow: aut o;
+}
+
+.cpt-table-parents,
+.cpt-parents-header,
+.cpt-parents-row,
+.parent-state,
+.node-probability {
+    border: 1px solid;
+}
+
+.parent-state {
+    text-align: center;
+}
+
+.parent-state,
+.node-probability {
+    padding: 0.5em;
+}
+
+.node-probability-input {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: white;
+    text-align: center;
+    appearance: textfield;
+    font-size: medium;
+    transition: color 0.5s;
+}
+
+.cpt-parents {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.5em;
+}

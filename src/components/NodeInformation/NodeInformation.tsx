@@ -107,6 +107,8 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
                 key={Object.keys(node.data.cpt).length}
                 cpt={node.data.cpt}
                 hasParents={node.hasParents()}
+                parents={node.parentNames}
+                states={node.data.states}
                 updateCPT={updateCPT}
             />
         </div>
