@@ -14,6 +14,9 @@ import Node from "../../renderer/entities/Node";
 // Types
 import { ICptWithoutParents, ICptWithParents } from "bayesjs";
 
+// For precise arithmetic
+import { mathExact } from "math-exact";
+
 // EventBus singleton
 import EventBus from "../../shared/EventBus";
 const eventBus = EventBus.instance;
@@ -74,8 +77,10 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
                 delete entry.then[state];
 
                 // Split share of probability value from deleted state between remaining states
-                const toAdd = value / node.data.states.length;
-                Object.keys(entry.then).forEach((state) => (entry.then[state] += toAdd));
+                const toAdd = mathExact("Divide", value, node.data.states.length);
+                Object.keys(entry.then).forEach(
+                    (state) => (entry.then[state] = mathExact("Add", toAdd, entry.then[state]))
+                );
             });
         } else {
             // Get current probability value of the state to delete
@@ -85,8 +90,15 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
             delete (node.data.cpt as ICptWithoutParents)[state];
 
             // Split share of probability value from deleted state between remaining states
-            const toAdd = value / node.data.states.length;
-            Object.keys(node.data.cpt).forEach((state) => ((node.data.cpt as ICptWithoutParents)[state] += toAdd));
+            const toAdd = mathExact("Divide", value, node.data.states.length);
+            Object.keys(node.data.cpt).forEach(
+                (state) =>
+                    ((node.data.cpt as ICptWithoutParents)[state] = mathExact(
+                        "Add",
+                        toAdd,
+                        (node.data.cpt as ICptWithoutParents)[state]
+                    ))
+            );
         }
 
         // If the node has children, refresh all of their CPTs
