@@ -239,8 +239,14 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
 
         // If this is the first parent
         if (this.parents.length === 1) {
-            this.data.cpt = stateCombinations.map((combination) => {
-                return { when: combination, then: { ...this.data.probabilities } };
+            this.data.cpt = stateCombinations.map((combination, index) => {
+                return {
+                    when: combination,
+                    then:
+                        index < (this.data.cpt as ICptWithParents).length
+                            ? (this.data.cpt as ICptWithParents)[index].then
+                            : { ...this.data.probabilities }
+                };
             });
         }
 
