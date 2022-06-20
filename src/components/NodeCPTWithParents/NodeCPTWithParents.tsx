@@ -9,6 +9,9 @@ import { FaSave } from "react-icons/fa";
 // Styles
 import "./NodeCPTWithParents.scss";
 
+// For precise arithmetic
+import { mathExact } from "math-exact";
+
 // Component props
 export interface NodeCPTWithParentsProps {
     cpt: ICptWithParents;
@@ -40,7 +43,7 @@ const NodeCPTWithParents = ({ cpt, parents, states, updateCPT }: NodeCPTWithPare
 
         // Get the sum of all the probabilities
         const sumOfAllStates = otherStates.reduce(
-            (acc, state) => acc + cptCopy.current[entryNumber].then[state],
+            (acc, state) => mathExact("Add", acc, cptCopy.current[entryNumber].then[state]),
             value
         );
 
