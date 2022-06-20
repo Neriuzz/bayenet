@@ -184,6 +184,7 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
         if (!clickGesture.alt) clickGesture.world.deselectAllClickables(this.id);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public onDoubleClick(clickGesture: ClickGesture) {
         eventBus.emit("toggleNodeInformation", this);
     }

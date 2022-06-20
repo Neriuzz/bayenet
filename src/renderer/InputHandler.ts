@@ -12,10 +12,6 @@ import IInteractable from "./interfaces/IInteractable";
 import Vector2D from "./util/Vector2D";
 import World from "./World";
 
-// Event bus
-import EventBus from "../shared/EventBus";
-const eventBus = EventBus.instance;
-
 // Constants for zooming functionality
 const MAX_ZOOM = 2;
 const MIN_ZOOM = 0.5;

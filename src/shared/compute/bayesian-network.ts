@@ -1,8 +1,11 @@
+// BayesJS types
 import { ICombinations, INetwork, inferAll, INode, INodeResult } from "bayesjs";
-import EventBus from "../EventBus";
 
+// Event bus singleton
+import EventBus from "../EventBus";
 const eventBus = EventBus.instance;
 
+// Custom type extending the BayesJS INode
 export type INodeData = INode & {
     name: string;
     probabilities: INodeResult;
