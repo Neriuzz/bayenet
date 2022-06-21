@@ -16,7 +16,7 @@ export interface NodeStatesProps {
     states: string[];
     probabilities: INodeResult;
     addState: (name: string) => void;
-    removeState: (index: number) => void;
+    removeState: (state: string) => void;
     addEvidence: (state: string) => void;
 }
 
@@ -35,9 +35,9 @@ const NodeStates = ({ states, probabilities, addState, removeState, addEvidence 
         setAddingState(true);
     };
 
-    const handleRemoveStateButtonClicked = (index: number) => {
+    const handleRemoveStateButtonClicked = (state: string) => {
         // Only allow to remove a states if it does not leave the node stateless
-        if (states.length > 1) removeState(index);
+        if (states.length > 1) removeState(state);
     };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -90,7 +90,7 @@ const NodeStates = ({ states, probabilities, addState, removeState, addEvidence 
                             className="node-state-button"
                             size="20px"
                             title="Remove state"
-                            onClick={() => handleRemoveStateButtonClicked(index)}
+                            onClick={() => handleRemoveStateButtonClicked(state)}
                         />
                         <AiOutlineEye
                             className="node-state-button"

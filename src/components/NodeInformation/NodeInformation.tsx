@@ -85,12 +85,9 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
         forceRender();
     };
 
-    const removeState = (index: number) => {
-        // Retrieve state via index
-        const state = node.data.states[index];
-
+    const removeState = (state: string) => {
         // Remove state from node states and state probabilities
-        node.data.states.splice(index, 1);
+        node.data.states = node.data.states.filter((_state) => _state !== state);
         delete node.data.probabilities[state];
 
         if (node.hasParents()) {

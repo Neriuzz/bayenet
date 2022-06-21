@@ -77,8 +77,8 @@ const NodeCPTWithParents = ({ cpt, parents, states, updateCPT }: NodeCPTWithPare
                 <table className="cpt-table-parents">
                     <thead>
                         <tr className="parents-and-states">
-                            {[...parents, ...states].map((parentOrState) => (
-                                <th key={parentOrState} className="cpt-parents-header">
+                            {[...parents, ...states].map((parentOrState, index) => (
+                                <th key={index} className="cpt-parents-header">
                                     {parentOrState}
                                 </th>
                             ))}
