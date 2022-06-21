@@ -19,7 +19,6 @@ export default class BayesianNetwork {
         // Register event listeners
         eventBus.on("inferAll", () => this.calculateProbabilities());
         eventBus.on("addEvidence", (id: string, state: string) => this.addEvidence(id, state));
-        eventBus.on("removeEvidence", (id: string) => this.removeEvidence(id));
         eventBus.on("clearEvidence", () => this.clearEvidence());
     }
 

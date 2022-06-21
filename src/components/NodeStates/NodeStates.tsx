@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 
 // Icons
-import { AiFillPlusCircle } from "react-icons/ai";
+import { AiFillPlusCircle, AiOutlineEye } from "react-icons/ai";
 import { BsTrash } from "react-icons/bs";
 
 // Types
@@ -17,18 +17,10 @@ export interface NodeStatesProps {
     stateProbabilities: INodeResult;
     addState: (name: string) => void;
     removeState: (index: number) => void;
-    addEvidence: (id: string, state: string) => void;
-    removeEvidence: (id: string) => void;
+    addEvidence: (state: string) => void;
 }
 
-const NodeStates = ({
-    states,
-    stateProbabilities,
-    addState,
-    removeState,
-    addEvidence,
-    removeEvidence
-}: NodeStatesProps) => {
+const NodeStates = ({ states, stateProbabilities, addState, removeState, addEvidence }: NodeStatesProps) => {
     const [addingState, setAddingState] = useState(false);
 
     const roundNumber = (num: number) => {
@@ -102,6 +94,12 @@ const NodeStates = ({
                             size="20px"
                             title="Remove state"
                             onClick={() => handleRemoveStateButtonClicked(index)}
+                        />
+                        <AiOutlineEye
+                            className="node-state-button"
+                            size="20px"
+                            title="Set state as evidence"
+                            onClick={() => addEvidence(state)}
                         />
                     </div>
                 </div>

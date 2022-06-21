@@ -33,15 +33,14 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
         node.name = newName;
     };
 
-    const addEvidence = (id: string, state: string) => {
-        eventBus.emit("addEvidence", id, state);
-    };
-
-    const removeEvidence = (id: string) => {
-        eventBus.emit("removeEvidence", id);
+    const addEvidence = (state: string) => {
+        eventBus.emit("addEvidence", node.id, state);
     };
 
     const addState = (state: string) => {
+        // Clear the current evidence
+        eventBus.emit("clearEvidence");
+
         // Add new state to node states and set initial probability to 0
         node.data.states.push(state);
         node.data.probabilities[state] = 0.0;
@@ -68,6 +67,9 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
     };
 
     const removeState = (index: number) => {
+        // Clear the current evidence
+        eventBus.emit("clearEvidence");
+
         // Retrieve state via index
         const state = node.data.states[index];
 
@@ -120,6 +122,9 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
     };
 
     const updateCPT = (newCpt: ICptWithParents | ICptWithoutParents) => {
+        // Clear all evidence
+        eventBus.emit("clearEvidence");
+
         // Update node cpt
         node.data.cpt = newCpt;
 
@@ -140,7 +145,6 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
                 addState={addState}
                 removeState={removeState}
                 addEvidence={addEvidence}
-                removeEvidence={removeEvidence}
             />
             <p className="node-information-tooltip">Conditional Probability Table</p>
             <NodeCPT
