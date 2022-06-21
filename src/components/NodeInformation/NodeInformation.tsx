@@ -57,9 +57,6 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
     };
 
     const addState = (state: string) => {
-        // Clear the current evidence
-        eventBus.emit("clearEvidence");
-
         // Add new state to node states and set initial probability to 0
         node.data.states.push(state);
         node.data.probabilities[state] = 0.0;
@@ -78,6 +75,9 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
         // If node has children, refresh all of their CPTs
         if (node.hasChildren()) node.children.forEach((child) => child.refreshCPT());
 
+        // Clear the current evidence
+        eventBus.emit("clearEvidence");
+
         // Infer new state probabilities for entire network
         eventBus.emit("inferAll");
 
@@ -86,9 +86,6 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
     };
 
     const removeState = (index: number) => {
-        // Clear the current evidence
-        eventBus.emit("clearEvidence");
-
         // Retrieve state via index
         const state = node.data.states[index];
 
@@ -133,6 +130,9 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
         // If the node has children, refresh all of their CPTs
         if (node.hasChildren()) node.children.forEach((child) => child.refreshCPT());
 
+        // Clear the current evidence
+        eventBus.emit("clearEvidence");
+
         // Infer new state probabilites for entire network
         eventBus.emit("inferAll");
 
@@ -141,11 +141,11 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
     };
 
     const updateCPT = (newCpt: ICptWithParents | ICptWithoutParents) => {
-        // Clear all evidence
-        eventBus.emit("clearEvidence");
-
         // Update node cpt
         node.data.cpt = newCpt;
+
+        // Clear all evidence
+        eventBus.emit("clearEvidence");
 
         // Infer new state probabilities for entire network
         eventBus.emit("inferAll");

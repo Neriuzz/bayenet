@@ -34,6 +34,7 @@ const App = () => {
 
     const clearEvidence = () => {
         eventBus.emit("clearEvidence");
+        eventBus.emit("evidenceCleared");
     };
 
     return (
