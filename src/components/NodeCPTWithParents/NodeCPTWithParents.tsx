@@ -9,9 +9,6 @@ import { FaSave } from "react-icons/fa";
 // Styles
 import "./NodeCPTWithParents.scss";
 
-// For precise arithmetic
-import { mathExact } from "math-exact";
-
 // Component props
 export interface NodeCPTWithParentsProps {
     cpt: ICptWithParents;
@@ -26,9 +23,7 @@ const NodeCPTWithParents = ({ cpt, parents, states, updateCPT }: NodeCPTWithPare
     const badValues = useRef<HTMLInputElement[]>([]);
 
     const handleOnSubmit = () => {
-        if (allowSubmit) {
-            updateCPT(cptCopy.current);
-        }
+        if (allowSubmit) updateCPT(cptCopy.current);
     };
 
     const handleOnChange = (state: string, entryNumber: number, value: number, inputRef: HTMLInputElement) => {
@@ -43,7 +38,7 @@ const NodeCPTWithParents = ({ cpt, parents, states, updateCPT }: NodeCPTWithPare
 
         // Get the sum of all the probabilities
         const sumOfAllStates = otherStates.reduce(
-            (acc, state) => mathExact("Add", acc, cptCopy.current[entryNumber].then[state]),
+            (acc, state) => acc + cptCopy.current[entryNumber].then[state],
             value
         );
 
@@ -92,8 +87,8 @@ const NodeCPTWithParents = ({ cpt, parents, states, updateCPT }: NodeCPTWithPare
                                         {entry.when[id]}
                                     </td>
                                 ))}
-                                {Object.keys(entry.then).map((state, index) => (
-                                    <td className="node-probability" key={index}>
+                                {Object.keys(entry.then).map((state) => (
+                                    <td className="node-probability" key={state}>
                                         <input
                                             key={states.length}
                                             className="node-probability-input"
@@ -101,7 +96,7 @@ const NodeCPTWithParents = ({ cpt, parents, states, updateCPT }: NodeCPTWithPare
                                             min="0.0"
                                             max="1.0"
                                             step="0.01"
-                                            defaultValue={entry.then[state]}
+                                            defaultValue={+entry.then[state].toFixed(5)}
                                             onChange={(event) =>
                                                 handleOnChange(
                                                     state,

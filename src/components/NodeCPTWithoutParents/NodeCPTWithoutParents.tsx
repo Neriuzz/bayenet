@@ -9,20 +9,21 @@ import { ICptWithoutParents, ICptWithParents } from "bayesjs";
 // Styles
 import "./NodeCPTWithoutParents.scss";
 
-// For precise arithmetic
-import { mathExact } from "math-exact";
-
 // Component props
 export interface NodeCPTWithoutParentsProps {
+    states: string[];
     cpt: ICptWithoutParents;
     updateCPT: (newCpt: ICptWithParents | ICptWithoutParents) => void;
 }
 
-const NodeCPTWithoutParents = ({ cpt, updateCPT }: NodeCPTWithoutParentsProps) => {
+const NodeCPTWithoutParents = ({ states, cpt, updateCPT }: NodeCPTWithoutParentsProps) => {
     const [allowSubmit, setAllowSubmit] = useState(false);
 
-    // Use a copy to temporarily store changes to the cpt
     const cptCopy = useRef<ICptWithoutParents>({ ...cpt });
+    // Make sure no removed states are in the cptCopy
+    Object.keys(cptCopy.current).forEach((state) => {
+        if (!states.includes(state)) delete cptCopy.current[state];
+    });
 
     // Stores all the input fields that currently have incorrect values in them
     const badValues = useRef<HTMLInputElement[]>([]);
@@ -42,7 +43,7 @@ const NodeCPTWithoutParents = ({ cpt, updateCPT }: NodeCPTWithoutParentsProps) =
         const otherStates = Object.keys(cpt).filter((_state) => _state !== state);
 
         // Get the sum of all the probabilities
-        const sumOfAllStates = otherStates.reduce((acc, state) => mathExact("Add", acc, cptCopy.current[state]), value);
+        const sumOfAllStates = otherStates.reduce((acc, state) => acc + cptCopy.current[state], value);
 
         // If probabilities do not sum up to 1, don't allow user to save the cpt
         if (sumOfAllStates !== 1) {
@@ -83,13 +84,13 @@ const NodeCPTWithoutParents = ({ cpt, updateCPT }: NodeCPTWithoutParentsProps) =
                     </thead>
                     <tbody>
                         <tr className="table-probabilities">
-                            {Object.keys(cpt).map((state, index) => (
-                                <td className="table-probability" key={index}>
+                            {Object.keys(cpt).map((state) => (
+                                <td className="table-probability" key={state}>
                                     <input
                                         key={Object.keys(cpt).length}
                                         className="probability-input"
                                         type="number"
-                                        defaultValue={cpt[state]}
+                                        defaultValue={+cpt[state].toFixed(5)}
                                         min="0"
                                         max="1"
                                         step="0.01"

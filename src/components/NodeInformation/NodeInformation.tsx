@@ -14,9 +14,6 @@ import Node from "../../renderer/entities/Node";
 // Types
 import { ICptWithoutParents, ICptWithParents } from "bayesjs";
 
-// For precise arithmetic
-import { mathExact } from "math-exact";
-
 // EventBus singleton
 import EventBus from "../../shared/EventBus";
 const eventBus = EventBus.instance;
@@ -100,10 +97,8 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
                 delete entry.then[state];
 
                 // Split share of probability value from deleted state between remaining states
-                const toAdd = mathExact("Divide", value, node.data.states.length);
-                Object.keys(entry.then).forEach(
-                    (entryState) => (entry.then[entryState] = mathExact("Add", toAdd, entry.then[entryState]))
-                );
+                const toAdd = +(value / node.data.states.length).toFixed(5);
+                Object.keys(entry.then).forEach((entryState) => (entry.then[entryState] += toAdd));
             });
         } else {
             // Get current probability value of the state to delete
@@ -112,16 +107,11 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
             // Remove the state from node cpt
             delete (node.data.cpt as ICptWithoutParents)[state];
 
+            console.log(node.data.cpt);
+
             // Split share of probability value from deleted state between remaining states
-            const toAdd = mathExact("Divide", value, node.data.states.length);
-            Object.keys(node.data.cpt).forEach(
-                (state) =>
-                    ((node.data.cpt as ICptWithoutParents)[state] = mathExact(
-                        "Add",
-                        toAdd,
-                        (node.data.cpt as ICptWithoutParents)[state]
-                    ))
-            );
+            const toAdd = +(value / node.data.states.length).toFixed(5);
+            Object.keys(node.data.cpt).forEach((state) => ((node.data.cpt as ICptWithoutParents)[state] += toAdd));
         }
 
         // If the node has children, refresh all of their CPTs

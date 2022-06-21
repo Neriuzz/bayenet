@@ -29,7 +29,7 @@ const NodeCPT = ({ id, cpt, hasParents, parents, states, updateCPT }: NodeCPTPro
                     updateCPT={updateCPT}
                 />
             ) : (
-                <NodeCPTWithoutParents cpt={cpt as ICptWithoutParents} updateCPT={updateCPT} />
+                <NodeCPTWithoutParents states={states} cpt={cpt as ICptWithoutParents} updateCPT={updateCPT} />
             )}
         </div>
     );
