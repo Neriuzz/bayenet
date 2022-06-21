@@ -53,16 +53,28 @@ export default function generateParentStateCombinations(parents: ParentAndStates
     const combineAllCombinations = pipe(length, flip(liftN)(unapply(mergeAll)))(parentCombinations);
 
     // Run the combineAllCombinations function and get result
-    const result = flatten(apply(combineAllCombinations, parentCombinations as [arg: unknown]));
+    const result: Combination[] = flatten(apply(combineAllCombinations, parentCombinations as [arg: unknown]));
 
     // Order the results
     const orderedResult: Combination[] = [];
 
-    // Push all the evenly indexed entries first
-    result.forEach((_, index) => index % 2 === 0 && orderedResult.push(result[index]));
+    // Get length of combinations
+    const combinationLength = result.length;
 
-    // Then all the odd ones
-    result.forEach((_, index) => index % 2 !== 0 && orderedResult.push(result[index]));
+    // Get number of states for first parents
+    const firstParentNumberOfStates = parents[0].states.length;
+
+    // Get number of iterations
+    const iterations = combinationLength / firstParentNumberOfStates;
+
+    // Generate initial indices
+    let indices = [...parents[0].states.map((_, index) => index * iterations)];
+
+    // Order the array so that we go through the first parents state combinations first
+    for (let i = 0; i < iterations; i++) {
+        indices.forEach((index) => orderedResult.push(result[index]));
+        indices = [...indices.map((index) => index + 1)];
+    }
 
     // Return the ordered result
     return orderedResult;
