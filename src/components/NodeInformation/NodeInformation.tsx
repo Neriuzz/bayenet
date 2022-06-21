@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 
 // Styling
 import "./NodeInformation.scss";
@@ -27,7 +27,23 @@ export interface NodeInformationProps {
 }
 
 const NodeInformation = ({ node }: NodeInformationProps) => {
+    // Reducer used to forcefully re-render the component
     const [, forceRender] = useReducer((s) => s + 1, 0);
+
+    // Run this when the component mounts, so that whenever we clear evidence from the network
+    // the component knows about it
+    useEffect(() => {
+        // Register the clear evidence event listener
+        eventBus.on("clearEvidence", handleClearEvidence);
+
+        // Unregister event handlers
+        return () => eventBus.stopListening("clearEvidence", handleClearEvidence);
+    }, []);
+
+    const handleClearEvidence = () => {
+        // Rerender the entire component when evidence is cleared from the network so that visual changes are displayed
+        forceRender();
+    };
 
     const updateName = (newName: string) => {
         node.name = newName;
@@ -35,6 +51,9 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
 
     const addEvidence = (state: string) => {
         eventBus.emit("addEvidence", node.id, state);
+
+        // Rerender the component so visual changes are displayed
+        forceRender();
     };
 
     const addState = (state: string) => {
@@ -141,7 +160,7 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
             <p className="node-information-tooltip">States</p>
             <NodeStates
                 states={node.data.states}
-                stateProbabilities={node.data.probabilities}
+                probabilities={node.data.probabilities}
                 addState={addState}
                 removeState={removeState}
                 addEvidence={addEvidence}

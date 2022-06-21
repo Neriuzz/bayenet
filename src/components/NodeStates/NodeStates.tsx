@@ -14,13 +14,13 @@ import ColorHash from "color-hash";
 import "./NodeStates.scss";
 export interface NodeStatesProps {
     states: string[];
-    stateProbabilities: INodeResult;
+    probabilities: INodeResult;
     addState: (name: string) => void;
     removeState: (index: number) => void;
     addEvidence: (state: string) => void;
 }
 
-const NodeStates = ({ states, stateProbabilities, addState, removeState, addEvidence }: NodeStatesProps) => {
+const NodeStates = ({ states, probabilities, addState, removeState, addEvidence }: NodeStatesProps) => {
     const [addingState, setAddingState] = useState(false);
 
     const roundNumber = (num: number) => {
@@ -79,15 +79,12 @@ const NodeStates = ({ states, stateProbabilities, addState, removeState, addEvid
                     <div
                         className="state-probability-bar"
                         style={{
-                            width:
-                                stateProbabilities[state] > 0.025
-                                    ? `${Math.floor(stateProbabilities[state] * 100)}%`
-                                    : "2%",
+                            width: probabilities[state] > 0.025 ? `${Math.floor(probabilities[state] * 100)}%` : "2%",
                             backgroundColor: colourHash.hex(state)
                         }}
-                        title={stateProbabilities[state].toString()}
+                        title={probabilities[state].toString()}
                     ></div>
-                    <p className="state-probability">{`${roundNumber(stateProbabilities[state] * 100)}%`}</p>
+                    <p className="state-probability">{`${roundNumber(probabilities[state] * 100)}%`}</p>
                     <div className="node-state-buttons">
                         <BsTrash
                             className="node-state-button"
