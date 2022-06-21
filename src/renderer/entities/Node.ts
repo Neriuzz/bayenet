@@ -241,6 +241,8 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
         // Get all possible state combinations
         const stateCombinations = generateParentStateCombinations(parents);
 
+        console.log(stateCombinations);
+
         // If this is the first parent
         if (this.parents.length === 1) {
             this.data.cpt = stateCombinations.map((combination, index) => {

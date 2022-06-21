@@ -9,6 +9,10 @@ export interface ParentAndStates {
     states: string[];
 }
 
+interface Combination {
+    [key: string]: string;
+}
+
 /**
  * @description Generates a key-value pair object
  *
@@ -48,6 +52,18 @@ export default function generateParentStateCombinations(parents: ParentAndStates
     // Function to combine all possible state combinations into one object
     const combineAllCombinations = pipe(length, flip(liftN)(unapply(mergeAll)))(parentCombinations);
 
-    // Run the combineAllCombinations function and return result
-    return flatten(apply(combineAllCombinations, parentCombinations as [arg: unknown]));
+    // Run the combineAllCombinations function and get result
+    const result = flatten(apply(combineAllCombinations, parentCombinations as [arg: unknown]));
+
+    // Order the results
+    const orderedResult: Combination[] = [];
+
+    // Push all the evenly indexed entries first
+    result.forEach((_, index) => index % 2 === 0 && orderedResult.push(result[index]));
+
+    // Then all the odd ones
+    result.forEach((_, index) => index % 2 !== 0 && orderedResult.push(result[index]));
+
+    // Return the ordered result
+    return orderedResult;
 }
