@@ -241,17 +241,28 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
         // Get all possible state combinations
         const stateCombinations = generateParentStateCombinations(parents);
 
+        console.log(stateCombinations);
+
         // If this is the first parent
         if (this.parents.length === 1) {
-            this.data.cpt = stateCombinations.map((combination, index) => {
+            console.log((this.data.cpt as ICptWithParents).length);
+            this.data.cpt = stateCombinations.map((combination) => {
+                // If this is a parent being added, and not a state change
+                if ((this.data.cpt as ICptWithParents).length === undefined)
+                    return {
+                        when: combination,
+                        then: { ...this.data.probabilities }
+                    };
+
+                // If there is a state being changed
                 return {
                     when: combination,
-                    then:
-                        index < (this.data.cpt as ICptWithParents).length
-                            ? (this.data.cpt as ICptWithParents)[index].then
-                            : { ...this.data.probabilities }
+                    then: (this.data.cpt as ICptWithParents).find((entry) =>
+                        Object.values(combination).every((state) => Object.values(entry.when).includes(state))
+                    )?.then || { ...this.data.probabilities }
                 };
             });
+            return;
         }
 
         // Otherwise
