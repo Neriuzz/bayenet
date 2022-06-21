@@ -4,7 +4,7 @@
     "version": "1.0.0",
     "scripts": {
         "dev": "vite",
-        "build": "tsc && vite build",
+        "build": "rm -rf dist/ && tsc && vite build",
         "preview": "vite preview",
         "prettier": "prettier --config .prettierrc.json src/ --write",
         "lint": "eslint --fix src"

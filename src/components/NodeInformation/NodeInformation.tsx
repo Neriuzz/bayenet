@@ -34,10 +34,10 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
     // the component knows about it
     useEffect(() => {
         // Register the clear evidence event listener
-        eventBus.on("clearEvidence", handleClearEvidence);
+        eventBus.on("evidenceCleared", handleClearEvidence);
 
         // Unregister event handlers
-        return () => eventBus.stopListening("clearEvidence", handleClearEvidence);
+        return () => eventBus.stopListening("evidenceCleared", handleClearEvidence);
     }, []);
 
     const handleClearEvidence = () => {

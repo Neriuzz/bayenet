@@ -43,6 +43,7 @@ export default class BayesianNetwork {
     private clearEvidence() {
         this.evidence = {};
         this.calculateProbabilities();
+        eventBus.emit("evidenceCleared");
     }
 
     public removeEvidence(id: string) {
