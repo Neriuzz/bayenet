@@ -33,6 +33,14 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
         node.name = newName;
     };
 
+    const addEvidence = (id: string, state: string) => {
+        eventBus.emit("addEvidence", id, state);
+    };
+
+    const removeEvidence = (id: string) => {
+        eventBus.emit("removeEvidence", id);
+    };
+
     const addState = (state: string) => {
         // Add new state to node states and set initial probability to 0
         node.data.states.push(state);
@@ -131,10 +139,11 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
                 stateProbabilities={node.data.probabilities}
                 addState={addState}
                 removeState={removeState}
+                addEvidence={addEvidence}
+                removeEvidence={removeEvidence}
             />
             <p className="node-information-tooltip">Conditional Probability Table</p>
             <NodeCPT
-                key={node.data.states.length}
                 cpt={node.data.cpt}
                 hasParents={node.hasParents()}
                 parents={node.parentNames}

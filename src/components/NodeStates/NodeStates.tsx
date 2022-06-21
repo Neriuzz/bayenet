@@ -17,9 +17,18 @@ export interface NodeStatesProps {
     stateProbabilities: INodeResult;
     addState: (name: string) => void;
     removeState: (index: number) => void;
+    addEvidence: (id: string, state: string) => void;
+    removeEvidence: (id: string) => void;
 }
 
-const NodeStates = ({ states, stateProbabilities, addState, removeState }: NodeStatesProps) => {
+const NodeStates = ({
+    states,
+    stateProbabilities,
+    addState,
+    removeState,
+    addEvidence,
+    removeEvidence
+}: NodeStatesProps) => {
     const [addingState, setAddingState] = useState(false);
 
     const roundNumber = (num: number) => {

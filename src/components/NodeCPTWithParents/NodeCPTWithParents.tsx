@@ -95,6 +95,7 @@ const NodeCPTWithParents = ({ cpt, parents, states, updateCPT }: NodeCPTWithPare
                                 {Object.keys(entry.then).map((state, index) => (
                                     <td className="node-probability" key={index}>
                                         <input
+                                            key={entry.then[state]}
                                             className="node-probability-input"
                                             type="number"
                                             min="0.0"

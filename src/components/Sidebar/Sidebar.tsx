@@ -13,6 +13,7 @@ const Sidebar = () => {
     const [node, setNode] = useState<Node>();
 
     const handleToggleNodeInformation = (node: Node) => {
+        // Set the component state to the new node
         setNode(node);
     };
 
