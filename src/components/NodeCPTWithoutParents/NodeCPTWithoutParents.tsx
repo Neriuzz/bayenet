@@ -86,7 +86,7 @@ const NodeCPTWithoutParents = ({ cpt, updateCPT }: NodeCPTWithoutParentsProps) =
                             {Object.keys(cpt).map((state, index) => (
                                 <td className="table-probability" key={index}>
                                     <input
-                                        key={cpt[state]}
+                                        key={Object.keys(cpt).length}
                                         className="probability-input"
                                         type="number"
                                         defaultValue={cpt[state]}

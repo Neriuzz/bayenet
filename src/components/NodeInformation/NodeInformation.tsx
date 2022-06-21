@@ -105,7 +105,7 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
                 // Split share of probability value from deleted state between remaining states
                 const toAdd = mathExact("Divide", value, node.data.states.length);
                 Object.keys(entry.then).forEach(
-                    (state) => (entry.then[state] = mathExact("Add", toAdd, entry.then[state]))
+                    (entryState) => (entry.then[entryState] = mathExact("Add", toAdd, entry.then[entryState]))
                 );
             });
         } else {
