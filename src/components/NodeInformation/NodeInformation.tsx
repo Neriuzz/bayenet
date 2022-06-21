@@ -167,6 +167,7 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
             />
             <p className="node-information-tooltip">Conditional Probability Table</p>
             <NodeCPT
+                id={node.id}
                 cpt={node.data.cpt}
                 hasParents={node.hasParents()}
                 parents={node.parentNames}

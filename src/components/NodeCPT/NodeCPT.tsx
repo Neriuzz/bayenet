@@ -10,6 +10,7 @@ import "./NodeCPT.scss";
 
 // Component props
 export interface NodeCPTProps {
+    id: number;
     cpt: ICptWithParents | ICptWithoutParents;
     hasParents: boolean;
     parents: string[];
@@ -17,9 +18,9 @@ export interface NodeCPTProps {
     updateCPT: (newCpt: ICptWithParents | ICptWithoutParents) => void;
 }
 
-const NodeCPT = ({ cpt, hasParents, parents, states, updateCPT }: NodeCPTProps) => {
+const NodeCPT = ({ id, cpt, hasParents, parents, states, updateCPT }: NodeCPTProps) => {
     return (
-        <div className="node-cpt">
+        <div key={id} className="node-cpt">
             {hasParents ? (
                 <NodeCPTWithParents
                     cpt={cpt as ICptWithParents}
