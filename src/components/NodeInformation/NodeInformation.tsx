@@ -107,8 +107,6 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
             // Remove the state from node cpt
             delete (node.data.cpt as ICptWithoutParents)[state];
 
-            console.log(node.data.cpt);
-
             // Split share of probability value from deleted state between remaining states
             const toAdd = +(value / node.data.states.length).toFixed(5);
             Object.keys(node.data.cpt).forEach((state) => ((node.data.cpt as ICptWithoutParents)[state] += toAdd));
