@@ -9,7 +9,7 @@ This project aims to provide an easy-to-use editor for Bayesian networks.
 -   `node` ^13.9.0
 -   `npm` ^6.13.7
 
-## :dash: Running a development version of the web application
+## :dash: Running a development version of Bayenet
 
 -   Fetch the repository to your local machine via `git clone https://github.com/Neriuzz/bayenet.git`
 -   CD into the repository `cd bayenet`
