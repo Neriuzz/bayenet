@@ -15,8 +15,6 @@ import Vector2D from "./util/Vector2D";
 
 const eventBus = EventBus.instance;
 export default class World {
-    private nextID = 0;
-
     public entities: IEntity[] = [];
     private recentlyCreatedEntities: IEntity[] = [];
 
@@ -74,6 +72,9 @@ export default class World {
 
         // Reset the Markov blanket
         this.markovBlanket = new Set();
+
+        // Save current state
+        eventBus.emit("saveState");
     }
 
     public get renderables(): IRenderable[] {
@@ -216,7 +217,7 @@ export default class World {
 
     public createNode(coords: Vector2D) {
         // Create new node
-        const node = new Node(this.nextID++, coords, 30);
+        const node = new Node(this.entities.length + 1, coords, 30);
 
         // Add node to rendering world
         this.addEntity(node);
@@ -227,12 +228,15 @@ export default class World {
         // Let frontend know that a node has been created
         eventBus.emit("nodeCreated");
 
+        // Save current state
+        eventBus.emit("saveState");
+
         // Return newly created node
         return node;
     }
 
     public createEdge(from: Node) {
-        const edge = new Edge(this.nextID++, 10, from, from.position);
+        const edge = new Edge(this.entities.length + 1, 10, from, from.position);
         this.addEntity(edge);
 
         eventBus.emit("edgeCreated");

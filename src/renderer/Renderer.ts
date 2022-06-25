@@ -1,9 +1,13 @@
-import WorldData from "../shared/WorldData";
 import Board from "./entities/Board";
 import InputHandler from "./InputHandler";
+import State from "./State";
 import World from "./World";
 
+import WorldData from "../shared/WorldData";
+import EventBus from "../shared/EventBus";
 const worldData = WorldData.instance;
+const eventBus = EventBus.instance;
+
 export default class Renderer {
     private frameCount = 0;
     private animationFrameID = 0;
@@ -23,6 +27,12 @@ export default class Renderer {
 
         // Initialise input handler
         new InputHandler(this.world);
+
+        // Attempt to load previous session
+        State.loadPreviousWorldState(this.world);
+
+        // Register saveState event listener
+        eventBus.on("saveState", () => this.saveWorldState());
 
         // Begin the render loop
         this.renderLoop();
@@ -54,5 +64,9 @@ export default class Renderer {
 
     public cancelDraw() {
         cancelAnimationFrame(this.animationFrameID);
+    }
+
+    private saveWorldState() {
+        State.saveCurrentWorldState(this.world);
     }
 }

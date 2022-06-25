@@ -159,13 +159,19 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
             this.edges.push(edge);
 
             // Don't allow to create edge if it creates a cycle in the network
-            if (edge.from.id === this.id || isCyclic(clickGesture.world.nodes)) clickGesture.world.undo();
+            if (edge.from.id === this.id || isCyclic(clickGesture.world.nodes)) {
+                clickGesture.world.undo();
+                return;
+            }
 
             // Update parents in the data
             this.data.parents.push(edge.from.id.toString());
 
             // Update node cpt to account for parents
             this.refreshCPT();
+
+            // Save current state to localStorage
+            eventBus.emit("saveState");
 
             return;
         }
@@ -208,6 +214,9 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
     public onDragEnd(dragGesture: DragGesture) {
         this.dragging = false;
         this.zIndex = dragGesture.zIndex || this.zIndex;
+
+        // Save current state
+        eventBus.emit("saveState");
     }
 
     public onEnterHover(hoverGesture: HoverGesture) {

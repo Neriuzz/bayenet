@@ -78,6 +78,9 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
         // Infer new state probabilities for entire network
         eventBus.emit("inferAll");
 
+        // Save the state of everything to localStorage
+        eventBus.emit("saveState");
+
         // Rerender the component so visual changes are displayed
         forceRender();
     };
@@ -121,6 +124,9 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
         // Infer new state probabilites for entire network
         eventBus.emit("inferAll");
 
+        // Save the state of everything to localStorage
+        eventBus.emit("saveState");
+
         // Rerender the component so visual changes are displayed
         forceRender();
     };
@@ -134,6 +140,9 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
 
         // Infer new state probabilities for entire network
         eventBus.emit("inferAll");
+
+        // Save the state of everything to localStorage
+        eventBus.emit("saveState");
 
         // Rerender for visual updates
         forceRender();

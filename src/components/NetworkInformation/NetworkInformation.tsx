@@ -39,12 +39,18 @@ const NetworkInformation = () => {
         setEdgeCount((edgeCount) => edgeCount - 1);
     };
 
+    const handleStateLoaded = () => {
+        setNodeCount(worldData.numberOfNodes);
+        setEdgeCount(worldData.numberOfEdges);
+    };
+
     useEffect(() => {
         // Register event handlers
         eventBus.on("nodeCreated", handleNodeCreated);
         eventBus.on("nodeDeleted", handleNodeDeleted);
         eventBus.on("edgeCreated", handleEdgeCreated);
         eventBus.on("edgeDeleted", handleEdgeDeleted);
+        eventBus.on("stateLoaded", () => handleStateLoaded());
 
         return () => {
             // Unregister event handlers
@@ -52,6 +58,7 @@ const NetworkInformation = () => {
             eventBus.stopListening("nodeDeleted", handleNodeDeleted);
             eventBus.stopListening("edgeCreated", handleEdgeCreated);
             eventBus.stopListening("edgeDeleted", handleEdgeDeleted);
+            eventBus.stopListening("stateLoaded", handleStateLoaded);
         };
     }, []);
 
