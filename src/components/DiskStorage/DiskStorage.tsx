@@ -60,6 +60,9 @@ const DiskStorage = () => {
                     style={{ display: "none" }}
                     onChange={handleFileUploaded}
                 />
+                <p className="load-warning">
+                    Please make sure to save the current network before loading another one. All progress will be lost.
+                </p>
                 <button className="disk-storage-button" onClick={handleLoadNetwork}>
                     Load network from local files
                 </button>
