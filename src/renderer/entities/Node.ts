@@ -170,8 +170,8 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
             // Update node cpt to account for parents
             this.refreshCPT();
 
-            // Save current state to localStorage
-            eventBus.emit("saveState");
+            // Save current network to localStorage
+            eventBus.emit("saveNetwork");
 
             return;
         }
@@ -215,8 +215,8 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
         this.dragging = false;
         this.zIndex = dragGesture.zIndex || this.zIndex;
 
-        // Save current state
-        eventBus.emit("saveState");
+        // Save current network
+        eventBus.emit("saveNetwork");
     }
 
     public onEnterHover(hoverGesture: HoverGesture) {

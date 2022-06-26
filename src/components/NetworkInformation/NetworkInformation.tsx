@@ -12,6 +12,7 @@ import { AiOutlineNodeIndex } from "react-icons/ai";
 // Singleton data classes
 import EventBus from "../../shared/EventBus";
 import WorldData from "../../shared/WorldData";
+import DiskStorage from "../DiskStorage/DiskStorage";
 
 // Setup singleton instances
 const eventBus = EventBus.instance;
@@ -39,7 +40,7 @@ const NetworkInformation = () => {
         setEdgeCount((edgeCount) => edgeCount - 1);
     };
 
-    const handleStateLoaded = () => {
+    const handleNetworkLoaded = () => {
         setNodeCount(worldData.numberOfNodes);
         setEdgeCount(worldData.numberOfEdges);
     };
@@ -50,7 +51,7 @@ const NetworkInformation = () => {
         eventBus.on("nodeDeleted", handleNodeDeleted);
         eventBus.on("edgeCreated", handleEdgeCreated);
         eventBus.on("edgeDeleted", handleEdgeDeleted);
-        eventBus.on("stateLoaded", () => handleStateLoaded());
+        eventBus.on("networkLoaded", () => handleNetworkLoaded());
 
         return () => {
             // Unregister event handlers
@@ -58,7 +59,7 @@ const NetworkInformation = () => {
             eventBus.stopListening("nodeDeleted", handleNodeDeleted);
             eventBus.stopListening("edgeCreated", handleEdgeCreated);
             eventBus.stopListening("edgeDeleted", handleEdgeDeleted);
-            eventBus.stopListening("stateLoaded", handleStateLoaded);
+            eventBus.stopListening("networkLoaded", handleNetworkLoaded);
         };
     }, []);
 
@@ -75,6 +76,7 @@ const NetworkInformation = () => {
                 <AiOutlineNodeIndex className="icon" size={"40px"} />
                 <p className="count-number">{edgeCount}</p>
             </div>
+            <DiskStorage />
             <p className="tool-tip">Double-click on a node to view its information.</p>
         </div>
     );

@@ -1,6 +1,6 @@
 import Board from "./entities/Board";
 import InputHandler from "./InputHandler";
-import State from "./State";
+import State, { ISavedNetwork } from "./State";
 import World from "./World";
 
 import WorldData from "../shared/WorldData";
@@ -29,10 +29,11 @@ export default class Renderer {
         new InputHandler(this.world);
 
         // Attempt to load previous session
-        State.loadPreviousWorldState(this.world);
+        State.loadNetworkFromLocalStorage(this.world);
 
-        // Register saveState event listener
-        eventBus.on("saveState", () => this.saveWorldState());
+        // Register event listeners for saving and loading state
+        eventBus.on("saveNetwork", () => this.saveNetwork());
+        eventBus.on("loadNetwork", (network: ISavedNetwork) => this.loadNetwork(network));
 
         // Begin the render loop
         this.renderLoop();
@@ -66,7 +67,11 @@ export default class Renderer {
         cancelAnimationFrame(this.animationFrameID);
     }
 
-    private saveWorldState() {
-        State.saveCurrentWorldState(this.world);
+    private loadNetwork(network: ISavedNetwork) {
+        State.loadNetworkFromFile(network, this.world);
+    }
+
+    private saveNetwork() {
+        State.saveCurrentNetwork(this.world);
     }
 }

@@ -1,0 +1,17 @@
+.disk-storage-container {
+    width: 100%;
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5em;
+}
+
+.disk-storage-button {
+    display: inline-block;
+    cursor: pointer;
+    text-align: center;
+    padding: 10px;
+    width: 15em;
+}

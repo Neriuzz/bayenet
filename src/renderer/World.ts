@@ -73,8 +73,8 @@ export default class World {
         // Reset the Markov blanket
         this.markovBlanket = new Set();
 
-        // Save current state
-        eventBus.emit("saveState");
+        // Save current network
+        eventBus.emit("saveNetwork");
     }
 
     public get renderables(): IRenderable[] {
@@ -228,8 +228,8 @@ export default class World {
         // Let frontend know that a node has been created
         eventBus.emit("nodeCreated");
 
-        // Save current state
-        eventBus.emit("saveState");
+        // Save current network
+        eventBus.emit("saveNetwork");
 
         // Return newly created node
         return node;

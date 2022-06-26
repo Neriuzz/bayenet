@@ -34,35 +34,52 @@ export interface IEdgeState {
     to: number;
 }
 
-export interface IWorldState {
+export interface ISavedNetwork {
     nodes: INodeState[];
     edges: IEdgeState[];
 }
 
 export default class State {
-    public static saveCurrentWorldState(world: World) {
-        // Save current world state as JSON
-        localStorage.setItem("worldState", JSON.stringify(this.getCurrentStateFromWorld(world)));
+    public static saveCurrentNetwork(world: World) {
+        // Save current world network as JSON
+        localStorage.setItem("network", JSON.stringify(this.getCurrentNetwork(world)));
     }
 
-    public static loadPreviousWorldState(world: World) {
-        // Retrieve previous state from localStroage
-        const previousState = localStorage.getItem("worldState");
+    public static loadNetworkFromFile(network: ISavedNetwork, world: World) {
+        // Remove all entities from the world
+        world.entities.forEach((entity) => world.removeEntity(entity));
+
+        // Load in new network
+        this.loadNetwork(network, world);
+
+        // Set local storage
+        localStorage.setItem("network", JSON.stringify(network));
+
+        // Let frontend know network has been loaded
+        (async () => {
+            await sleep(100);
+            eventBus.emit("networkLoaded");
+        })();
+    }
+
+    public static loadNetworkFromLocalStorage(world: World) {
+        // Retrieve previous network from localStroage
+        const previousNetwork = localStorage.getItem("network");
 
         // If there is none, exit
-        if (!previousState) return;
+        if (!previousNetwork) return;
 
-        // Load the state into the world
-        this.loadStateIntoWorld(world, JSON.parse(previousState));
+        // Load the network into the world
+        this.loadNetwork(JSON.parse(previousNetwork), world);
 
         // Have to sleep here to wait for the network information component to mount
         (async () => {
             await sleep(100);
-            eventBus.emit("stateLoaded");
+            eventBus.emit("networkLoaded");
         })();
     }
 
-    private static getCurrentStateFromWorld(world: World): IWorldState {
+    private static getCurrentNetwork(world: World): ISavedNetwork {
         // Get all required data from all the nodes in the world
         const nodes: INodeState[] = world.nodes.map((node) => {
             return {
@@ -82,22 +99,22 @@ export default class State {
         return { nodes, edges };
     }
 
-    private static loadStateIntoWorld(world: World, state: IWorldState) {
+    private static loadNetwork(network: ISavedNetwork, world: World) {
         // Generate nodes
-        state.nodes
-            .map((node) => this.nodeFromState(node))
+        network.nodes
+            .map((node) => this.nodeFromPrevious(node))
             .forEach((node) => {
                 world.addEntity(node);
                 world.bayesianNetwork.addNode(node.id.toString(), node.data);
             });
 
         // Generate edges
-        state.edges
-            .map((edge) => this.edgeFromState(world.nodes, edge))
+        network.edges
+            .map((edge) => this.edgeFromPrevious(world.nodes, edge))
             .forEach((edge) => edge && world.addEntity(edge));
     }
 
-    private static nodeFromState(state: INodeState) {
+    private static nodeFromPrevious(state: INodeState) {
         // Create a new node
         const node = new Node(state.id, state.position, 30);
 
@@ -109,7 +126,7 @@ export default class State {
         return node;
     }
 
-    private static edgeFromState(nodes: Node[], state: IEdgeState) {
+    private static edgeFromPrevious(nodes: Node[], state: IEdgeState) {
         // If has no "to" node, do not process
         if (state.to == -1) return;
 
