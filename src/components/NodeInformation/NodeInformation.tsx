@@ -44,6 +44,9 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
 
     const updateName = (newName: string) => {
         node.name = newName;
+
+        // Save current network to localStorage
+        eventBus.emit("saveNetwork");
     };
 
     const addEvidence = (state: string) => {
