@@ -156,10 +156,15 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
             edge.to = this;
             edge.zIndex = 0;
             edge.from.zIndex = edge.from.previousZIndex;
+
             this.edges.push(edge);
 
-            // Don't allow to create edge if it creates a cycle in the network
-            if (edge.from.id === this.id || isCyclic(clickGesture.world.nodes)) {
+            // Don't allow to create edge if it creates a cycle in the network or if it is a duplicate edge
+            if (
+                edge.from.id === this.id ||
+                this.edges.filter((_edge) => _edge !== edge).find((_edge) => _edge.from.id === edge.from.id) ||
+                isCyclic(clickGesture.world.nodes)
+            ) {
                 clickGesture.world.undo();
                 return;
             }

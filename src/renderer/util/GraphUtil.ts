@@ -21,6 +21,7 @@ function extractAdjacencyList(nodes: Node[]) {
             }
         });
     });
+    console.log(adj);
     return adj;
 }
 
