@@ -1,5 +1,5 @@
 /**
- * Module to faciliate saving of the Bayesian network
+ * Module to facilitate saving of the Bayesian network
  * @author Nerius Ilmonas
  */
 
@@ -134,7 +134,7 @@ export default class State {
         const fromNode = nodes.find((node) => node.id === state.from);
         const toNode = nodes.find((node) => node.id === state.to);
 
-        // If they cannot be retrieve, exit
+        // If they cannot be retrieved, exit
         if (!fromNode || !toNode) return;
 
         // Create the edge
