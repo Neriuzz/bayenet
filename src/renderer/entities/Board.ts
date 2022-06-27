@@ -59,6 +59,9 @@ export default class Board {
     public onKeyDown(keyGesture: KeyGesture) {
         if (keyGesture.key == "Delete" && keyGesture.world.numberOfClickablesSelected > 0) {
             keyGesture.world.removeAllSelectedClickables();
+
+            eventBus.emit(UserEvent.TOGGLE_NODE_INFORMATION);
+
             return;
         }
 
