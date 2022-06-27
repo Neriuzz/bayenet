@@ -12,7 +12,7 @@ import Canvas from "../Canvas/Canvas";
 import Sidebar from "../Sidebar/Sidebar";
 
 // Event bus to listen for messages from the renderer
-import EventBus from "../../shared/EventBus";
+import EventBus, { CameraEvent, NetworkEvent } from "../../shared/EventBus";
 import { useState } from "react";
 import InformationModal from "../InformationModal/InformationModal";
 const eventBus = EventBus.instance;
@@ -21,11 +21,11 @@ const App = () => {
     const [showModal, setShowModal] = useState(false);
 
     const resetCameraZoom = () => {
-        eventBus.emit("resetCameraZoom");
+        eventBus.emit(CameraEvent.RESET_ZOOM);
     };
 
     const invertCameraScroll = () => {
-        eventBus.emit("invertCameraScroll");
+        eventBus.emit(CameraEvent.INVERT_SCROLL);
     };
 
     const openModal = () => {
@@ -33,8 +33,8 @@ const App = () => {
     };
 
     const clearEvidence = () => {
-        eventBus.emit("clearEvidence");
-        eventBus.emit("evidenceCleared");
+        eventBus.emit(NetworkEvent.CLEAR_EVIDENCE);
+        eventBus.emit(NetworkEvent.EVIDENCE_CLEARED);
     };
 
     return (

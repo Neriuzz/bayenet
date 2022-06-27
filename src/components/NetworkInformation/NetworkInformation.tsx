@@ -10,7 +10,7 @@ import { VscCircleLargeOutline } from "react-icons/vsc";
 import { AiOutlineNodeIndex } from "react-icons/ai";
 
 // Singleton data classes
-import EventBus from "../../shared/EventBus";
+import EventBus, { NetworkEvent } from "../../shared/EventBus";
 import WorldData from "../../shared/WorldData";
 import DiskStorage from "../DiskStorage/DiskStorage";
 
@@ -47,19 +47,19 @@ const NetworkInformation = () => {
 
     useEffect(() => {
         // Register event handlers
-        eventBus.on("nodeCreated", handleNodeCreated);
-        eventBus.on("nodeDeleted", handleNodeDeleted);
-        eventBus.on("edgeCreated", handleEdgeCreated);
-        eventBus.on("edgeDeleted", handleEdgeDeleted);
-        eventBus.on("networkLoaded", () => handleNetworkLoaded());
+        eventBus.on(NetworkEvent.NODE_CREATED, handleNodeCreated);
+        eventBus.on(NetworkEvent.NODE_DELETED, handleNodeDeleted);
+        eventBus.on(NetworkEvent.EDGE_CREATED, handleEdgeCreated);
+        eventBus.on(NetworkEvent.EDGE_DELTED, handleEdgeDeleted);
+        eventBus.on(NetworkEvent.NETWORK_LOADED, () => handleNetworkLoaded());
 
         return () => {
             // Unregister event handlers
-            eventBus.stopListening("nodeCreated", handleNodeCreated);
-            eventBus.stopListening("nodeDeleted", handleNodeDeleted);
-            eventBus.stopListening("edgeCreated", handleEdgeCreated);
-            eventBus.stopListening("edgeDeleted", handleEdgeDeleted);
-            eventBus.stopListening("networkLoaded", handleNetworkLoaded);
+            eventBus.stopListening(NetworkEvent.NODE_CREATED, handleNodeCreated);
+            eventBus.stopListening(NetworkEvent.NODE_DELETED, handleNodeDeleted);
+            eventBus.stopListening(NetworkEvent.EDGE_CREATED, handleEdgeCreated);
+            eventBus.stopListening(NetworkEvent.EDGE_DELTED, handleEdgeDeleted);
+            eventBus.stopListening(NetworkEvent.NETWORK_LOADED, handleNetworkLoaded);
         };
     }, []);
 

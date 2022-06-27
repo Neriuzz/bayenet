@@ -2,7 +2,7 @@
 import { ICombinations, INetwork, inferAll, INode, INodeResult } from "bayesjs";
 
 // Event bus singleton
-import EventBus from "../EventBus";
+import EventBus, { NetworkEvent } from "../EventBus";
 const eventBus = EventBus.instance;
 
 // Custom type extending the BayesJS INode
@@ -17,9 +17,9 @@ export default class BayesianNetwork {
 
     constructor() {
         // Register event listeners
-        eventBus.on("inferAll", () => this.calculateProbabilities());
-        eventBus.on("addEvidence", (id: string, state: string) => this.addEvidence(id, state));
-        eventBus.on("clearEvidence", () => this.clearEvidence());
+        eventBus.on(NetworkEvent.INFER_ALL, () => this.calculateProbabilities());
+        eventBus.on(NetworkEvent.ADD_EVIDENCE, (id: string, state: string) => this.addEvidence(id, state));
+        eventBus.on(NetworkEvent.CLEAR_EVIDENCE, () => this.clearEvidence());
     }
 
     public addNode(name: string, node: INode) {

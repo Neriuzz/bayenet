@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import "./Sidebar.scss";
 
-import EventBus from "../../shared/EventBus";
+import EventBus, { UserEvent } from "../../shared/EventBus";
 import Node from "../../renderer/entities/Node";
 import NodeInformation from "../NodeInformation/NodeInformation";
 import NetworkInformation from "../NetworkInformation/NetworkInformation";
@@ -18,8 +18,8 @@ const Sidebar = () => {
     };
 
     useEffect(() => {
-        eventBus.on("toggleNodeInformation", handleToggleNodeInformation);
-        return () => eventBus.stopListening("toggleNodeInformation", handleToggleNodeInformation);
+        eventBus.on(UserEvent.TOGGLE_NODE_INFORMATION, handleToggleNodeInformation);
+        return () => eventBus.stopListening(UserEvent.TOGGLE_NODE_INFORMATION, handleToggleNodeInformation);
     }, []);
 
     return <div className="sidebar">{(node && <NodeInformation node={node} />) || <NetworkInformation />}</div>;

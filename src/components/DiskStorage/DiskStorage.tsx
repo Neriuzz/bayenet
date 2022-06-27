@@ -3,7 +3,7 @@ import { useRef } from "react";
 // Styles
 import "./DiskStorage.scss";
 
-import EventBus from "../../shared/EventBus";
+import EventBus, { NetworkEvent } from "../../shared/EventBus";
 const eventBus = EventBus.instance;
 
 const DiskStorage = () => {
@@ -18,7 +18,7 @@ const DiskStorage = () => {
         const network = await uploadRef.current.files[0].text();
 
         // Tell renderer to load the network
-        eventBus.emit("loadNetwork", JSON.parse(network));
+        eventBus.emit(NetworkEvent.LOAD_NETWORK, JSON.parse(network));
     };
 
     const handleLoadNetwork = () => {

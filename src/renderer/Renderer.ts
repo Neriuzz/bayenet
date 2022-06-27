@@ -4,7 +4,7 @@ import State, { ISavedNetwork } from "./State";
 import World from "./World";
 
 import WorldData from "../shared/WorldData";
-import EventBus from "../shared/EventBus";
+import EventBus, { NetworkEvent } from "../shared/EventBus";
 const worldData = WorldData.instance;
 const eventBus = EventBus.instance;
 
@@ -32,8 +32,8 @@ export default class Renderer {
         State.loadNetworkFromLocalStorage(this.world);
 
         // Register event listeners for saving and loading state
-        eventBus.on("saveNetwork", () => this.saveNetwork());
-        eventBus.on("loadNetwork", (network: ISavedNetwork) => this.loadNetwork(network));
+        eventBus.on(NetworkEvent.SAVE_NETWORK, () => this.saveNetwork());
+        eventBus.on(NetworkEvent.LOAD_NETWORK, (network: ISavedNetwork) => this.loadNetwork(network));
 
         // Begin the render loop
         this.renderLoop();

@@ -8,7 +8,7 @@ import { ClickGesture, DragGesture, KeyGesture } from "../gestures";
 import Vector2D from "../util/Vector2D";
 
 // Eventbus singleton
-import EventBus from "../../shared/EventBus";
+import EventBus, { UserEvent } from "../../shared/EventBus";
 const eventBus = EventBus.instance;
 export default class Board {
     public dragging = false;
@@ -23,7 +23,7 @@ export default class Board {
     }
 
     public onClick(clickGesture: ClickGesture) {
-        eventBus.emit("toggleNodeInformation");
+        eventBus.emit(UserEvent.TOGGLE_NODE_INFORMATION);
 
         if (clickGesture.world.edgeBeingCreated) clickGesture.world.undo();
 

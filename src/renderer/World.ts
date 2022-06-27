@@ -1,5 +1,5 @@
 import BayesianNetwork from "../shared/compute/bayesian-network";
-import EventBus from "../shared/EventBus";
+import EventBus, { NetworkEvent } from "../shared/EventBus";
 import Board from "./entities/Board";
 import Edge from "./entities/Edge";
 import Node from "./entities/Node";
@@ -43,7 +43,7 @@ export default class World {
             this.bayesianNetwork.removeEvidence(node.id.toString());
 
             // Send message to frontend
-            eventBus.emit("nodeDeleted");
+            eventBus.emit(NetworkEvent.NODE_DELETED);
         }
 
         if (entity instanceof Edge) {
@@ -63,7 +63,7 @@ export default class World {
             edge.from.edges = edge.from.edges.filter((_edge) => _edge.id !== edge.id);
 
             // Send message to frontend
-            eventBus.emit("edgeDeleted");
+            eventBus.emit(NetworkEvent.EDGE_DELTED);
         }
 
         // Remove edge from entities and recently created entities
@@ -74,7 +74,7 @@ export default class World {
         this.markovBlanket = new Set();
 
         // Save current network
-        eventBus.emit("saveNetwork");
+        eventBus.emit(NetworkEvent.SAVE_NETWORK);
     }
 
     public get renderables(): IRenderable[] {
@@ -226,10 +226,10 @@ export default class World {
         this.bayesianNetwork.addNode(node.id.toString(), node.data);
 
         // Let frontend know that a node has been created
-        eventBus.emit("nodeCreated");
+        eventBus.emit(NetworkEvent.NODE_CREATED);
 
         // Save current network
-        eventBus.emit("saveNetwork");
+        eventBus.emit(NetworkEvent.SAVE_NETWORK);
 
         // Return newly created node
         return node;
@@ -239,7 +239,7 @@ export default class World {
         const edge = new Edge(this.entities.length + 1, 10, from, from.position);
         this.addEntity(edge);
 
-        eventBus.emit("edgeCreated");
+        eventBus.emit(NetworkEvent.EDGE_CREATED);
 
         return edge;
     }

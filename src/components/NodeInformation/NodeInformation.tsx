@@ -15,7 +15,7 @@ import Node from "../../renderer/entities/Node";
 import { ICptWithoutParents, ICptWithParents } from "bayesjs";
 
 // EventBus singleton
-import EventBus from "../../shared/EventBus";
+import EventBus, { NetworkEvent } from "../../shared/EventBus";
 const eventBus = EventBus.instance;
 
 // Component prop types
@@ -31,10 +31,10 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
     // the component knows about it
     useEffect(() => {
         // Register the clear evidence event listener
-        eventBus.on("evidenceCleared", handleClearEvidence);
+        eventBus.on(NetworkEvent.EVIDENCE_CLEARED, handleClearEvidence);
 
         // Unregister event handlers
-        return () => eventBus.stopListening("evidenceCleared", handleClearEvidence);
+        return () => eventBus.stopListening(NetworkEvent.EVIDENCE_CLEARED, handleClearEvidence);
     }, []);
 
     const handleClearEvidence = () => {
@@ -46,11 +46,11 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
         node.name = newName;
 
         // Save current network to localStorage
-        eventBus.emit("saveNetwork");
+        eventBus.emit(NetworkEvent.SAVE_NETWORK);
     };
 
     const addEvidence = (state: string) => {
-        eventBus.emit("addEvidence", node.id, state);
+        eventBus.emit(NetworkEvent.ADD_EVIDENCE, node.id, state);
 
         // Rerender the component so visual changes are displayed
         forceRender();
@@ -76,13 +76,13 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
         if (node.hasChildren()) node.children.forEach((child) => child.refreshCPT());
 
         // Clear the current evidence
-        eventBus.emit("clearEvidence");
+        eventBus.emit(NetworkEvent.CLEAR_EVIDENCE);
 
         // Infer new state probabilities for entire network
-        eventBus.emit("inferAll");
+        eventBus.emit(NetworkEvent.INFER_ALL);
 
         // Save the network to localStorage
-        eventBus.emit("saveNetwork");
+        eventBus.emit(NetworkEvent.SAVE_NETWORK);
 
         // Rerender the component so visual changes are displayed
         forceRender();
@@ -122,13 +122,13 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
         if (node.hasChildren()) node.children.forEach((child) => child.refreshCPT());
 
         // Clear the current evidence
-        eventBus.emit("clearEvidence");
+        eventBus.emit(NetworkEvent.CLEAR_EVIDENCE);
 
         // Infer new state probabilites for entire network
-        eventBus.emit("inferAll");
+        eventBus.emit(NetworkEvent.INFER_ALL);
 
         // Save the network to localStorage
-        eventBus.emit("saveNetwork");
+        eventBus.emit(NetworkEvent.SAVE_NETWORK);
 
         // Rerender the component so visual changes are displayed
         forceRender();
@@ -139,13 +139,13 @@ const NodeInformation = ({ node }: NodeInformationProps) => {
         node.data.cpt = newCpt;
 
         // Clear all evidence
-        eventBus.emit("clearEvidence");
+        eventBus.emit(NetworkEvent.CLEAR_EVIDENCE);
 
         // Infer new state probabilities for entire network
-        eventBus.emit("inferAll");
+        eventBus.emit(NetworkEvent.INFER_ALL);
 
         // Save the network to localStorage
-        eventBus.emit("saveNetwork");
+        eventBus.emit(NetworkEvent.SAVE_NETWORK);
 
         // Rerender for visual updates
         forceRender();

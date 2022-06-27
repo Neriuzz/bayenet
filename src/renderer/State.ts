@@ -15,7 +15,7 @@ import { sleep } from "./util/General";
 import Vector2D from "./util/Vector2D";
 
 // Event Bus singleton
-import EventBus from "../shared/EventBus";
+import EventBus, { NetworkEvent } from "../shared/EventBus";
 const eventBus = EventBus.instance;
 
 // Interfaces
@@ -58,7 +58,7 @@ export default class State {
         // Let frontend know network has been loaded
         (async () => {
             await sleep(100);
-            eventBus.emit("networkLoaded");
+            eventBus.emit(NetworkEvent.NETWORK_LOADED);
         })();
     }
 
@@ -75,7 +75,7 @@ export default class State {
         // Have to sleep here to wait for the network information component to mount
         (async () => {
             await sleep(100);
-            eventBus.emit("networkLoaded");
+            eventBus.emit(NetworkEvent.NETWORK_LOADED);
         })();
     }
 

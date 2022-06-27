@@ -22,7 +22,7 @@ import Edge from "./Edge";
 
 // Singletons
 import WorldData from "../../shared/WorldData";
-import EventBus from "../../shared/EventBus";
+import EventBus, { NetworkEvent, UserEvent } from "../../shared/EventBus";
 const worldData = WorldData.instance;
 const eventBus = EventBus.instance;
 
@@ -146,7 +146,7 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
 
     public onClick(clickGesture: ClickGesture) {
         // Toggle the node information sidebar when clicking on a node
-        eventBus.emit("toggleNodeInformation");
+        eventBus.emit(UserEvent.TOGGLE_NODE_INFORMATION);
 
         if (clickGesture.world.edgeBeingCreated) {
             // Retrieve the current edge being created
@@ -176,7 +176,7 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
             this.refreshCPT();
 
             // Save current network to localStorage
-            eventBus.emit("saveNetwork");
+            eventBus.emit(NetworkEvent.SAVE_NETWORK);
 
             return;
         }
@@ -197,7 +197,7 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public onDoubleClick(clickGesture: ClickGesture) {
-        eventBus.emit("toggleNodeInformation", this);
+        eventBus.emit(UserEvent.TOGGLE_NODE_INFORMATION, this);
     }
 
     public onDragStart(dragGesture: DragGesture) {
@@ -221,7 +221,7 @@ export default class Node implements IRenderable, IClickable, IDoubleClickable, 
         this.zIndex = dragGesture.zIndex || this.zIndex;
 
         // Save current network
-        eventBus.emit("saveNetwork");
+        eventBus.emit(NetworkEvent.SAVE_NETWORK);
     }
 
     public onEnterHover(hoverGesture: HoverGesture) {

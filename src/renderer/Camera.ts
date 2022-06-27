@@ -1,4 +1,4 @@
-import EventBus from "../shared/EventBus";
+import EventBus, { CameraEvent } from "../shared/EventBus";
 import Vector2D from "./util/Vector2D";
 
 const eventBus = EventBus.instance;
@@ -11,8 +11,8 @@ export default class Camera {
         this.position = new Vector2D(0, 0);
 
         // Register event handler for resetting zoom level
-        eventBus.on("resetCameraZoom", () => this.resetZoom());
-        eventBus.on("invertCameraScroll", () => this.invertScroll());
+        eventBus.on(CameraEvent.RESET_ZOOM, () => this.resetZoom());
+        eventBus.on(CameraEvent.INVERT_SCROLL, () => this.invertScroll());
     }
 
     // TODO: Smoothly reset the zoom if you have time in the future
