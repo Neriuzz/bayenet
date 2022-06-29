@@ -164,3 +164,6 @@ sketch
 
 # Do not include build folder
 build/
+
+.code2pdf
+*.pdf
