@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { mock } from "jest-mock-extended";
 import Board from "../../src/renderer/entities/Board";
 import IClickable from "../../src/renderer/interfaces/IClickable";

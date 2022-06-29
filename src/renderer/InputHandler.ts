@@ -21,7 +21,7 @@ export default class InputHandler {
     private dragging = false;
 
     // Timer for differentiating between clicks and double clicks
-    private timer = 0;
+    private timer: NodeJS.Timeout | null = null;
 
     constructor(private world: World) {
         // Register window event listeners
