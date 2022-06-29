@@ -19,4 +19,4 @@ This project aims to provide an easy-to-use editor for Bayesian networks.
 
 ## :wrench: Running tests
 
-All execute all test suites, simply run `npm run test`.
+To execute all test suites, simply run `npm run test`.
