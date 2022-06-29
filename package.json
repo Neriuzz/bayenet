@@ -7,7 +7,8 @@
         "build": "rm -rf dist/ && tsc && vite build",
         "preview": "vite preview",
         "prettier": "prettier --config .prettierrc.json src/ --write",
-        "lint": "eslint --fix src"
+        "lint": "eslint --fix src",
+        "test": "jest"
     },
     "author": "Nerius Ilmonas",
     "dependencies": {
@@ -22,6 +23,7 @@
     "devDependencies": {
         "@types/color-hash": "^1.0.2",
         "@types/events": "^3.0.0",
+        "@types/jest": "^28.1.3",
         "@types/ramda": "^0.28.14",
         "@types/react": "^18.0.7",
         "@types/react-dom": "^18.0.0",
@@ -35,6 +37,7 @@
         "path": "^0.12.7",
         "prettier": "^2.6.2",
         "sass": "^1.50.1",
+        "ts-jest": "^28.0.5",
         "typescript": "^4.6.3",
         "vite": "^2.9.5"
     }

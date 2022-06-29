@@ -37,15 +37,15 @@ export default class EventBus {
         return EventBus._instance;
     }
 
-    public on(event: string | number, callback: (...args: any[]) => void) {
+    public on(event: string | symbol, callback: (...args: any[]) => void) {
         this.eventEmitter.on(event, callback);
     }
 
-    public emit(event: string | number, ...args: any[]) {
+    public emit(event: string | symbol, ...args: any[]) {
         this.eventEmitter.emit(event, ...args);
     }
 
-    public stopListening(event: string | number, callback: (...args: any[]) => void) {
+    public stopListening(event: string | symbol, callback: (...args: any[]) => void) {
         this.eventEmitter.removeListener(event, callback);
     }
 }

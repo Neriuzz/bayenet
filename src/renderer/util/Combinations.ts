@@ -46,6 +46,9 @@ function createCombinationsForParent(parent: ParentAndStates): Record<string, st
  * @returns Returns all possible combinations of parent states, which is then used in the conditional probability table
  */
 export default function generateParentStateCombinations(parents: ParentAndStates[]) {
+    // If parents are empty, return
+    if (!parents.length) return [];
+
     // Get all the possible state combinations for each parent
     const parentCombinations = parents.map(createCombinationsForParent);
 
