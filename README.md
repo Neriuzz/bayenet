@@ -16,3 +16,7 @@ This project aims to provide an easy-to-use editor for Bayesian networks.
 -   Install all dependencies `npm i`
 -   Run the dev server `npm run dev`
 -   Go to `localhost:3000` on your browser
+
+## :wrench: Running tests
+
+All execute all test suites, simply run `npm run test`.
